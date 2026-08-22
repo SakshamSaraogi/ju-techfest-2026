@@ -78,6 +78,92 @@ p {
   display: block;
 }
 
+/* =============================================================
+   PRELOADER SCREEN (SPIDER BOTTOM-UP FILL ANIMATION)
+   ============================================================= */
+.preloader {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: #050507;
+  z-index: 10000000;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  pointer-events: auto;
+  user-select: none;
+  overflow: hidden;
+}
+
+.preloader-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.spider-loader-container {
+  width: clamp(105px, 15vw, 150px);
+  aspect-ratio: 736 / 832;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.spider-bg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(255, 255, 255, 0.08);
+  -webkit-mask: url('/spider-icon.png') no-repeat center / contain;
+  mask: url('/spider-icon.png') no-repeat center / contain;
+}
+
+.spider-fill {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #d91424;
+  -webkit-mask: url('/spider-icon.png') no-repeat center / contain;
+  mask: url('/spider-icon.png') no-repeat center / contain;
+  clip-path: inset(100% 0 0 0);
+  will-change: clip-path;
+}
+
+.preloader-text-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.preloader-subtext {
+  font-family: "DM Mono", monospace;
+  font-size: clamp(0.78rem, 1.2vw, 0.95rem);
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.75);
+  margin-top: 1.8rem;
+  text-align: center;
+}
+
+.preloader-counter {
+  font-family: "Barlow Condensed", sans-serif;
+  font-size: clamp(1.8rem, 3.2vw, 2.6rem);
+  font-weight: 900;
+  color: #ffffff;
+  letter-spacing: 0.04em;
+  margin-top: 0.35rem;
+  text-align: center;
+}
+
 /* Fixed Global Ambient Background Streamlines */
 #bg-canvas {
   position: fixed;

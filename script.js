@@ -11,6 +11,57 @@ import {
 
 gsap.registerPlugin(ScrollTrigger);
 
+function initPreloader() {
+  const preloader = document.getElementById("preloader");
+  const spiderFill = document.getElementById("spider-fill");
+  const counter = document.getElementById("preloader-counter");
+  const spiderContainer = document.getElementById("spider-container");
+  const textWrapper = document.getElementById("preloader-text-wrapper");
+
+  if (!preloader) return;
+
+  const loaderProxy = { progress: 0 };
+
+  gsap.to(loaderProxy, {
+    progress: 100,
+    duration: 1.9,
+    ease: "power2.inOut",
+    onUpdate: () => {
+      const p = Math.min(100, Math.round(loaderProxy.progress));
+      if (counter) counter.textContent = `${p}%`;
+      if (spiderFill) spiderFill.style.clipPath = `inset(${100 - p}% 0 0 0)`;
+    },
+    onComplete: () => {
+      const tl = gsap.timeline({
+        onComplete: () => {
+          preloader.style.display = "none";
+        },
+      });
+
+      tl.to([spiderContainer, textWrapper], {
+        y: -25,
+        opacity: 0,
+        duration: 0.45,
+        ease: "power2.in",
+      }).to(
+        preloader,
+        {
+          yPercent: -100,
+          duration: 0.8,
+          ease: "power4.inOut",
+        },
+        "-=0.1"
+      );
+    },
+  });
+}
+
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", initPreloader);
+} else {
+  initPreloader();
+}
+
 window.addEventListener("load", init);
 
 function init() {
