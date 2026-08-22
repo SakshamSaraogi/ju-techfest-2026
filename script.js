@@ -656,13 +656,20 @@ function init() {
     );
   }
 
-  // ZENTRY INTERACTIVE SPOTLIGHT PHOTO HOVER
+  // ZENTRY INTERACTIVE SPOTLIGHT PHOTO HOVER & MOBILE AUTO-REVEAL
   const DESKTOP_MIN = 768;
   const TILT_MAX = 20;
   const DRIFT_MAX = 25;
   const SMOOTHING = 0.075;
 
-  const CARD_OPEN = { width: "26rem", height: "19.5rem", borderRadius: "0.6rem" };
+  const getCardOpenConfig = () => {
+    if (window.innerWidth >= DESKTOP_MIN) {
+      return { width: "26rem", height: "19.5rem", borderRadius: "0.6rem" };
+    } else {
+      return { width: "clamp(15rem, 74vw, 21rem)", height: "clamp(11rem, 54vw, 15.5rem)", borderRadius: "0.5rem" };
+    }
+  };
+
   const CARD_DOT = { width: "0.4em", height: "0.4em", borderRadius: "0.04em" };
 
   const CARD_CENTERED = {
@@ -675,8 +682,12 @@ function init() {
   };
 
   const isDesktop = () => window.innerWidth >= DESKTOP_MIN;
+  const allSpots = document.querySelectorAll(".spot");
 
-  document.querySelectorAll(".spot").forEach((spot) => {
+  let activeMobileSpot = null;
+  let mobileAutoRevealTl = null;
+
+  allSpots.forEach((spot) => {
     const card = spot.querySelector(".spot-card");
     const image = spot.querySelector("img");
 
@@ -714,9 +725,7 @@ function init() {
       }
     };
 
-    const expandCard = () => {
-      if (!isDesktop()) return;
-
+    const expandCard = (isAuto = false) => {
       isHovering = true;
       spot.classList.add("active");
       gsap.set(spot, { zIndex: 1000 });
@@ -730,7 +739,6 @@ function init() {
       Object.assign(live, { x: 0, y: 0, tiltX: 0, tiltY: 0 });
       Object.assign(aim, { x: 0, y: 0, tiltX: 0, tiltY: 0 });
 
-      // For bottom-most line (Esports), shift center upward so it never clips with bottom boundary
       const allLines = document.querySelectorAll(".headline .line");
       const isBottomLine = parentLine && parentLine === allLines[allLines.length - 1];
       const centeredConfig = {
@@ -741,24 +749,77 @@ function init() {
       gsap.set(card, centeredConfig);
       gsap.set(image, { x: 0, y: 0 });
 
-      startTracking();
+      if (isDesktop()) {
+        startTracking();
+      }
 
       gsap.to(card, {
-        ...CARD_OPEN,
-        duration: 0.75,
+        ...getCardOpenConfig(),
+        duration: isDesktop() ? 0.75 : 0.6,
         ease: "power3.out",
         overwrite: "auto",
       });
 
       gsap.to(image, {
         opacity: 1,
-        duration: 0.5,
+        duration: isDesktop() ? 0.5 : 0.4,
         ease: "power2.out",
         overwrite: "auto",
       });
     };
 
-    spot.addEventListener("mouseenter", expandCard);
+    const shrinkCard = () => {
+      isHovering = false;
+      aim.tiltX = aim.tiltY = 0;
+
+      stopTracking();
+
+      gsap.to(card, {
+        ...CARD_DOT,
+        x: 0,
+        y: 0,
+        rotateX: 0,
+        rotateY: 0,
+        duration: isDesktop() ? 0.5 : 0.45,
+        ease: "power3.out",
+        overwrite: "auto",
+        onComplete: () => {
+          if (isHovering) return;
+
+          spot.classList.remove("active");
+          gsap.set(spot, { zIndex: 10 });
+
+          const parentLine = spot.closest(".line");
+          if (parentLine) {
+            parentLine.classList.remove("active-line");
+            gsap.set(parentLine, { zIndex: 1 });
+          }
+
+          gsap.set(card, {
+            clearProps: "width,height,borderRadius,yPercent",
+            ...CARD_CENTERED,
+          });
+
+          gsap.set(image, { x: 0, y: 0 });
+        },
+      });
+
+      gsap.to(image, {
+        opacity: 0,
+        duration: isDesktop() ? 0.3 : 0.25,
+        ease: "power2.out",
+        overwrite: "auto",
+      });
+    };
+
+    // Store references on the DOM node for auto-reveal triggers
+    spot._expandCard = expandCard;
+    spot._shrinkCard = shrinkCard;
+
+    // Desktop hover events
+    spot.addEventListener("mouseenter", () => {
+      if (isDesktop()) expandCard();
+    });
 
     const aimAtCursor = (event) => {
       if (!isHovering || !isDesktop()) return;
@@ -793,54 +854,78 @@ function init() {
 
     spot.addEventListener("mousemove", aimAtCursor);
 
-    const shrinkCard = () => {
-      if (!isDesktop()) return;
+    spot.addEventListener("mouseleave", () => {
+      if (isDesktop()) shrinkCard();
+    });
 
-      isHovering = false;
-      aim.tiltX = aim.tiltY = 0;
+    // Mobile touch & tap-scroll interactive reveal
+    spot.addEventListener("touchstart", (e) => {
+      if (isDesktop()) return;
+      if (activeMobileSpot && activeMobileSpot !== spot) {
+        activeMobileSpot._shrinkCard();
+      }
+      activeMobileSpot = spot;
+      expandCard();
+    }, { passive: true });
 
-      stopTracking();
-
-      gsap.to(card, {
-        ...CARD_DOT,
-        x: 0,
-        y: 0,
-        rotateX: 0,
-        rotateY: 0,
-        duration: 0.5,
-        ease: "power3.out",
-        overwrite: "auto",
-        onComplete: () => {
-          if (isHovering) return;
-
-          spot.classList.remove("active");
-          gsap.set(spot, { zIndex: 10 });
-
-          const parentLine = spot.closest(".line");
-          if (parentLine) {
-            parentLine.classList.remove("active-line");
-            gsap.set(parentLine, { zIndex: 1 });
-          }
-
-          gsap.set(card, {
-            clearProps: "width,height,borderRadius,yPercent",
-            ...CARD_CENTERED,
-          });
-
-          gsap.set(image, { x: 0, y: 0 });
-        },
-      });
-
-      gsap.to(image, {
-        opacity: 0,
-        duration: 0.3,
-        ease: "power2.out",
-        overwrite: "auto",
-      });
-    };
-
-    spot.addEventListener("mouseleave", shrinkCard);
+    spot.addEventListener("click", (e) => {
+      if (isDesktop()) return;
+      e.stopPropagation();
+      if (spot.classList.contains("active")) {
+        shrinkCard();
+        activeMobileSpot = null;
+      } else {
+        if (activeMobileSpot && activeMobileSpot !== spot) {
+          activeMobileSpot._shrinkCard();
+        }
+        activeMobileSpot = spot;
+        expandCard();
+      }
+    });
   });
+
+  // Mobile tap outside to close active card
+  document.addEventListener("touchstart", (e) => {
+    if (isDesktop()) return;
+    if (activeMobileSpot && !e.target.closest(".spot")) {
+      activeMobileSpot._shrinkCard();
+      activeMobileSpot = null;
+    }
+  }, { passive: true });
+
+  // Mobile Scroll-Driven Auto Reveal
+  const initMobileSpotAutoReveal = () => {
+    if (allSpots.length === 0) return;
+
+    ScrollTrigger.matchMedia({
+      "(max-width: 899px)": function () {
+        const spotsArr = Array.from(allSpots);
+
+        mobileAutoRevealTl = gsap.timeline({
+          scrollTrigger: {
+            trigger: "#about-section",
+            start: "top 45%",
+            end: "bottom 85%",
+            toggleActions: "play none none reverse",
+          },
+        });
+
+        // Sequence through spots 1, 2, 3 automatically
+        spotsArr.forEach((sp, idx) => {
+          const delay = idx * 1.8;
+          mobileAutoRevealTl.call(() => {
+            if (!activeMobileSpot) sp._expandCard(true);
+          }, null, delay);
+
+          mobileAutoRevealTl.call(() => {
+            if (!activeMobileSpot || activeMobileSpot === sp) sp._shrinkCard();
+          }, null, delay + 1.25);
+        });
+      },
+    });
+  };
+
+  initMobileSpotAutoReveal();
 
   // ZENTRY 3D LEFT-BEVEL ENTRANCE ANIMATION
   const headline = document.querySelector(".headline");

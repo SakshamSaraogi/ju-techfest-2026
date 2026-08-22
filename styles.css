@@ -746,8 +746,13 @@ p {
 
 @media (max-width: 999px) {
   .spot {
-    cursor: default;
-    pointer-events: none;
+    cursor: pointer;
+    pointer-events: auto !important;
+    touch-action: pan-y;
+  }
+
+  .spot-card {
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.95), 0 0 25px rgba(217, 20, 36, 0.6);
   }
 }
 
