@@ -378,14 +378,6 @@ function init() {
       scale: 3.5,
       ease: "power2.inOut",
       duration: 0.14,
-      onStart: () => {
-        const anchor = document.getElementById("logo-anchor");
-        if (anchor) anchor.style.zIndex = "30";
-      },
-      onReverseComplete: () => {
-        const anchor = document.getElementById("logo-anchor");
-        if (anchor) anchor.style.zIndex = "150";
-      },
     },
     0.22
   );
@@ -496,17 +488,22 @@ function init() {
       opacity: 1,
       ease: "power2.inOut",
       duration: 0.12,
-      onStart: () => {
-        const anchor = document.getElementById("logo-anchor");
-        if (anchor) anchor.style.zIndex = "150";
-      },
-      onReverseComplete: () => {
-        const anchor = document.getElementById("logo-anchor");
-        if (anchor) anchor.style.zIndex = "30";
-      },
     },
     0.86
   );
+
+  // Top Floating Innov8 Logo -> Tapping smoothly scrolls to the very top/first page frame
+  const floatingLogoBtn = document.getElementById("floating-logo");
+  if (floatingLogoBtn) {
+    floatingLogoBtn.addEventListener("click", (e) => {
+      e.preventDefault();
+      if (window.lenis) {
+        window.lenis.scrollTo(0, { immediate: false, duration: 1.2 });
+      } else {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      }
+    });
+  }
 
   // -------------------------------------------------------------
   // 6. ABOUT SECTION: ZENTRY SPOTLIGHT & HANGING CHARACTERS
@@ -687,57 +684,64 @@ function init() {
   let activeSpotManual = null;
   let autoRevealResumeTimeout = null;
 
-  // 1. Build the continuous Auto-Reveal GSAP Timeline (Sequences Spot 1 -> 2 -> 3)
+  // 1. Build the continuous Auto-Reveal GSAP Timeline (Desktop ONLY, Sequences Spot 1 -> 2 -> 3)
   const autoRevealTl = gsap.timeline({
     repeat: -1,
     paused: true,
     repeatDelay: 0.8,
   });
 
-  allSpots.forEach((spot) => {
-    const card = spot.querySelector(".spot-card");
-    const img = spot.querySelector("img");
-    const parentLine = spot.closest(".line");
-    const allLines = document.querySelectorAll(".headline .line");
-    const isBottomLine = parentLine && parentLine === allLines[allLines.length - 1];
+  if (isDesktop()) {
+    allSpots.forEach((spot) => {
+      const card = spot.querySelector(".spot-card");
+      const img = spot.querySelector("img");
+      const parentLine = spot.closest(".line");
+      const allLines = document.querySelectorAll(".headline .line");
+      const isBottomLine = parentLine && parentLine === allLines[allLines.length - 1];
 
-    autoRevealTl
-      .add(() => {
-        gsap.set(spot, { zIndex: 1000 });
-        if (parentLine) gsap.set(parentLine, { zIndex: 1000 });
-        gsap.set(card, {
-          ...CARD_CENTERED,
-          yPercent: isBottomLine ? -75 : -50,
-        });
-      })
-      .to(card, {
-        width: () => getCardOpenConfig().width,
-        height: () => getCardOpenConfig().height,
-        borderRadius: () => getCardOpenConfig().borderRadius,
-        duration: 0.55,
-        ease: "power3.out",
-      })
-      .to(img, { opacity: 1, duration: 0.35, ease: "power2.out" }, "<")
-      .to({}, { duration: 1.6 }) // Hold open to view
-      .to(card, {
-        width: "0.4em",
-        height: "0.4em",
-        borderRadius: "0.04em",
-        duration: 0.45,
-        ease: "power3.inOut",
-      })
-      .to(img, { opacity: 0, duration: 0.25, ease: "power2.in" }, "<")
-      .add(() => {
-        gsap.set(spot, { zIndex: 10 });
-        if (parentLine) gsap.set(parentLine, { zIndex: 1 });
-      })
-      .to({}, { duration: 0.4 }); // Short pause between spots
-  });
+      autoRevealTl
+        .add(() => {
+          gsap.set(spot, { zIndex: 1000 });
+          if (parentLine) gsap.set(parentLine, { zIndex: 1000 });
+          gsap.set(card, {
+            ...CARD_CENTERED,
+            yPercent: isBottomLine ? -75 : -50,
+          });
+        })
+        .to(card, {
+          width: () => getCardOpenConfig().width,
+          height: () => getCardOpenConfig().height,
+          borderRadius: () => getCardOpenConfig().borderRadius,
+          duration: 0.55,
+          ease: "power3.out",
+        })
+        .to(img, { opacity: 1, duration: 0.35, ease: "power2.out" }, "<")
+        .to({}, { duration: 1.6 }) // Hold open to view
+        .to(card, {
+          width: "0.4em",
+          height: "0.4em",
+          borderRadius: "0.04em",
+          duration: 0.45,
+          ease: "power3.inOut",
+        })
+        .to(img, { opacity: 0, duration: 0.25, ease: "power2.in" }, "<")
+        .add(() => {
+          gsap.set(spot, { zIndex: 10 });
+          if (parentLine) gsap.set(parentLine, { zIndex: 1 });
+        })
+        .to({}, { duration: 0.4 }); // Short pause between spots
+    });
+  }
 
   // 2. Manual Open / Close Controllers
   const openSpotDirectly = (spot) => {
-    autoRevealTl.pause();
-    if (autoRevealResumeTimeout) clearTimeout(autoRevealResumeTimeout);
+    if (isDesktop()) {
+      autoRevealTl.pause();
+    }
+    if (autoRevealResumeTimeout) {
+      clearTimeout(autoRevealResumeTimeout);
+      autoRevealResumeTimeout = null;
+    }
 
     allSpots.forEach((s) => {
       if (s !== spot) {
@@ -813,13 +817,15 @@ function init() {
       overwrite: "auto",
     });
 
-    // Schedule resuming the auto-reveal timeline after 2.5 seconds of idle
-    if (autoRevealResumeTimeout) clearTimeout(autoRevealResumeTimeout);
-    autoRevealResumeTimeout = setTimeout(() => {
-      if (!activeSpotManual && !document.querySelector(".spot.active")) {
-        autoRevealTl.resume();
-      }
-    }, 2500);
+    // Schedule resuming the auto-reveal timeline ONLY on Desktop (Never on Phone)
+    if (isDesktop()) {
+      if (autoRevealResumeTimeout) clearTimeout(autoRevealResumeTimeout);
+      autoRevealResumeTimeout = setTimeout(() => {
+        if (isDesktop() && !activeSpotManual && !document.querySelector(".spot.active")) {
+          autoRevealTl.resume();
+        }
+      }, 2500);
+    }
   };
 
   // 3. Attach Event Listeners to each Spot

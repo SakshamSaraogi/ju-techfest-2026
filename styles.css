@@ -781,11 +781,26 @@ p {
 @media (max-width: 768px) {
   .site-header {
     padding: 1.25rem 1.5rem;
-    z-index: auto !important;
+    z-index: 900 !important;
+    pointer-events: none;
   }
 
   .logo-anchor {
-    z-index: 30 !important;
+    top: 1.25rem;
+    z-index: 900 !important;
+    pointer-events: auto !important;
+    cursor: pointer !important;
+  }
+
+  .nav-logo-link {
+    pointer-events: auto !important;
+    cursor: pointer !important;
+    display: inline-flex !important;
+  }
+
+  .site-logo {
+    height: 30px !important;
+    pointer-events: auto !important;
   }
 
   .hero-scroll-section {
@@ -799,11 +814,11 @@ p {
   }
 
   #carousel-canvas {
-    z-index: 120 !important;
+    z-index: 20 !important;
   }
 
   .menu {
-    z-index: 99999 !important;
+    z-index: 999999 !important;
   }
 
   .welcome-text {
