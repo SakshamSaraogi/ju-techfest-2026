@@ -1,0 +1,138 @@
+.brief-hero {
+  position: relative;
+  width: 100%;
+  height: 80svh;
+  background-color: var(--base-300);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.brief-banner-img {
+  position: relative;
+  width: 100%;
+  height: 100svh;
+  overflow: hidden;
+}
+
+.brief-banner-img-wrapper {
+  width: 100%;
+  height: 100%;
+}
+
+.brief-overview {
+  position: relative;
+  width: 100%;
+  padding: 8rem 0;
+  background-color: var(--base-200);
+}
+
+.brief-overview-header {
+  width: 100%;
+  margin-bottom: 8rem;
+}
+
+.brief-overview-header .container {
+  display: flex;
+  justify-content: space-between;
+  padding: 2.25rem;
+}
+
+.brief-overview-header .container h2 {
+  width: 50%;
+}
+
+.brief-overview-content {
+  width: 100%;
+}
+
+.brief-overview-content .container {
+  display: flex;
+  gap: 2rem;
+  padding: 2.25rem;
+}
+
+.brief-overview-content .brief-overview-content-col:nth-child(1) {
+  flex: 2;
+}
+
+.brief-overview-content .brief-overview-content-col:nth-child(2) {
+  flex: 5;
+}
+
+.brief-overview-content .brief-overview-content-col:nth-child(2) h5 {
+  padding: 0;
+  margin-bottom: 4rem;
+}
+
+.brief-images {
+  position: relative;
+  width: 100%;
+  background-color: var(--base-200);
+}
+
+.brief-images-container {
+  width: 100%;
+}
+
+.brief-img {
+  border-radius: 6px;
+  overflow: hidden;
+  width: 100%;
+  height: 100%;
+  aspect-ratio: 8/5;
+}
+
+.brief-images-container .container {
+  width: 75%;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.next-brief {
+  position: relative;
+  width: 100%;
+  padding: 10rem 2.25rem 14rem 2.25rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  overflow: hidden;
+  background-color: var(--base-200);
+}
+
+.next-brief-header {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+@media (max-width: 1000px) {
+  .brief-hero-header {
+    width: 85%;
+  }
+
+  .brief-overview-header .container {
+    flex-direction: column-reverse;
+    gap: 2rem;
+  }
+
+  .brief-overview-header .container h2 {
+    padding: 0;
+    width: 100%;
+  }
+
+  .brief-overview-header {
+    margin-bottom: 4rem;
+  }
+
+  .brief-overview-content .container {
+    flex-direction: column;
+  }
+
+  .brief-images-container .container {
+    width: 100%;
+    gap: 0.75rem;
+  }
+}

@@ -1,0 +1,54 @@
+.blinding-light {
+  position: relative;
+  width: 100%;
+  height: 100svh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  overflow: hidden;
+  background: var(--base-300);
+}
+
+.blinding-light-header {
+  position: absolute;
+  top: 25%;
+  transform: translateY(-50%);
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 2rem;
+  flex-shrink: 0;
+  padding: 2.5rem;
+  text-align: center;
+}
+
+.blinding-light-footer {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  z-index: 2;
+}
+
+.blinding-light-footer .container {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  padding: 2.25rem;
+}
+
+.blinding-light-stage {
+  position: relative;
+  width: 100%;
+  flex: 1;
+  min-height: 0;
+  z-index: 1;
+}
+
+.blinding-light-stage canvas {
+  display: block;
+  width: 100% !important;
+  height: 100% !important;
+}

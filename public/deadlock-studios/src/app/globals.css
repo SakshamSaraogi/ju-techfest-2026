@@ -1,0 +1,228 @@
+@import url(./fonts.css);
+
+:root {
+  --type-1: "Verilet", sans-serif;
+  --type-2: "Cossette Titre", sans-serif;
+  --type-3: "SUSE Mono", monospace;
+
+  --base-100: #f7f5f0;
+  --base-200: #272a2a;
+  --base-300: #0b0b0b;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+  text-transform: uppercase;
+}
+
+::-webkit-scrollbar {
+  display: none;
+}
+
+body {
+  font-family: var(--type-2);
+  background-color: var(--base-300);
+  color: var(--base-100);
+}
+
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.container {
+  position: relative;
+  width: 100%;
+  max-width: 2000px;
+  height: 100%;
+  margin: 0 auto;
+  padding: 0.75rem;
+}
+
+.type-1 {
+  font-family: var(--type-1);
+}
+
+.type-2 {
+  font-family: var(--type-2);
+}
+
+.type-3 {
+  font-family: var(--type-3);
+}
+
+h1.type-1,
+h2.type-1,
+h3.type-1,
+h4.type-1,
+h5.type-1,
+h6.type-1 {
+  font-weight: 500;
+  letter-spacing: -5%;
+  padding: 0 0.75rem;
+  line-height: 0.6;
+}
+
+h1.type-1 {
+  font-size: clamp(6rem, 12vw, 18rem);
+}
+
+h2.type-1 {
+  font-size: clamp(5rem, 10vw, 15rem);
+}
+
+h3.type-1 {
+  font-size: clamp(4rem, 8vw, 12rem);
+}
+
+h4.type-1 {
+  font-size: clamp(3rem, 6vw, 9rem);
+}
+
+h5.type-1 {
+  font-size: clamp(2rem, 4vw, 6rem);
+}
+
+h6.type-1 {
+  font-size: clamp(1.5rem, 3vw, 4.5rem);
+}
+
+h1.type-2,
+h2.type-2,
+h3.type-2,
+h4.type-2,
+h5.type-2,
+h6.type-2 {
+  font-weight: 500;
+  letter-spacing: -3%;
+  padding: 0 0.5rem;
+  line-height: 0.9;
+}
+
+h1.type-2 {
+  font-size: clamp(4rem, 8vw, 12rem);
+}
+
+h2.type-2 {
+  font-size: clamp(3rem, 6vw, 9rem);
+}
+
+h3.type-2 {
+  font-size: clamp(2.5rem, 5vw, 7.5rem);
+}
+
+h4.type-2 {
+  font-size: clamp(2rem, 4vw, 6rem);
+}
+
+h5.type-2 {
+  font-size: clamp(1.5rem, 3vw, 4.5rem);
+}
+
+h6.type-2 {
+  font-size: clamp(1.25rem, 2.5vw, 3.75rem);
+}
+
+p,
+a {
+  text-decoration: none;
+  font-family: var(--type-2);
+  font-size: 1.5rem;
+  font-weight: 400;
+  line-height: 0.9;
+}
+
+p.sm {
+  font-size: 1.25rem;
+}
+
+p.lg {
+  font-size: 1.75rem;
+}
+
+.mono {
+  font-family: var(--type-3);
+  font-size: 0.85rem;
+  font-weight: 450;
+  line-height: 1;
+  letter-spacing: -2%;
+}
+
+.mono.sm {
+  font-size: 0.75rem;
+}
+
+.mono.lg {
+  font-size: 0.95rem;
+}
+
+.btn {
+  border: 1px solid var(--base-100);
+  padding: 0.65rem 2.5rem;
+  border-radius: 4rem;
+}
+
+.transition-grid {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100svh;
+  display: flex;
+  flex-direction: column;
+  z-index: 1000;
+  pointer-events: none;
+}
+
+.transition-grid.is-blocking,
+.transition-grid.is-blocking .transition-row,
+.transition-grid.is-blocking .transition-block {
+  pointer-events: auto;
+}
+
+.transition-row {
+  flex: 1;
+  display: flex;
+}
+
+.transition-row.row-1 .transition-block {
+  transform-origin: top;
+}
+
+.transition-row.row-2 .transition-block {
+  transform-origin: bottom;
+}
+
+.transition-block {
+  flex: 1;
+  background-color: #49534e;
+  will-change: transform;
+}
+
+@media (max-width: 1000px) {
+  .btn {
+    padding: 0.65rem 2rem;
+  }
+}

@@ -1,0 +1,95 @@
+.at-container {
+  position: relative;
+  width: 100%;
+  height: 100svh;
+  padding: 2rem;
+  background-color: var(--base-300);
+  overflow: hidden;
+}
+
+.at-inner {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.at-text {
+  width: 100%;
+}
+
+.at-text .container {
+  width: 55%;
+}
+
+.at-text p {
+  color: var(--base-100);
+  text-align: center;
+  margin-bottom: 2rem;
+  font-size: clamp(1.5rem, 2.5vw, 4.5rem);
+  letter-spacing: -2%;
+}
+
+.at-word {
+  display: inline-block;
+  position: relative;
+  margin-right: 0.2rem;
+  margin-bottom: 0.2rem;
+  padding: 0.1rem 0.2rem;
+  border-radius: 0.5rem;
+  will-change: background-color, opacity;
+  opacity: 0;
+}
+
+.at-word.at-keyword-wrapper {
+  margin: 0 0.4rem 0.2rem 0.2rem;
+}
+
+.at-word span {
+  position: relative;
+  opacity: 0;
+}
+
+.at-word span.at-keyword {
+  border-radius: 0.5rem;
+  display: inline-block;
+  width: 100%;
+  height: 100%;
+  padding: 0.1rem 0;
+  color: #141414;
+}
+
+.at-word span.at-keyword::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: calc(100% + 1rem);
+  height: calc(100% + 0.4rem);
+  background-color: var(--kw-color, var(--base-100));
+  border-radius: 0.5rem;
+  z-index: -1;
+}
+
+@media (max-width: 1000px) {
+  .at-text .container {
+    width: 90%;
+  }
+
+  .at-text p {
+    font-size: 1.25rem;
+  }
+
+  .at-word {
+    margin-right: 0.1rem;
+    margin-bottom: 0.15rem;
+    padding: 0.1rem 0.2rem;
+  }
+
+  .at-word.at-keyword-wrapper {
+    margin: 0 0.2rem 0.1rem 0.1rem;
+  }
+}

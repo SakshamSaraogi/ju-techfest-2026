@@ -1,0 +1,121 @@
+.catalog-slider {
+  position: relative;
+  width: 100%;
+  height: 100svh;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.catalog-canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.catalog-slider-content {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  transform: translateY(-50%);
+  width: 100%;
+  z-index: 2;
+  display: flex;
+  justify-content: flex-end;
+  padding: 0 0.75rem 0 2.25rem;
+  box-sizing: border-box;
+}
+
+.catalog-slider-content.is-awaiting-enter .container {
+  visibility: hidden;
+}
+
+.catalog-slider-content .container {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  width: 50%;
+  max-width: none;
+  margin: 0;
+}
+
+.catalog-slide-title h1 {
+  display: block;
+  font-size: clamp(2.5rem, 5vw, 7.5rem);
+}
+
+.catalog-line {
+  overflow: hidden;
+}
+
+.catalog-line span {
+  position: relative;
+  display: inline-block;
+  will-change: transform;
+}
+
+.catalog-slide-description {
+  width: 55%;
+  padding: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  color: var(--base-100);
+}
+
+.catalog-slide-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.catalog-slide-link a {
+  position: relative;
+  display: block;
+  width: max-content;
+  padding: 0.5rem 0;
+  color: var(--base-100);
+  cursor: pointer;
+}
+
+.catalog-slider-footer {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1;
+  color: var(--base-100);
+  pointer-events: none;
+}
+
+.catalog-slider-footer .container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 2.25rem;
+}
+
+@media (max-width: 1000px) {
+  .catalog-slider-content {
+    justify-content: center;
+    padding: 0 1rem;
+  }
+
+  .catalog-slider-content .container {
+    width: calc(100% - 2rem);
+    align-items: center;
+    text-align: center;
+  }
+
+  .catalog-slide-title h1 {
+    padding: 0;
+    justify-content: center;
+  }
+
+  .catalog-slide-description {
+    width: 90%;
+  }
+
+  .catalog-slide-link a {
+    margin: 0 auto;
+  }
+}

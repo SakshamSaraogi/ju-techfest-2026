@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>JU INNOV8 2026 | EVENTS & REGISTRATION</title>
+  <link rel="stylesheet" href="/styles.css" />
+  <link rel="stylesheet" href="/events.css" />
+</head>
+
+<body class="events-page-body">
+  <!-- Fixed Global Ambient Background (Dark Red Flowing Streamlines) -->
+  <canvas id="bg-canvas"></canvas>
+
+  <!-- Fixed Navigation Header -->
+  <header class="site-header events-site-header">
+    <div class="header-left">
+      <a href="/" class="nav-logo-link" title="Back to Home">
+        <img src="/innov8.png" alt="INNOV8" class="site-logo" />
+      </a>
+    </div>
+  </header>
+
+  <!-- Dedicated Top-Level Fixed Hamburger/Cross Toggle Button -->
+  <button class="menu" id="menu-btn" type="button" aria-label="Toggle navigation menu">
+    <div class="hamburger-icon" id="hamburger-icon">
+      <span class="ham-line line-top"></span>
+      <span class="ham-line line-mid"></span>
+      <span class="ham-line line-bot"></span>
+    </div>
+  </button>
+
+  <!-- Fullscreen WeAreCasey Style Interactive Menu Overlay -->
+  <nav class="fullscreen-menu" id="fullscreen-menu" aria-hidden="true">
+    <div class="menu-bg"></div>
+    <div class="menu-container">
+      <div class="menu-items-list">
+        <a class="menu-item" href="/" data-target="home">
+          <span class="item-index">01</span>
+          <span class="item-label">Home</span>
+          <span class="item-divider"></span>
+        </a>
+        <a class="menu-item" href="/events.html" data-target="events">
+          <span class="item-index">02</span>
+          <span class="item-label">Events</span>
+          <span class="item-divider"></span>
+        </a>
+        <a class="menu-item" href="/#about-section" data-target="team">
+          <span class="item-index">03</span>
+          <span class="item-label">Team</span>
+          <span class="item-divider"></span>
+        </a>
+        <a class="menu-item" href="/#domains-section" data-target="sponsors">
+          <span class="item-index">04</span>
+          <span class="item-label">Sponsors</span>
+          <span class="item-divider"></span>
+        </a>
+        <a class="menu-item" href="/#footer-section" data-target="contact">
+          <span class="item-index">05</span>
+          <span class="item-label">Contact</span>
+          <span class="item-divider"></span>
+        </a>
+        <a class="menu-item" href="/events.html" data-target="guidelines">
+          <span class="item-index">06</span>
+          <span class="item-label">Guidelines</span>
+          <span class="item-divider"></span>
+        </a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Events Page Wrapper -->
+  <main class="events-page-wrapper">
+    <div class="events-layout">
+      <!-- Left Sidebar (ApeChain style) -->
+      <aside class="events-sidebar">
+        <!-- Search Bar -->
+        <div class="search-box-wrapper">
+          <input type="text" id="events-search-input" placeholder="Search" autocomplete="off" />
+          <svg class="search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="8"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+          </svg>
+          <button id="clear-search-btn" class="clear-search-btn" style="display: none;" title="Clear search">&times;</button>
+        </div>
+
+        <!-- Categories Filter -->
+        <nav class="categories-nav">
+          <button class="category-item active" data-category="all">
+            <div class="cat-label-wrap">
+              <span class="cat-label cat-label-main">ALL</span>
+              <span class="cat-label cat-label-hover">ALL</span>
+            </div>
+            <span class="cat-count" id="count-all">12</span>
+          </button>
+          <button class="category-item" data-category="hardware">
+            <div class="cat-label-wrap">
+              <span class="cat-label cat-label-main">HARDWARE</span>
+              <span class="cat-label cat-label-hover">HARDWARE</span>
+            </div>
+            <span class="cat-count" id="count-hardware">4</span>
+          </button>
+          <button class="category-item" data-category="software">
+            <div class="cat-label-wrap">
+              <span class="cat-label cat-label-main">SOFTWARE</span>
+              <span class="cat-label cat-label-hover">SOFTWARE</span>
+            </div>
+            <span class="cat-count" id="count-software">4</span>
+          </button>
+          <button class="category-item" data-category="esports">
+            <div class="cat-label-wrap">
+              <span class="cat-label cat-label-main">ESPORTS</span>
+              <span class="cat-label cat-label-hover">ESPORTS</span>
+            </div>
+            <span class="cat-count" id="count-esports">4</span>
+          </button>
+        </nav>
+      </aside>
+
+      <!-- Right Main Content Area -->
+      <section class="events-main-section">
+        <!-- Meta / Header bar -->
+        <div class="events-meta-bar">
+          <div class="events-meta-left">
+            <span class="events-badge">INNOVERSE DIRECTORY</span>
+            <h1 class="events-heading">EXPLORE ALL EVENTS</h1>
+          </div>
+          <span class="events-counter-badge" id="results-count-badge">SHOWING 12 OF 12</span>
+        </div>
+
+        <!-- Events Grid (Square Cards) -->
+        <div class="events-grid" id="events-grid">
+          <!-- Cards populated and animated via events.js -->
+        </div>
+
+        <!-- No Results Fallback -->
+        <div class="no-results-box" id="no-results-box" style="display: none;">
+          <p class="no-results-title">NO EVENTS FOUND</p>
+          <p class="no-results-desc">No events matched your search keyword or selected category.</p>
+          <button class="reset-filter-btn" id="reset-filter-btn">RESET FILTERS</button>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <!-- Interactive Event Details / Registration Modal -->
+  <div class="event-modal-backdrop" id="event-modal" style="display: none;">
+    <div class="event-modal-dialog">
+      <button class="modal-close-btn" id="modal-close-btn" aria-label="Close modal">&times;</button>
+      <div class="modal-body" id="modal-body-content">
+        <!-- Injected via JavaScript on card click -->
+      </div>
+    </div>
+  </div>
+
+  <!-- GSAP Circular Page Transition Overlay -->
+  <div id="page-transition-overlay" class="page-transition-overlay"></div>
+
+  <script type="module" src="/events.js"></script>
+</body>
+
+</html>

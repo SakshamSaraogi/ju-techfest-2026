@@ -1,0 +1,24 @@
+.studio-hero {
+  position: relative;
+  width: 100%;
+  height: 150svh;
+  padding: 2rem;
+  overflow: hidden;
+}
+
+.studio-hero canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+}
+
+.studio-hero-header {
+  position: relative;
+  z-index: 0;
+  text-align: justify;
+  pointer-events: none;
+  width: 100%;
+}

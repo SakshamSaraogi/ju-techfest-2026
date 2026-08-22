@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>JU INNOV8 2026 | INNOVERSE</title>
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+
+<body>
+  <!-- Fixed Global Background (Dark Red Flowing Streamlines) -->
+  <canvas id="bg-canvas"></canvas>
+
+  <!-- Fixed Header & Floating Center Logo -->
+  <header class="site-header">
+    <div class="header-left"></div>
+    <div class="logo-anchor" id="logo-anchor">
+      <a href="#" class="nav-logo-link" id="floating-logo">
+        <img src="/innov8.png" alt="INNOV8" class="site-logo" />
+      </a>
+    </div>
+  </header>
+
+  <!-- Dedicated Top-Level Fixed Hamburger/Cross Toggle Button -->
+  <button class="menu" id="menu-btn" type="button" aria-label="Toggle navigation menu">
+    <div class="hamburger-icon" id="hamburger-icon">
+      <span class="ham-line line-top"></span>
+      <span class="ham-line line-mid"></span>
+      <span class="ham-line line-bot"></span>
+    </div>
+  </button>
+
+  <!-- Fullscreen WeAreCasey Style Interactive Menu Overlay -->
+  <nav class="fullscreen-menu" id="fullscreen-menu" aria-hidden="true">
+    <div class="menu-bg"></div>
+    <div class="menu-container">
+      <div class="menu-items-list">
+        <a class="menu-item" href="/" data-target="home">
+          <span class="item-index">01</span>
+          <span class="item-label">Home</span>
+          <span class="item-divider"></span>
+        </a>
+        <a class="menu-item" href="/events.html" data-target="events">
+          <span class="item-index">02</span>
+          <span class="item-label">Events</span>
+          <span class="item-divider"></span>
+        </a>
+        <a class="menu-item" href="#about-section" data-target="team">
+          <span class="item-index">03</span>
+          <span class="item-label">Team</span>
+          <span class="item-divider"></span>
+        </a>
+        <a class="menu-item" href="#domains-section" data-target="sponsors">
+          <span class="item-index">04</span>
+          <span class="item-label">Sponsors</span>
+          <span class="item-divider"></span>
+        </a>
+        <a class="menu-item" href="#footer-section" data-target="contact">
+          <span class="item-index">05</span>
+          <span class="item-label">Contact</span>
+          <span class="item-divider"></span>
+        </a>
+        <a class="menu-item" href="/events.html" data-target="guidelines">
+          <span class="item-index">06</span>
+          <span class="item-label">Guidelines</span>
+          <span class="item-divider"></span>
+        </a>
+      </div>
+    </div>
+  </nav>
+
+  <main class="page-container">
+    <!-- Section 1: Hero Scroll Track (Pinned for Smooth Zoom-Out Transition & 3D Spiral Carousel) -->
+    <section class="hero-scroll-section" id="hero-scroll-section">
+      <div class="hero-sticky-viewport">
+        <!-- The Zoom-Out Rectangle Card -->
+        <div class="hero-card" id="hero-card">
+          <!-- Kinetic Typography Moving Behind Character -->
+          <div class="bg-marquee-container">
+            <div class="marquee-track track-top">
+              <div class="marquee-content">
+                <span>WELCOME TO INNOVERSE</span>
+                <img src="/spiderweb.png" alt="Spiderweb" class="spiderweb-accent" />
+                <span>WELCOME TO INNOVERSE</span>
+                <img src="/spiderweb.png" alt="Spiderweb" class="spiderweb-accent" />
+                <span>WELCOME TO INNOVERSE</span>
+                <img src="/spiderweb.png" alt="Spiderweb" class="spiderweb-accent" />
+                <span>WELCOME TO INNOVERSE</span>
+                <img src="/spiderweb.png" alt="Spiderweb" class="spiderweb-accent" />
+              </div>
+              <div class="marquee-content" aria-hidden="true">
+                <span>WELCOME TO INNOVERSE</span>
+                <img src="/spiderweb.png" alt="Spiderweb" class="spiderweb-accent" />
+                <span>WELCOME TO INNOVERSE</span>
+                <img src="/spiderweb.png" alt="Spiderweb" class="spiderweb-accent" />
+                <span>WELCOME TO INNOVERSE</span>
+                <img src="/spiderweb.png" alt="Spiderweb" class="spiderweb-accent" />
+                <span>WELCOME TO INNOVERSE</span>
+                <img src="/spiderweb.png" alt="Spiderweb" class="spiderweb-accent" />
+              </div>
+            </div>
+
+            <div class="marquee-track track-bottom">
+              <div class="marquee-content reverse">
+                <span>JU INNOV8 2026</span>
+                <img src="/spiderweb.png" alt="Spiderweb" class="spiderweb-accent" />
+                <span>JU INNOV8 2026</span>
+                <img src="/spiderweb.png" alt="Spiderweb" class="spiderweb-accent" />
+                <span>JU INNOV8 2026</span>
+                <img src="/spiderweb.png" alt="Spiderweb" class="spiderweb-accent" />
+                <span>JU INNOV8 2026</span>
+                <img src="/spiderweb.png" alt="Spiderweb" class="spiderweb-accent" />
+              </div>
+              <div class="marquee-content reverse" aria-hidden="true">
+                <span>JU INNOV8 2026</span>
+                <img src="/spiderweb.png" alt="Spiderweb" class="spiderweb-accent" />
+                <span>JU INNOV8 2026</span>
+                <img src="/spiderweb.png" alt="Spiderweb" class="spiderweb-accent" />
+                <span>JU INNOV8 2026</span>
+                <img src="/spiderweb.png" alt="Spiderweb" class="spiderweb-accent" />
+                <span>JU INNOV8 2026</span>
+                <img src="/spiderweb.png" alt="Spiderweb" class="spiderweb-accent" />
+              </div>
+            </div>
+          </div>
+
+          <!-- WebGL Interactive Character Canvas -->
+          <canvas id="hero-canvas"></canvas>
+        </div>
+
+        <!-- Centered "Welcome To" Red Strip Reveal above Logo -->
+        <div class="welcome-reveal-container" id="welcome-reveal-container">
+          <div class="welcome-block-reveal">
+            <span class="welcome-text" id="welcome-text">Welcome To</span>
+            <div class="reveal-red-strip" id="reveal-red-strip"></div>
+          </div>
+        </div>
+
+        <!-- 3D Curved WebGL Mesh Carousel Canvas (Bending along the 3D Orbit) -->
+        <canvas id="carousel-canvas"></canvas>
+      </div>
+    </section>
+
+    <!-- ABOUT INNOV8 SECTION (Zentry Interactive Photo Hover Spotlight & Hanging Characters) -->
+    <section class="about-section spotlight-section" id="about-section">
+      <!-- Suspended Swinging Characters Container -->
+      <div class="hanging-characters-wrapper" id="hanging-characters-wrapper">
+        <!-- Left: Miles Morales (hanging_1.png) -->
+        <div class="hanging-character hanging-left" id="hanger-left">
+          <div class="character-img-box">
+            <img src="/hanging_1.png" alt="Miles Morales Hanging" class="hanging-spider-img" />
+          </div>
+        </div>
+
+        <!-- Right: Spider-Gwen (hanging_2.png) -->
+        <div class="hanging-character hanging-right" id="hanger-right">
+          <div class="character-img-box">
+            <img src="/hanging_2.png" alt="Spider-Gwen Hanging" class="hanging-spider-img" />
+          </div>
+        </div>
+      </div>
+
+      <div class="spotlight-container">
+        <h2 class="headline">
+          <span class="line">
+            <span class="word">WE</span>
+            <span class="word">SHAPE</span>
+            <span class="word">THE</span>
+          </span>
+
+          <span class="line">
+            <span class="word">FUTURE</span>
+            <span class="spot">
+              <span class="spot-card"><img src="/img1.png" alt="Software" /></span>
+            </span>
+            <span class="word">WHERE</span>
+          </span>
+
+          <span class="line">
+            <span class="word text-crimson">SOFTWARE</span>
+          </span>
+
+          <span class="line">
+            <span class="word">MEETS</span>
+            <span class="spot">
+              <span class="spot-card"><img src="/img2.jpeg" alt="Hardware" /></span>
+            </span>
+            <span class="word text-crimson">HARDWARE</span>
+          </span>
+
+          <span class="line">
+            <span class="word">AND</span>
+            <span class="word text-crimson">ESPORTS</span>
+          </span>
+
+          <span class="line">
+            <span class="word">COME</span>
+            <span class="spot">
+              <span class="spot-card"><img src="/img3.jpeg" alt="Esports" /></span>
+            </span>
+            <span class="word">ALIVE</span>
+          </span>
+        </h2>
+      </div>
+    </section>
+
+    <!-- SECTION 3: DOMAINS 3D SHOWCASE (3 Curved Mesh Frames, Center Innov8 Logo, Left Info, Right Selector Pills) -->
+    <section class="domains-scroll-section" id="domains-scroll-section">
+      <div class="domains-sticky-viewport">
+        <!-- 3D WebGL Canvas for 3 Curved Cards & Orbit Flight -->
+        <canvas id="domains-canvas"></canvas>
+
+        <!-- Center Innov8 Logo Anchor (Behind the active card) -->
+        <div class="domains-center-logo">
+          <img src="/innov8.png" alt="INNOV8" class="domains-logo-img" />
+        </div>
+
+        <!-- Left Column: Title, Description, CTA -->
+        <div class="domains-left-content">
+          <h2 class="domains-title">DOMAINS</h2>
+          <p class="domains-desc">
+            Dive in and discover our core disciplines turning groundbreaking ideas into reality across software,
+            hardware, and esports.
+          </p>
+          <a href="/events.html" class="domains-cta-btn">REGISTER NOW</a>
+        </div>
+
+        <!-- Right Column: Vertical Domain Selector Navigation -->
+        <div class="domains-right-nav">
+          <button class="domain-pill active" data-index="0" data-category="software" type="button">
+            <span class="domain-label-wrap" data-text="SOFTWARE">SOFTWARE</span>
+          </button>
+          <button class="domain-pill" data-index="1" data-category="hardware" type="button">
+            <span class="domain-label-wrap" data-text="HARDWARE">HARDWARE</span>
+          </button>
+          <button class="domain-pill" data-index="2" data-category="esports" type="button">
+            <span class="domain-label-wrap" data-text="ESPORTS">ESPORTS</span>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 4: GLIMPSES 3D SPIRAL VORTEX & FREEFALLING CHARACTER -->
+    <section class="glimpses-scroll-section" id="glimpses-section">
+      <div class="glimpses-sticky-viewport">
+        <!-- 3D WebGL Canvas for Spiral Vortex Gallery -->
+        <canvas id="glimpses-canvas"></canvas>
+
+        <!-- Top Header -->
+        <div class="glimpses-header-container">
+          <h2 class="glimpses-title">
+            <span class="glimpses-line glimpses-line-1">
+              <span class="word">EXPERIENCE</span>
+              <span class="word">THE</span>
+            </span>
+            <span class="glimpses-line glimpses-line-2">
+              <span class="word text-crimson">INNOVERSE</span>
+            </span>
+          </h2>
+          <div class="glimpses-quote-container" id="glimpses-quote-container">
+            <span class="glimpses-quote-label-wrap" data-text="IT'S JUST A LEAP OF FAITH">IT'S JUST A LEAP OF FAITH</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 5: AFTERMOVIE INTERACTIVE SECTION -->
+    <section class="aftermovie-scroll-section" id="aftermovie-section">
+      <div class="aftermovie-sticky-viewport">
+        <!-- Crimson Streamline Background Overlay -->
+        <div class="aftermovie-bg-overlay">
+          <svg class="aftermovie-streamlines" viewBox="0 0 1440 900" fill="none" preserveAspectRatio="xMidYMid slice">
+            <path d="M-100,200 C300,50 600,450 1540,150" stroke="rgba(0,0,0,0.65)" stroke-width="1.8"
+              stroke-dasharray="6 6" />
+            <path d="M-100,350 C400,150 800,600 1540,300" stroke="rgba(0,0,0,0.75)" stroke-width="2.2" />
+            <path d="M-100,500 C350,300 750,750 1540,450" stroke="rgba(0,0,0,0.6)" stroke-width="1.5"
+              stroke-dasharray="4 4" />
+            <path d="M-100,650 C500,450 900,850 1540,600" stroke="rgba(0,0,0,0.7)" stroke-width="2" />
+            <path d="M-100,800 C450,600 850,950 1540,750" stroke="rgba(0,0,0,0.5)" stroke-width="1.5" />
+            <!-- Topography contours -->
+            <ellipse cx="280" cy="520" rx="360" ry="240" stroke="rgba(0,0,0,0.55)" stroke-width="1.8" />
+            <ellipse cx="1160" cy="480" rx="380" ry="260" stroke="rgba(0,0,0,0.55)" stroke-width="1.8" />
+            <ellipse cx="720" cy="450" rx="550" ry="380" stroke="rgba(0,0,0,0.4)" stroke-width="1.5" />
+          </svg>
+        </div>
+
+        <!-- Left & Right Corner Slide-in Images -->
+        <div class="aftermovie-corner-img corner-left" id="aftermovie-left-img">
+          <img src="/left.png" alt="Aftermovie Visual Left" />
+        </div>
+        <div class="aftermovie-corner-img corner-right" id="aftermovie-right-img">
+          <img src="/right.png" alt="Aftermovie Visual Right" />
+        </div>
+
+        <!-- Top Centered Typography -->
+        <div class="aftermovie-content-container">
+          <h2 class="aftermovie-title" id="aftermovie-title">
+            <span class="aftermovie-line">WATCH THE</span>
+            <span class="aftermovie-line text-crimson">AFTERMOVIE</span>
+          </h2>
+        </div>
+
+        <!-- Centered Expanding Video/Media Box -->
+        <div class="aftermovie-media-card" id="aftermovie-media-card">
+          <div class="aftermovie-media-inner">
+            <iframe class="aftermovie-yt-iframe" id="aftermovie-yt-iframe" src="https://www.youtube.com/embed/dQw4w9WgXcQ?enablejsapi=1&rel=0&playsinline=1" title="JU Innov8 Aftermovie" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+            <img src="/img1.png" alt="JU Innov8 Aftermovie" class="aftermovie-preview-img" />
+            <div class="aftermovie-media-overlay"></div>
+          </div>
+        </div>
+
+        <!-- Scroll Below Hint -->
+        <div class="aftermovie-scroll-hint" id="aftermovie-scroll-hint">
+          <span>SCROLL BELOW</span>
+          <svg class="aftermovie-scroll-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <path d="M7 10l5 5 5-5" />
+          </svg>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 6: INNOV8 FOOTER -->
+    <footer class="site-footer" id="site-footer">
+      <div class="footer-container">
+        <!-- Outer Card with the footermask.svg shape -->
+        <div class="footer-card" id="footer-card">
+          <!-- Background SVG with custom crown tab shape and ambient streamlines -->
+          <svg class="footer-card-shape" viewBox="0 0 1688 896" fill="none" preserveAspectRatio="none">
+            <defs>
+              <linearGradient id="footer-card-grad" x1="0%" y1="0%" x2="0%" y2="100%">
+                <stop offset="0%" stop-color="#141419" />
+                <stop offset="100%" stop-color="#08080a" />
+              </linearGradient>
+              <linearGradient id="footer-border-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="rgba(217, 20, 36, 0.45)" />
+                <stop offset="50%" stop-color="rgba(255, 255, 255, 0.18)" />
+                <stop offset="100%" stop-color="rgba(217, 20, 36, 0.35)" />
+              </linearGradient>
+              <clipPath id="footer-card-clip" clipPathUnits="objectBoundingBox">
+                <path
+                  d="M 0 0.0714 C 0 0.0513 0.0083 0.0357 0.019 0.0357 H 0.2607 C 0.2844 0.0357 0.3051 0.0246 0.3199 0.0089 C 0.3318 0.0022 0.3466 0 0.3643 0 H 0.6357 C 0.6534 0 0.6682 0.0022 0.6801 0.0089 C 0.6949 0.0246 0.7156 0.0357 0.7393 0.0357 H 0.9810 C 0.9917 0.0357 1 0.0513 1 0.0714 V 0.9286 C 1 0.9487 0.9917 0.9643 0.9810 0.9643 H 0.7393 C 0.7156 0.9643 0.6949 0.9754 0.6801 0.9911 C 0.6682 0.9978 0.6534 1 0.6357 1 H 0.3643 C 0.3466 1 0.3318 0.9978 0.3199 0.9911 C 0.3051 0.9754 0.2844 0.9643 0.2607 0.9643 H 0.019 C 0.0083 0.9643 0 0.9487 0 0.9286 Z" />
+              </clipPath>
+            </defs>
+            <path
+              d="M0 50C0 32 14 18 32 18H440C480 18 515 10 540 4C560 1 585 0 615 0H1073C1103 0 1128 1 1148 4C1173 10 1208 18 1248 18H1656C1674 18 1688 32 1688 50V856C1688 878 1672 896 1650 896H38C16 896 0 878 0 856Z"
+              fill="url(#footer-card-grad)" stroke="url(#footer-border-grad)" stroke-width="2" />
+            <!-- Ambient Topography Streamlines inside Footer -->
+            <path d="M50 180 C400 100 800 280 1638 160" stroke="rgba(217, 20, 36, 0.22)" stroke-width="1.5"
+              stroke-dasharray="6 6" />
+            <path d="M50 360 C350 220 900 450 1638 300" stroke="rgba(255, 255, 255, 0.08)" stroke-width="1.5" />
+            <path d="M50 540 C500 380 1100 620 1638 460" stroke="rgba(217, 20, 36, 0.18)" stroke-width="1.8" />
+            <path d="M50 700 C450 600 950 780 1638 640" stroke="rgba(255, 255, 255, 0.06)" stroke-width="1.5"
+              stroke-dasharray="4 4" />
+          </svg>
+
+          <!-- In-Footer Top Crown Notch Innov8 Logo -->
+          <div class="footer-notch-logo-container" id="footer-notch-logo-container">
+            <a href="#hero-scroll-section" class="footer-notch-logo-link">
+              <img src="/innov8.png" alt="JU Innov8 Logo" class="footer-notch-logo" />
+            </a>
+          </div>
+
+          <!-- Top/Center Tagline (WHERE TECH / MEETS THRILL with block reveal) -->
+          <div class="footer-tagline-container" id="footer-tagline-container">
+            <h2 class="footer-tagline">
+              <div class="footer-block-reveal">
+                <span class="footer-tagline-line" id="footer-tagline-line1">WHERE TECH</span>
+                <div class="footer-reveal-strip" id="footer-strip-1"></div>
+              </div>
+              <div class="footer-block-reveal">
+                <span class="footer-tagline-line text-crimson" id="footer-tagline-line2">MEETS THRILL</span>
+                <div class="footer-reveal-strip" id="footer-strip-2"></div>
+              </div>
+            </h2>
+          </div>
+
+          <!-- Left Navigation Column: PAGES -->
+          <div class="footer-nav-col col-pages">
+            <span class="footer-col-label">PAGES</span>
+            <nav class="footer-links-list">
+              <a href="#hero-scroll-section" class="footer-link-pill" data-text="HOME">
+                <span class="footer-link-wrap" data-text="HOME">HOME</span>
+              </a>
+              <a href="events.html" class="footer-link-pill" data-text="EVENTS">
+                <span class="footer-link-wrap" data-text="EVENTS">EVENTS</span>
+              </a>
+              <a href="#site-footer" class="footer-link-pill" data-text="TEAM">
+                <span class="footer-link-wrap" data-text="TEAM">TEAM</span>
+              </a>
+            </nav>
+          </div>
+
+          <!-- Right Navigation Column: FOLLOW ON -->
+          <div class="footer-nav-col col-socials">
+            <span class="footer-col-label">FOLLOW ON</span>
+            <nav class="footer-links-list">
+              <a href="https://youtube.com" target="_blank" rel="noopener" class="footer-link-pill" data-text="YOUTUBE">
+                <span class="footer-link-wrap" data-text="YOUTUBE">YOUTUBE</span>
+              </a>
+              <a href="https://instagram.com" target="_blank" rel="noopener" class="footer-link-pill"
+                data-text="INSTAGRAM">
+                <span class="footer-link-wrap" data-text="INSTAGRAM">INSTAGRAM</span>
+              </a>
+              <a href="https://linkedin.com" target="_blank" rel="noopener" class="footer-link-pill"
+                data-text="LINKEDIN">
+                <span class="footer-link-wrap" data-text="LINKEDIN">LINKEDIN</span>
+              </a>
+            </nav>
+          </div>
+
+          <!-- Center Cyborg Visual (footer.png) -->
+          <div class="footer-character-wrapper" id="footer-character-wrapper">
+            <img src="/footer.png" alt="JU Innov8 Cyborg Character" class="footer-character-img" />
+          </div>
+
+          <!-- Bottom Venue CTA Button -->
+          <div class="footer-venue-cta-container">
+            <a href="https://maps.google.com" target="_blank" rel="noopener" class="footer-venue-btn">
+              <span>VENUE</span>
+              <svg class="footer-btn-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                <path d="M7 17L17 7M17 7H7M17 7V17" />
+              </svg>
+            </a>
+          </div>
+        </div>
+
+        <!-- Bottom Copyright Bar -->
+        <div class="footer-bottom-bar">
+          <p class="footer-copyright">© Innov8 2026. ALL RIGHTS RESERVED.</p>
+          <p class="footer-copyright footer-credits">DEVELOPED BY SAKSHAM SARAOGI</p>
+        </div>
+      </div>
+    </footer>
+  </main>
+
+  <!-- GSAP Circular Page Transition Overlay -->
+  <div id="page-transition-overlay" class="page-transition-overlay"></div>
+
+  <script type="module" src="script.js"></script>
+</body>
+
+</html>
