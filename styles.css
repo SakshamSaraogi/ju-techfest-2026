@@ -2336,4 +2336,12 @@ p {
     margin-right: 0.5rem;
     font-size: 0.82rem;
   }
+
+  body.event-modal-active #menu-btn {
+    opacity: 0 !important;
+    pointer-events: none !important;
+    visibility: hidden !important;
+    transform: scale(0.5) translateY(-20px) !important;
+    transition: opacity 0.25s ease, transform 0.25s ease, visibility 0.25s ease !important;
+  }
 }

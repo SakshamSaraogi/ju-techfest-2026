@@ -808,6 +808,46 @@ input[type="submit"],
   }
 }
 
+@media (max-width: 900px) {
+  /* Disappear top-level hamburger button when viewing event detail on phone */
+  body.event-modal-active #menu-btn {
+    opacity: 0 !important;
+    pointer-events: none !important;
+    visibility: hidden !important;
+    transform: scale(0.5) translateY(-20px) !important;
+    transition: opacity 0.25s ease, transform 0.25s ease, visibility 0.25s ease !important;
+  }
+
+  .event-modal-backdrop {
+    padding: 0.75rem;
+  }
+
+  .event-modal-dialog {
+    padding: 2.2rem 1.25rem 1.8rem;
+    border-radius: 1.2rem;
+    width: 100%;
+    max-height: 94vh;
+  }
+
+  .modal-close-btn {
+    top: 0.85rem !important;
+    right: 0.85rem !important;
+    width: 44px !important;
+    height: 44px !important;
+    background: rgba(217, 20, 36, 0.25) !important;
+    border: 1.5px solid rgba(217, 20, 36, 0.8) !important;
+    border-radius: 50% !important;
+    color: #ffffff !important;
+    font-size: 2.2rem !important;
+    font-weight: 300 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    z-index: 99999 !important;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.9), 0 0 15px rgba(217, 20, 36, 0.6) !important;
+  }
+}
+
 @media (max-width: 600px) {
   .events-page-wrapper {
     padding: 6.5rem 1.25rem 4rem;

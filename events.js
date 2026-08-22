@@ -793,6 +793,7 @@ function openModalWithCircleMorph(event, originPoint) {
 
   modal.style.display = "flex";
   modal.classList.add("open");
+  document.body.classList.add("event-modal-active");
   document.body.style.overflow = "hidden";
 
   // GSAP Expanding Circle Morph Animation on the full modal backdrop
@@ -844,6 +845,8 @@ function closeModalWithMorph() {
   const modal = document.getElementById("event-modal");
   const dialog = modal ? modal.querySelector(".event-modal-dialog") : null;
   if (!modal || !dialog) return;
+
+  document.body.classList.remove("event-modal-active");
 
   const centerX = activeOriginPoint ? activeOriginPoint.x : window.innerWidth / 2;
   const centerY = activeOriginPoint ? activeOriginPoint.y : window.innerHeight / 2;

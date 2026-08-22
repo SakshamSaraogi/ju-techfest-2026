@@ -887,7 +887,7 @@ function init() {
   document.addEventListener("pointerdown", handleOutsideTap);
   document.addEventListener("touchstart", handleOutsideTap, { passive: true });
 
-  // 4. ScrollTrigger Controls for Auto-Reveal Timeline
+  // 4. ScrollTrigger Controls for Auto-Reveal Timeline (Desktop Only, Phone is Click-Only)
   const aboutSectionEl = document.getElementById("about-section");
   if (aboutSectionEl) {
     ScrollTrigger.create({
@@ -895,10 +895,10 @@ function init() {
       start: "top 80%",
       end: "bottom 20%",
       onEnter: () => {
-        if (!activeSpotManual) autoRevealTl.play();
+        if (isDesktop() && !activeSpotManual) autoRevealTl.play();
       },
       onEnterBack: () => {
-        if (!activeSpotManual) autoRevealTl.play();
+        if (isDesktop() && !activeSpotManual) autoRevealTl.play();
       },
       onLeave: () => {
         autoRevealTl.pause(0);
@@ -1011,15 +1011,17 @@ function init() {
   let domainsCamera = null;
   const domainMeshes = [];
 
+  const isMobileViewport = window.innerWidth < 900;
+
   if (domainsCanvas) {
     domainsRenderer = new THREE.WebGLRenderer({
       canvas: domainsCanvas,
-      antialias: true,
+      antialias: !isMobileViewport,
       alpha: true,
       powerPreference: "high-performance",
     });
     domainsRenderer.setSize(window.innerWidth, window.innerHeight);
-    domainsRenderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    domainsRenderer.setPixelRatio(Math.min(window.devicePixelRatio, isMobileViewport ? 1.25 : 1.75));
 
     domainsScene = new THREE.Scene();
     domainsCamera = new THREE.PerspectiveCamera(
@@ -1035,10 +1037,11 @@ function init() {
     const domainCardHeight = 5.35;
 
     const domainImages = ["/img1.jpg", "/img2.jpeg", "/img3.jpeg"];
+    const segments = isMobileViewport ? 16 : 32;
 
     for (let i = 0; i < 3; i++) {
       // Create independent plane geometry for dynamic curvature morphing
-      const geom = new THREE.PlaneGeometry(domainCardWidth, domainCardHeight, 36, 1);
+      const geom = new THREE.PlaneGeometry(domainCardWidth, domainCardHeight, segments, 1);
       const baseX = [];
       for (let j = 0; j < geom.attributes.position.count; j++) {
         baseX.push(geom.attributes.position.getX(j));
@@ -1058,7 +1061,7 @@ function init() {
       });
 
       const mesh = new THREE.Mesh(geom, material);
-      mesh.userData = { index: i };
+      mesh.userData = { index: i, lastCurvature: null };
       domainsScene.add(mesh);
       domainMeshes.push(mesh);
     }
@@ -1066,6 +1069,11 @@ function init() {
 
   // Dynamic mesh curvature deformation: Inward curl for entering frame, outward curl for exiting frame
   function updateCardCurvature(mesh, curvatureK) {
+    if (mesh.userData.lastCurvature !== null && Math.abs(mesh.userData.lastCurvature - curvatureK) < 0.001) {
+      return;
+    }
+    mesh.userData.lastCurvature = curvatureK;
+
     const pos = mesh.geometry.attributes.position;
     const baseX = mesh.geometry.userData.baseX;
     if (!baseX) return;
@@ -1083,7 +1091,6 @@ function init() {
       }
     }
     pos.needsUpdate = true;
-    mesh.geometry.computeVertexNormals();
   }
 
   const DOMAIN_CARD_GAP = 1.25;
@@ -1284,9 +1291,9 @@ function init() {
   const domainsScrollTrigger = ScrollTrigger.create({
     trigger: "#domains-scroll-section",
     start: "top top",
-    end: "+=3600",
+    end: window.innerWidth < 900 ? "+=1600" : "+=3400",
     pin: true,
-    scrub: 1.0,
+    scrub: window.innerWidth < 900 ? 0.35 : 0.8,
     onUpdate: (self) => {
       // Map self.progress (0.0 -> 1.0) across the 3 domains with wide gap
       const orbitT = -DOMAIN_CARD_GAP + self.progress * (DOMAIN_CARD_GAP * 3.0);
