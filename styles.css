@@ -185,7 +185,7 @@ p {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  z-index: auto;
+  z-index: 900 !important;
   pointer-events: none;
 }
 
@@ -206,8 +206,9 @@ p {
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 800;
-  pointer-events: auto;
+  z-index: 900 !important;
+  pointer-events: auto !important;
+  cursor: pointer !important;
   transform-style: preserve-3d;
 }
 
@@ -217,12 +218,16 @@ p {
   justify-content: center;
   transform-origin: center center;
   will-change: transform;
+  pointer-events: auto !important;
+  cursor: pointer !important;
 }
 
 .site-logo {
   height: clamp(1.6rem, 2.5vw, 2.2rem);
   width: auto;
   object-fit: contain;
+  pointer-events: auto !important;
+  cursor: pointer !important;
 }
 
 .menu {
@@ -499,7 +504,7 @@ p {
   left: 0;
   width: 100%;
   height: 100%;
-  z-index: 120;
+  z-index: 20;
   pointer-events: auto;
   will-change: transform;
 }

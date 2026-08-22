@@ -73,6 +73,7 @@ function init() {
     smoothWheel: true,
     syncTouch: true,
   });
+  window.lenis = lenis;
 
   lenis.on("scroll", ScrollTrigger.update);
   gsap.ticker.add((time) => {
@@ -492,18 +493,47 @@ function init() {
     0.86
   );
 
-  // Top Floating Innov8 Logo -> Tapping smoothly scrolls to the very top/first page frame
-  const floatingLogoBtn = document.getElementById("floating-logo");
-  if (floatingLogoBtn) {
-    floatingLogoBtn.addEventListener("click", (e) => {
+  // All Home & Logo Links (Top Header Logo, Footer Notch Logo, Footer HOME pill, Menu HOME) -> Smoothly scrolls to the initial top frame (0)
+  const homeAndLogoLinks = document.querySelectorAll(
+    "#floating-logo, .nav-logo-link, .footer-notch-logo-link, #footer-notch-logo-link, a[href='#hero-scroll-section'], .footer-link-pill[data-text='HOME'], .menu-item[data-target='home']"
+  );
+
+  const scrollToFirstPageTop = (e) => {
+    if (e) {
       e.preventDefault();
-      if (window.lenis) {
-        window.lenis.scrollTo(0, { immediate: false, duration: 1.2 });
-      } else {
-        window.scrollTo({ top: 0, behavior: "smooth" });
-      }
-    });
-  }
+      e.stopPropagation();
+    }
+    const path = window.location.pathname;
+    if (path !== "/" && !path.endsWith("index.html") && path !== "") {
+      window.location.href = "/";
+      return;
+    }
+
+    // Close fullscreen menu if open
+    const menuNav = document.getElementById("fullscreen-menu");
+    const menuBtn = document.getElementById("menu-btn");
+    if (menuNav && menuNav.classList.contains("is-menu-open")) {
+      menuNav.classList.remove("is-menu-open");
+      if (menuBtn) menuBtn.classList.remove("menu-active");
+    }
+
+    if (window.lenis) {
+      window.lenis.scrollTo(0, {
+        immediate: false,
+        duration: 1.3,
+        lock: false,
+        onComplete: () => {
+          ScrollTrigger.update();
+        },
+      });
+    } else {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+  };
+
+  homeAndLogoLinks.forEach((link) => {
+    link.addEventListener("click", scrollToFirstPageTop);
+  });
 
   // -------------------------------------------------------------
   // 6. ABOUT SECTION: ZENTRY SPOTLIGHT & HANGING CHARACTERS
@@ -682,67 +712,9 @@ function init() {
 
   const allSpots = Array.from(document.querySelectorAll(".spot"));
   let activeSpotManual = null;
-  let autoRevealResumeTimeout = null;
 
-  // 1. Build the continuous Auto-Reveal GSAP Timeline (Desktop ONLY, Sequences Spot 1 -> 2 -> 3)
-  const autoRevealTl = gsap.timeline({
-    repeat: -1,
-    paused: true,
-    repeatDelay: 0.8,
-  });
-
-  if (isDesktop()) {
-    allSpots.forEach((spot) => {
-      const card = spot.querySelector(".spot-card");
-      const img = spot.querySelector("img");
-      const parentLine = spot.closest(".line");
-      const allLines = document.querySelectorAll(".headline .line");
-      const isBottomLine = parentLine && parentLine === allLines[allLines.length - 1];
-
-      autoRevealTl
-        .add(() => {
-          gsap.set(spot, { zIndex: 1000 });
-          if (parentLine) gsap.set(parentLine, { zIndex: 1000 });
-          gsap.set(card, {
-            ...CARD_CENTERED,
-            yPercent: isBottomLine ? -75 : -50,
-          });
-        })
-        .to(card, {
-          width: () => getCardOpenConfig().width,
-          height: () => getCardOpenConfig().height,
-          borderRadius: () => getCardOpenConfig().borderRadius,
-          duration: 0.55,
-          ease: "power3.out",
-        })
-        .to(img, { opacity: 1, duration: 0.35, ease: "power2.out" }, "<")
-        .to({}, { duration: 1.6 }) // Hold open to view
-        .to(card, {
-          width: "0.4em",
-          height: "0.4em",
-          borderRadius: "0.04em",
-          duration: 0.45,
-          ease: "power3.inOut",
-        })
-        .to(img, { opacity: 0, duration: 0.25, ease: "power2.in" }, "<")
-        .add(() => {
-          gsap.set(spot, { zIndex: 10 });
-          if (parentLine) gsap.set(parentLine, { zIndex: 1 });
-        })
-        .to({}, { duration: 0.4 }); // Short pause between spots
-    });
-  }
-
-  // 2. Manual Open / Close Controllers
+  // 1. Manual Open / Close Controllers (No auto-reveal timeline, purely user-driven)
   const openSpotDirectly = (spot) => {
-    if (isDesktop()) {
-      autoRevealTl.pause();
-    }
-    if (autoRevealResumeTimeout) {
-      clearTimeout(autoRevealResumeTimeout);
-      autoRevealResumeTimeout = null;
-    }
-
     allSpots.forEach((s) => {
       if (s !== spot) {
         s.classList.remove("active");
@@ -777,13 +749,13 @@ function init() {
       width: openSize.width,
       height: openSize.height,
       borderRadius: openSize.borderRadius,
-      duration: 0.55,
+      duration: isDesktop() ? 0.6 : 0.5,
       ease: "power3.out",
       overwrite: "auto",
     });
     gsap.to(img, {
       opacity: 1,
-      duration: 0.35,
+      duration: isDesktop() ? 0.4 : 0.3,
       ease: "power2.out",
       overwrite: "auto",
     });
@@ -802,7 +774,7 @@ function init() {
       width: "0.4em",
       height: "0.4em",
       borderRadius: "0.04em",
-      duration: 0.4,
+      duration: 0.35,
       ease: "power3.out",
       overwrite: "auto",
       onComplete: () => {
@@ -812,27 +784,17 @@ function init() {
     });
     gsap.to(img, {
       opacity: 0,
-      duration: 0.22,
+      duration: 0.2,
       ease: "power2.out",
       overwrite: "auto",
     });
-
-    // Schedule resuming the auto-reveal timeline ONLY on Desktop (Never on Phone)
-    if (isDesktop()) {
-      if (autoRevealResumeTimeout) clearTimeout(autoRevealResumeTimeout);
-      autoRevealResumeTimeout = setTimeout(() => {
-        if (isDesktop() && !activeSpotManual && !document.querySelector(".spot.active")) {
-          autoRevealTl.resume();
-        }
-      }, 2500);
-    }
   };
 
-  // 3. Attach Event Listeners to each Spot
+  // 2. Attach Event Listeners to each Spot
   allSpots.forEach((spot) => {
     const card = spot.querySelector(".spot-card");
 
-    // Desktop hover
+    // Desktop hover: Opens on mouseenter, Closes on mouseleave
     spot.addEventListener("mouseenter", () => {
       if (isDesktop()) openSpotDirectly(spot);
     });
@@ -860,7 +822,7 @@ function init() {
       });
     });
 
-    // Mobile touch & click toggle
+    // Mobile touch & click toggle: Tap to open, Tap to close
     const handleMobileTap = (e) => {
       if (isDesktop()) return;
       if (spot.classList.contains("active")) {
@@ -892,30 +854,6 @@ function init() {
   };
   document.addEventListener("pointerdown", handleOutsideTap);
   document.addEventListener("touchstart", handleOutsideTap, { passive: true });
-
-  // 4. ScrollTrigger Controls for Auto-Reveal Timeline (Desktop Only, Phone is Click-Only)
-  const aboutSectionEl = document.getElementById("about-section");
-  if (aboutSectionEl) {
-    ScrollTrigger.create({
-      trigger: "#about-section",
-      start: "top 80%",
-      end: "bottom 20%",
-      onEnter: () => {
-        if (isDesktop() && !activeSpotManual) autoRevealTl.play();
-      },
-      onEnterBack: () => {
-        if (isDesktop() && !activeSpotManual) autoRevealTl.play();
-      },
-      onLeave: () => {
-        autoRevealTl.pause(0);
-        allSpots.forEach((s) => closeSpotDirectly(s));
-      },
-      onLeaveBack: () => {
-        autoRevealTl.pause(0);
-        allSpots.forEach((s) => closeSpotDirectly(s));
-      },
-    });
-  }
 
   // ZENTRY 3D LEFT-BEVEL ENTRANCE ANIMATION
   const headline = document.querySelector(".headline");
