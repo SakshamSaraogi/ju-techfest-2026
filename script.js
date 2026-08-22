@@ -657,7 +657,9 @@ function init() {
   }
 
   // ZENTRY INTERACTIVE SPOTLIGHT PHOTO HOVER & REAL-PHONE AUTO-REVEAL
-  const isTouchDevice = () => "ontouchstart" in window || navigator.maxTouchPoints > 0 || window.innerWidth < 900;
+  // =============================================================
+  // ZENTRY INTERACTIVE SPOTLIGHT PHOTO HOVER & AUTO-REVEAL
+  // =============================================================
   const isDesktop = () => window.innerWidth >= 900 && window.matchMedia("(hover: hover)").matches;
 
   const getCardOpenConfig = () => {
@@ -681,303 +683,232 @@ function init() {
     yPercent: -50,
   };
 
-  const allSpots = document.querySelectorAll(".spot");
-  let activeMobileSpot = null;
-  let mobileAutoRevealTimer = null;
-  let currentAutoIndex = 0;
-  let isAboutSectionInView = false;
-  let userInteracting = false;
-  let userInteractResumeTimeout = null;
+  const allSpots = Array.from(document.querySelectorAll(".spot"));
+  let activeSpotManual = null;
+  let autoRevealResumeTimeout = null;
 
-  allSpots.forEach((spot, spotIdx) => {
+  // 1. Build the continuous Auto-Reveal GSAP Timeline (Sequences Spot 1 -> 2 -> 3)
+  const autoRevealTl = gsap.timeline({
+    repeat: -1,
+    paused: true,
+    repeatDelay: 0.8,
+  });
+
+  allSpots.forEach((spot) => {
     const card = spot.querySelector(".spot-card");
-    const image = spot.querySelector("img");
+    const img = spot.querySelector("img");
+    const parentLine = spot.closest(".line");
+    const allLines = document.querySelectorAll(".headline .line");
+    const isBottomLine = parentLine && parentLine === allLines[allLines.length - 1];
 
-    const live = { x: 0, y: 0, tiltX: 0, tiltY: 0 };
-    const aim = { x: 0, y: 0, tiltX: 0, tiltY: 0 };
-
-    let isHovering = false;
-    let frame = null;
-
-    const startTracking = () => {
-      frame = () => {
-        live.x += (aim.x - live.x) * 0.075;
-        live.y += (aim.y - live.y) * 0.075;
-
-        live.tiltX += (aim.tiltX - live.tiltX) * 0.075;
-        live.tiltY += (aim.tiltY - live.tiltY) * 0.075;
-
+    autoRevealTl
+      .add(() => {
+        gsap.set(spot, { zIndex: 1000 });
+        if (parentLine) gsap.set(parentLine, { zIndex: 1000 });
         gsap.set(card, {
-          x: live.x,
-          y: live.y,
-          rotateX: live.tiltX,
-          rotateY: live.tiltY,
+          ...CARD_CENTERED,
+          yPercent: isBottomLine ? -75 : -50,
         });
-
-        gsap.set(image, { x: 0, y: 0 });
-      };
-
-      gsap.ticker.add(frame);
-    };
-
-    const stopTracking = () => {
-      if (frame) {
-        gsap.ticker.remove(frame);
-        frame = null;
-      }
-    };
-
-    const expandCard = (isAuto = false) => {
-      isHovering = true;
-      spot.classList.add("active");
-      gsap.set(spot, { zIndex: 1000 });
-
-      const parentLine = spot.closest(".line");
-      if (parentLine) {
-        parentLine.classList.add("active-line");
-        gsap.set(parentLine, { zIndex: 1000 });
-      }
-
-      Object.assign(live, { x: 0, y: 0, tiltX: 0, tiltY: 0 });
-      Object.assign(aim, { x: 0, y: 0, tiltX: 0, tiltY: 0 });
-
-      const allLines = document.querySelectorAll(".headline .line");
-      const isBottomLine = parentLine && parentLine === allLines[allLines.length - 1];
-      const centeredConfig = {
-        ...CARD_CENTERED,
-        yPercent: isBottomLine ? -75 : -50,
-      };
-
-      gsap.set(card, centeredConfig);
-      gsap.set(image, { x: 0, y: 0 });
-
-      if (isDesktop()) {
-        startTracking();
-      }
-
-      const openSize = getCardOpenConfig();
-
-      gsap.to(card, {
-        width: openSize.width,
-        height: openSize.height,
-        borderRadius: openSize.borderRadius,
-        duration: isDesktop() ? 0.75 : 0.55,
+      })
+      .to(card, {
+        width: () => getCardOpenConfig().width,
+        height: () => getCardOpenConfig().height,
+        borderRadius: () => getCardOpenConfig().borderRadius,
+        duration: 0.55,
         ease: "power3.out",
-        overwrite: "auto",
-      });
+      })
+      .to(img, { opacity: 1, duration: 0.35, ease: "power2.out" }, "<")
+      .to({}, { duration: 1.6 }) // Hold open to view
+      .to(card, {
+        width: "0.4em",
+        height: "0.4em",
+        borderRadius: "0.04em",
+        duration: 0.45,
+        ease: "power3.inOut",
+      })
+      .to(img, { opacity: 0, duration: 0.25, ease: "power2.in" }, "<")
+      .add(() => {
+        gsap.set(spot, { zIndex: 10 });
+        if (parentLine) gsap.set(parentLine, { zIndex: 1 });
+      })
+      .to({}, { duration: 0.4 }); // Short pause between spots
+  });
 
-      gsap.to(image, {
-        opacity: 1,
-        duration: isDesktop() ? 0.5 : 0.35,
-        ease: "power2.out",
-        overwrite: "auto",
-      });
-    };
+  // 2. Manual Open / Close Controllers
+  const openSpotDirectly = (spot) => {
+    autoRevealTl.pause();
+    if (autoRevealResumeTimeout) clearTimeout(autoRevealResumeTimeout);
 
-    const shrinkCard = () => {
-      isHovering = false;
-      aim.tiltX = aim.tiltY = 0;
-
-      stopTracking();
-
-      gsap.to(card, {
-        ...CARD_DOT,
-        x: 0,
-        y: 0,
-        rotateX: 0,
-        rotateY: 0,
-        duration: isDesktop() ? 0.5 : 0.4,
-        ease: "power3.out",
-        overwrite: "auto",
-        onComplete: () => {
-          if (isHovering) return;
-
-          spot.classList.remove("active");
-          gsap.set(spot, { zIndex: 10 });
-
-          const parentLine = spot.closest(".line");
-          if (parentLine) {
-            parentLine.classList.remove("active-line");
-            gsap.set(parentLine, { zIndex: 1 });
-          }
-
-          gsap.set(card, {
-            clearProps: "width,height,borderRadius,yPercent",
-            ...CARD_CENTERED,
-          });
-
-          gsap.set(image, { x: 0, y: 0 });
-        },
-      });
-
-      gsap.to(image, {
-        opacity: 0,
-        duration: isDesktop() ? 0.3 : 0.22,
-        ease: "power2.out",
-        overwrite: "auto",
-      });
-    };
-
-    spot._expandCard = expandCard;
-    spot._shrinkCard = shrinkCard;
-
-    // Desktop hover events
-    spot.addEventListener("mouseenter", () => {
-      if (isDesktop()) expandCard();
+    allSpots.forEach((s) => {
+      if (s !== spot) {
+        s.classList.remove("active");
+        const c = s.querySelector(".spot-card");
+        const im = s.querySelector("img");
+        const pl = s.closest(".line");
+        gsap.to(c, { width: "0.4em", height: "0.4em", duration: 0.35, ease: "power3.out", overwrite: "auto" });
+        gsap.to(im, { opacity: 0, duration: 0.2, overwrite: "auto" });
+        gsap.set(s, { zIndex: 10 });
+        if (pl) gsap.set(pl, { zIndex: 1 });
+      }
     });
 
-    const aimAtCursor = (event) => {
-      if (!isHovering || !isDesktop()) return;
+    spot.classList.add("active");
+    activeSpotManual = spot;
 
+    const card = spot.querySelector(".spot-card");
+    const img = spot.querySelector("img");
+    const parentLine = spot.closest(".line");
+    const allLines = document.querySelectorAll(".headline .line");
+    const isBottomLine = parentLine && parentLine === allLines[allLines.length - 1];
+
+    gsap.set(spot, { zIndex: 1000 });
+    if (parentLine) gsap.set(parentLine, { zIndex: 1000 });
+    gsap.set(card, {
+      ...CARD_CENTERED,
+      yPercent: isBottomLine ? -75 : -50,
+    });
+
+    const openSize = getCardOpenConfig();
+    gsap.to(card, {
+      width: openSize.width,
+      height: openSize.height,
+      borderRadius: openSize.borderRadius,
+      duration: 0.55,
+      ease: "power3.out",
+      overwrite: "auto",
+    });
+    gsap.to(img, {
+      opacity: 1,
+      duration: 0.35,
+      ease: "power2.out",
+      overwrite: "auto",
+    });
+  };
+
+  const closeSpotDirectly = (spot) => {
+    if (!spot) return;
+    spot.classList.remove("active");
+    if (activeSpotManual === spot) activeSpotManual = null;
+
+    const card = spot.querySelector(".spot-card");
+    const img = spot.querySelector("img");
+    const parentLine = spot.closest(".line");
+
+    gsap.to(card, {
+      width: "0.4em",
+      height: "0.4em",
+      borderRadius: "0.04em",
+      duration: 0.4,
+      ease: "power3.out",
+      overwrite: "auto",
+      onComplete: () => {
+        gsap.set(spot, { zIndex: 10 });
+        if (parentLine) gsap.set(parentLine, { zIndex: 1 });
+      },
+    });
+    gsap.to(img, {
+      opacity: 0,
+      duration: 0.22,
+      ease: "power2.out",
+      overwrite: "auto",
+    });
+
+    // Schedule resuming the auto-reveal timeline after 2.5 seconds of idle
+    if (autoRevealResumeTimeout) clearTimeout(autoRevealResumeTimeout);
+    autoRevealResumeTimeout = setTimeout(() => {
+      if (!activeSpotManual && !document.querySelector(".spot.active")) {
+        autoRevealTl.resume();
+      }
+    }, 2500);
+  };
+
+  // 3. Attach Event Listeners to each Spot
+  allSpots.forEach((spot) => {
+    const card = spot.querySelector(".spot-card");
+
+    // Desktop hover
+    spot.addEventListener("mouseenter", () => {
+      if (isDesktop()) openSpotDirectly(spot);
+    });
+
+    spot.addEventListener("mouseleave", () => {
+      if (isDesktop()) closeSpotDirectly(spot);
+    });
+
+    // Desktop 3D cursor tilt tracking
+    spot.addEventListener("mousemove", (event) => {
+      if (!isDesktop() || !spot.classList.contains("active")) return;
       const bounds = spot.getBoundingClientRect();
       const centerX = bounds.left + bounds.width / 2;
       const centerY = bounds.top + bounds.height / 2;
-
-      let offsetX = event.clientX - centerX;
-      let offsetY = event.clientY - centerY;
-
-      const distance = Math.hypot(offsetX, offsetY);
-
-      if (distance > 25) {
-        const scale = 25 / distance;
-        offsetX *= scale;
-        offsetY *= scale;
-      }
-
-      aim.x = offsetX;
-      aim.y = offsetY;
-
       const cardBounds = card.getBoundingClientRect();
       const ratioX = (event.clientX - centerX) / (cardBounds.width / 2);
       const ratioY = (event.clientY - centerY) / (cardBounds.height / 2);
-
-      const clamp = (value) => Math.max(-1, Math.min(1, value));
-
-      aim.tiltY = clamp(ratioX) * -20;
-      aim.tiltX = clamp(ratioY) * 20;
-    };
-
-    spot.addEventListener("mousemove", aimAtCursor);
-
-    spot.addEventListener("mouseleave", () => {
-      if (isDesktop()) shrinkCard();
+      const clamp = (v) => Math.max(-1, Math.min(1, v));
+      gsap.to(card, {
+        rotateY: clamp(ratioX) * -18,
+        rotateX: clamp(ratioY) * 18,
+        duration: 0.2,
+        ease: "power1.out",
+        overwrite: "auto",
+      });
     });
 
-    // Touch & pointer tap events for real phones
-    const handleTouchInteraction = (e) => {
-      userInteracting = true;
-      if (userInteractResumeTimeout) clearTimeout(userInteractResumeTimeout);
-      userInteractResumeTimeout = setTimeout(() => {
-        userInteracting = false;
-      }, 4000);
-
-      allSpots.forEach((s) => {
-        if (s !== spot) s._shrinkCard();
-      });
-      activeMobileSpot = spot;
-      expandCard();
+    // Mobile touch & click toggle
+    const handleMobileTap = (e) => {
+      if (isDesktop()) return;
+      if (spot.classList.contains("active")) {
+        closeSpotDirectly(spot);
+      } else {
+        openSpotDirectly(spot);
+      }
     };
 
     spot.addEventListener("pointerdown", (e) => {
       if (e.pointerType === "touch" || !isDesktop()) {
-        handleTouchInteraction(e);
+        e.stopPropagation();
+        handleMobileTap(e);
       }
     });
-
-    spot.addEventListener("touchstart", handleTouchInteraction, { passive: true });
 
     spot.addEventListener("click", (e) => {
       if (isDesktop()) return;
       e.stopPropagation();
-      if (spot.classList.contains("active")) {
-        shrinkCard();
-        activeMobileSpot = null;
-      } else {
-        handleTouchInteraction(e);
-      }
+      handleMobileTap(e);
     });
   });
 
-  // Tap outside closes any active mobile card
-  const closeActiveSpot = (e) => {
-    if (!e.target.closest(".spot")) {
-      if (activeMobileSpot) {
-        activeMobileSpot._shrinkCard();
-        activeMobileSpot = null;
-      }
+  // Tap outside closes active spot on mobile
+  const handleOutsideTap = (e) => {
+    if (!e.target.closest(".spot") && activeSpotManual) {
+      closeSpotDirectly(activeSpotManual);
     }
   };
+  document.addEventListener("pointerdown", handleOutsideTap);
+  document.addEventListener("touchstart", handleOutsideTap, { passive: true });
 
-  document.addEventListener("touchstart", closeActiveSpot, { passive: true });
-  document.addEventListener("pointerdown", (e) => {
-    if (e.pointerType === "touch") closeActiveSpot(e);
-  });
-
-  // Mobile Auto-Reveal Sequencer (Dual ScrollTrigger & IntersectionObserver for 100% reliability on real phones)
+  // 4. ScrollTrigger Controls for Auto-Reveal Timeline
   const aboutSectionEl = document.getElementById("about-section");
-
-  function runMobileAutoRevealStep() {
-    if (!isAboutSectionInView || userInteracting || activeMobileSpot || allSpots.length === 0) {
-      mobileAutoRevealTimer = setTimeout(runMobileAutoRevealStep, 1200);
-      return;
-    }
-
-    const currentSpot = allSpots[currentAutoIndex % allSpots.length];
-    currentSpot._expandCard(true);
-
-    setTimeout(() => {
-      if (!userInteracting && (!activeMobileSpot || activeMobileSpot === currentSpot)) {
-        currentSpot._shrinkCard();
-      }
-      currentAutoIndex = (currentAutoIndex + 1) % allSpots.length;
-      mobileAutoRevealTimer = setTimeout(runMobileAutoRevealStep, 1000);
-    }, 1800);
-  }
-
-  const startMobileAutoReveal = () => {
-    isAboutSectionInView = true;
-    if (!mobileAutoRevealTimer) {
-      mobileAutoRevealTimer = setTimeout(runMobileAutoRevealStep, 400);
-    }
-  };
-
-  const stopMobileAutoReveal = () => {
-    isAboutSectionInView = false;
-    if (mobileAutoRevealTimer) {
-      clearTimeout(mobileAutoRevealTimer);
-      mobileAutoRevealTimer = null;
-    }
-    allSpots.forEach((s) => s._shrinkCard());
-  };
-
   if (aboutSectionEl) {
-    // 1. ScrollTrigger trigger
     ScrollTrigger.create({
       trigger: "#about-section",
       start: "top 80%",
       end: "bottom 20%",
-      onEnter: startMobileAutoReveal,
-      onEnterBack: startMobileAutoReveal,
-      onLeave: stopMobileAutoReveal,
-      onLeaveBack: stopMobileAutoReveal,
+      onEnter: () => {
+        if (!activeSpotManual) autoRevealTl.play();
+      },
+      onEnterBack: () => {
+        if (!activeSpotManual) autoRevealTl.play();
+      },
+      onLeave: () => {
+        autoRevealTl.pause(0);
+        allSpots.forEach((s) => closeSpotDirectly(s));
+      },
+      onLeaveBack: () => {
+        autoRevealTl.pause(0);
+        allSpots.forEach((s) => closeSpotDirectly(s));
+      },
     });
-
-    // 2. IntersectionObserver fallback
-    if ("IntersectionObserver" in window) {
-      const aboutObserver = new IntersectionObserver(
-        (entries) => {
-          entries.forEach((entry) => {
-            if (entry.isIntersecting) {
-              startMobileAutoReveal();
-            } else {
-              stopMobileAutoReveal();
-            }
-          });
-        },
-        { threshold: 0.1 }
-      );
-      aboutObserver.observe(aboutSectionEl);
-    }
   }
 
   // ZENTRY 3D LEFT-BEVEL ENTRANCE ANIMATION
