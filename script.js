@@ -664,7 +664,9 @@ function init() {
     if (isDesktop()) {
       return { width: "26rem", height: "19.5rem", borderRadius: "0.6rem" };
     } else {
-      return { width: "clamp(15rem, 74vw, 21rem)", height: "clamp(11rem, 54vw, 15.5rem)", borderRadius: "0.5rem" };
+      const w = Math.round(Math.min(window.innerWidth * 0.78, 310));
+      const h = Math.round(w * 0.75);
+      return { width: `${w}px`, height: `${h}px`, borderRadius: "10px" };
     }
   };
 
@@ -753,8 +755,12 @@ function init() {
         startTracking();
       }
 
+      const openSize = getCardOpenConfig();
+
       gsap.to(card, {
-        ...getCardOpenConfig(),
+        width: openSize.width,
+        height: openSize.height,
+        borderRadius: openSize.borderRadius,
         duration: isDesktop() ? 0.75 : 0.55,
         ease: "power3.out",
         overwrite: "auto",
