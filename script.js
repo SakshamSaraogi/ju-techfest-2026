@@ -656,14 +656,12 @@ function init() {
     );
   }
 
-  // ZENTRY INTERACTIVE SPOTLIGHT PHOTO HOVER & MOBILE AUTO-REVEAL
-  const DESKTOP_MIN = 768;
-  const TILT_MAX = 20;
-  const DRIFT_MAX = 25;
-  const SMOOTHING = 0.075;
+  // ZENTRY INTERACTIVE SPOTLIGHT PHOTO HOVER & REAL-PHONE AUTO-REVEAL
+  const isTouchDevice = () => "ontouchstart" in window || navigator.maxTouchPoints > 0 || window.innerWidth < 900;
+  const isDesktop = () => window.innerWidth >= 900 && window.matchMedia("(hover: hover)").matches;
 
   const getCardOpenConfig = () => {
-    if (window.innerWidth >= DESKTOP_MIN) {
+    if (isDesktop()) {
       return { width: "26rem", height: "19.5rem", borderRadius: "0.6rem" };
     } else {
       return { width: "clamp(15rem, 74vw, 21rem)", height: "clamp(11rem, 54vw, 15.5rem)", borderRadius: "0.5rem" };
@@ -681,13 +679,15 @@ function init() {
     yPercent: -50,
   };
 
-  const isDesktop = () => window.innerWidth >= DESKTOP_MIN;
   const allSpots = document.querySelectorAll(".spot");
-
   let activeMobileSpot = null;
-  let mobileAutoRevealTl = null;
+  let mobileAutoRevealTimer = null;
+  let currentAutoIndex = 0;
+  let isAboutSectionInView = false;
+  let userInteracting = false;
+  let userInteractResumeTimeout = null;
 
-  allSpots.forEach((spot) => {
+  allSpots.forEach((spot, spotIdx) => {
     const card = spot.querySelector(".spot-card");
     const image = spot.querySelector("img");
 
@@ -699,11 +699,11 @@ function init() {
 
     const startTracking = () => {
       frame = () => {
-        live.x += (aim.x - live.x) * SMOOTHING;
-        live.y += (aim.y - live.y) * SMOOTHING;
+        live.x += (aim.x - live.x) * 0.075;
+        live.y += (aim.y - live.y) * 0.075;
 
-        live.tiltX += (aim.tiltX - live.tiltX) * SMOOTHING;
-        live.tiltY += (aim.tiltY - live.tiltY) * SMOOTHING;
+        live.tiltX += (aim.tiltX - live.tiltX) * 0.075;
+        live.tiltY += (aim.tiltY - live.tiltY) * 0.075;
 
         gsap.set(card, {
           x: live.x,
@@ -755,14 +755,14 @@ function init() {
 
       gsap.to(card, {
         ...getCardOpenConfig(),
-        duration: isDesktop() ? 0.75 : 0.6,
+        duration: isDesktop() ? 0.75 : 0.55,
         ease: "power3.out",
         overwrite: "auto",
       });
 
       gsap.to(image, {
         opacity: 1,
-        duration: isDesktop() ? 0.5 : 0.4,
+        duration: isDesktop() ? 0.5 : 0.35,
         ease: "power2.out",
         overwrite: "auto",
       });
@@ -780,7 +780,7 @@ function init() {
         y: 0,
         rotateX: 0,
         rotateY: 0,
-        duration: isDesktop() ? 0.5 : 0.45,
+        duration: isDesktop() ? 0.5 : 0.4,
         ease: "power3.out",
         overwrite: "auto",
         onComplete: () => {
@@ -806,13 +806,12 @@ function init() {
 
       gsap.to(image, {
         opacity: 0,
-        duration: isDesktop() ? 0.3 : 0.25,
+        duration: isDesktop() ? 0.3 : 0.22,
         ease: "power2.out",
         overwrite: "auto",
       });
     };
 
-    // Store references on the DOM node for auto-reveal triggers
     spot._expandCard = expandCard;
     spot._shrinkCard = shrinkCard;
 
@@ -833,8 +832,8 @@ function init() {
 
       const distance = Math.hypot(offsetX, offsetY);
 
-      if (distance > DRIFT_MAX) {
-        const scale = DRIFT_MAX / distance;
+      if (distance > 25) {
+        const scale = 25 / distance;
         offsetX *= scale;
         offsetY *= scale;
       }
@@ -848,8 +847,8 @@ function init() {
 
       const clamp = (value) => Math.max(-1, Math.min(1, value));
 
-      aim.tiltY = clamp(ratioX) * -TILT_MAX;
-      aim.tiltX = clamp(ratioY) * TILT_MAX;
+      aim.tiltY = clamp(ratioX) * -20;
+      aim.tiltX = clamp(ratioY) * 20;
     };
 
     spot.addEventListener("mousemove", aimAtCursor);
@@ -858,16 +857,22 @@ function init() {
       if (isDesktop()) shrinkCard();
     });
 
-    // Mobile touch & tap-scroll interactive reveal
-    spot.addEventListener("touchstart", (e) => {
-      if (isDesktop()) return;
-      if (activeMobileSpot && activeMobileSpot !== spot) {
-        activeMobileSpot._shrinkCard();
-      }
+    // Touch & tap events for real phones
+    const handleTouchInteraction = () => {
+      userInteracting = true;
+      if (userInteractResumeTimeout) clearTimeout(userInteractResumeTimeout);
+      userInteractResumeTimeout = setTimeout(() => {
+        userInteracting = false;
+      }, 3500);
+
+      allSpots.forEach((s) => {
+        if (s !== spot) s._shrinkCard();
+      });
       activeMobileSpot = spot;
       expandCard();
-    }, { passive: true });
+    };
 
+    spot.addEventListener("touchstart", handleTouchInteraction, { passive: true });
     spot.addEventListener("click", (e) => {
       if (isDesktop()) return;
       e.stopPropagation();
@@ -875,57 +880,66 @@ function init() {
         shrinkCard();
         activeMobileSpot = null;
       } else {
-        if (activeMobileSpot && activeMobileSpot !== spot) {
-          activeMobileSpot._shrinkCard();
-        }
-        activeMobileSpot = spot;
-        expandCard();
+        handleTouchInteraction();
       }
     });
   });
 
-  // Mobile tap outside to close active card
+  // Tap outside closes any active mobile card
   document.addEventListener("touchstart", (e) => {
-    if (isDesktop()) return;
-    if (activeMobileSpot && !e.target.closest(".spot")) {
-      activeMobileSpot._shrinkCard();
-      activeMobileSpot = null;
+    if (!e.target.closest(".spot")) {
+      if (activeMobileSpot) {
+        activeMobileSpot._shrinkCard();
+        activeMobileSpot = null;
+      }
     }
   }, { passive: true });
 
-  // Mobile Scroll-Driven Auto Reveal
-  const initMobileSpotAutoReveal = () => {
-    if (allSpots.length === 0) return;
+  // Mobile Auto-Reveal Loop using IntersectionObserver (Works 100% on real phones)
+  const aboutSectionEl = document.getElementById("about-section");
 
-    ScrollTrigger.matchMedia({
-      "(max-width: 899px)": function () {
-        const spotsArr = Array.from(allSpots);
+  function runMobileAutoRevealStep() {
+    if (!isAboutSectionInView || userInteracting || activeMobileSpot || allSpots.length === 0) {
+      mobileAutoRevealTimer = setTimeout(runMobileAutoRevealStep, 1500);
+      return;
+    }
 
-        mobileAutoRevealTl = gsap.timeline({
-          scrollTrigger: {
-            trigger: "#about-section",
-            start: "top 45%",
-            end: "bottom 85%",
-            toggleActions: "play none none reverse",
-          },
-        });
+    const currentSpot = allSpots[currentAutoIndex % allSpots.length];
+    currentSpot._expandCard(true);
 
-        // Sequence through spots 1, 2, 3 automatically
-        spotsArr.forEach((sp, idx) => {
-          const delay = idx * 1.8;
-          mobileAutoRevealTl.call(() => {
-            if (!activeMobileSpot) sp._expandCard(true);
-          }, null, delay);
+    setTimeout(() => {
+      if (!userInteracting && (!activeMobileSpot || activeMobileSpot === currentSpot)) {
+        currentSpot._shrinkCard();
+      }
+      currentAutoIndex = (currentAutoIndex + 1) % allSpots.length;
+      mobileAutoRevealTimer = setTimeout(runMobileAutoRevealStep, 1200);
+    }, 1800);
+  }
 
-          mobileAutoRevealTl.call(() => {
-            if (!activeMobileSpot || activeMobileSpot === sp) sp._shrinkCard();
-          }, null, delay + 1.25);
+  if (aboutSectionEl && "IntersectionObserver" in window) {
+    const aboutObserver = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            isAboutSectionInView = true;
+            if (!mobileAutoRevealTimer) {
+              mobileAutoRevealTimer = setTimeout(runMobileAutoRevealStep, 800);
+            }
+          } else {
+            isAboutSectionInView = false;
+            if (mobileAutoRevealTimer) {
+              clearTimeout(mobileAutoRevealTimer);
+              mobileAutoRevealTimer = null;
+            }
+            allSpots.forEach((s) => s._shrinkCard());
+          }
         });
       },
-    });
-  };
+      { threshold: 0.15 }
+    );
 
-  initMobileSpotAutoReveal();
+    aboutObserver.observe(aboutSectionEl);
+  }
 
   // ZENTRY 3D LEFT-BEVEL ENTRANCE ANIMATION
   const headline = document.querySelector(".headline");
