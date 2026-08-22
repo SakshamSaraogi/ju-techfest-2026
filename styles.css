@@ -644,6 +644,22 @@ p {
   perspective: 1000px;
   cursor: pointer;
   z-index: 10;
+  touch-action: pan-y;
+  pointer-events: auto !important;
+}
+
+/* Extended invisible hit area for finger tap on phones */
+.spot::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: max(48px, 1.4em);
+  height: max(48px, 1.4em);
+  z-index: 60;
+  cursor: pointer;
+  pointer-events: auto !important;
 }
 
 .spot::after {
@@ -666,8 +682,8 @@ p {
 
 .spot:hover::after,
 .spot.active::after {
-  opacity: 0;
-  transform: translate(-50%, -50%) scale(0);
+  opacity: 0 !important;
+  transform: translate(-50%, -50%) scale(0) !important;
 }
 
 @keyframes spot-core-blink {
@@ -704,6 +720,7 @@ p {
   box-shadow: 0 25px 60px rgba(0, 0, 0, 0.95), 0 0 35px rgba(217, 20, 36, 0.5);
   transform-style: preserve-3d;
   z-index: 1000 !important;
+  pointer-events: auto !important;
 }
 
 @keyframes spot-idle-pulse {
@@ -724,6 +741,11 @@ p {
 
 .spot:not(.active):not(:hover) .spot-card {
   animation: spot-idle-pulse 2.2s infinite ease-in-out;
+}
+
+.spot.active .spot-card,
+.spot:hover .spot-card {
+  animation: none !important;
 }
 
 /* All squares animate in perfect sync */

@@ -857,13 +857,13 @@ function init() {
       if (isDesktop()) shrinkCard();
     });
 
-    // Touch & tap events for real phones
-    const handleTouchInteraction = () => {
+    // Touch & pointer tap events for real phones
+    const handleTouchInteraction = (e) => {
       userInteracting = true;
       if (userInteractResumeTimeout) clearTimeout(userInteractResumeTimeout);
       userInteractResumeTimeout = setTimeout(() => {
         userInteracting = false;
-      }, 3500);
+      }, 4000);
 
       allSpots.forEach((s) => {
         if (s !== spot) s._shrinkCard();
@@ -872,7 +872,14 @@ function init() {
       expandCard();
     };
 
+    spot.addEventListener("pointerdown", (e) => {
+      if (e.pointerType === "touch" || !isDesktop()) {
+        handleTouchInteraction(e);
+      }
+    });
+
     spot.addEventListener("touchstart", handleTouchInteraction, { passive: true });
+
     spot.addEventListener("click", (e) => {
       if (isDesktop()) return;
       e.stopPropagation();
@@ -880,27 +887,32 @@ function init() {
         shrinkCard();
         activeMobileSpot = null;
       } else {
-        handleTouchInteraction();
+        handleTouchInteraction(e);
       }
     });
   });
 
   // Tap outside closes any active mobile card
-  document.addEventListener("touchstart", (e) => {
+  const closeActiveSpot = (e) => {
     if (!e.target.closest(".spot")) {
       if (activeMobileSpot) {
         activeMobileSpot._shrinkCard();
         activeMobileSpot = null;
       }
     }
-  }, { passive: true });
+  };
 
-  // Mobile Auto-Reveal Loop using IntersectionObserver (Works 100% on real phones)
+  document.addEventListener("touchstart", closeActiveSpot, { passive: true });
+  document.addEventListener("pointerdown", (e) => {
+    if (e.pointerType === "touch") closeActiveSpot(e);
+  });
+
+  // Mobile Auto-Reveal Sequencer (Dual ScrollTrigger & IntersectionObserver for 100% reliability on real phones)
   const aboutSectionEl = document.getElementById("about-section");
 
   function runMobileAutoRevealStep() {
     if (!isAboutSectionInView || userInteracting || activeMobileSpot || allSpots.length === 0) {
-      mobileAutoRevealTimer = setTimeout(runMobileAutoRevealStep, 1500);
+      mobileAutoRevealTimer = setTimeout(runMobileAutoRevealStep, 1200);
       return;
     }
 
@@ -912,33 +924,54 @@ function init() {
         currentSpot._shrinkCard();
       }
       currentAutoIndex = (currentAutoIndex + 1) % allSpots.length;
-      mobileAutoRevealTimer = setTimeout(runMobileAutoRevealStep, 1200);
+      mobileAutoRevealTimer = setTimeout(runMobileAutoRevealStep, 1000);
     }, 1800);
   }
 
-  if (aboutSectionEl && "IntersectionObserver" in window) {
-    const aboutObserver = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            isAboutSectionInView = true;
-            if (!mobileAutoRevealTimer) {
-              mobileAutoRevealTimer = setTimeout(runMobileAutoRevealStep, 800);
-            }
-          } else {
-            isAboutSectionInView = false;
-            if (mobileAutoRevealTimer) {
-              clearTimeout(mobileAutoRevealTimer);
-              mobileAutoRevealTimer = null;
-            }
-            allSpots.forEach((s) => s._shrinkCard());
-          }
-        });
-      },
-      { threshold: 0.15 }
-    );
+  const startMobileAutoReveal = () => {
+    isAboutSectionInView = true;
+    if (!mobileAutoRevealTimer) {
+      mobileAutoRevealTimer = setTimeout(runMobileAutoRevealStep, 400);
+    }
+  };
 
-    aboutObserver.observe(aboutSectionEl);
+  const stopMobileAutoReveal = () => {
+    isAboutSectionInView = false;
+    if (mobileAutoRevealTimer) {
+      clearTimeout(mobileAutoRevealTimer);
+      mobileAutoRevealTimer = null;
+    }
+    allSpots.forEach((s) => s._shrinkCard());
+  };
+
+  if (aboutSectionEl) {
+    // 1. ScrollTrigger trigger
+    ScrollTrigger.create({
+      trigger: "#about-section",
+      start: "top 80%",
+      end: "bottom 20%",
+      onEnter: startMobileAutoReveal,
+      onEnterBack: startMobileAutoReveal,
+      onLeave: stopMobileAutoReveal,
+      onLeaveBack: stopMobileAutoReveal,
+    });
+
+    // 2. IntersectionObserver fallback
+    if ("IntersectionObserver" in window) {
+      const aboutObserver = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              startMobileAutoReveal();
+            } else {
+              stopMobileAutoReveal();
+            }
+          });
+        },
+        { threshold: 0.1 }
+      );
+      aboutObserver.observe(aboutSectionEl);
+    }
   }
 
   // ZENTRY 3D LEFT-BEVEL ENTRANCE ANIMATION
