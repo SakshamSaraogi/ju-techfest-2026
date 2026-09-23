@@ -144,12 +144,27 @@ function init() {
   }
 
   // -------------------------------------------------------------
+  // DEVICE & PERFORMANCE PROFILING
+  // -------------------------------------------------------------
+  const isTouchDevice = () =>
+    window.innerWidth < 900 ||
+    ("ontouchstart" in window && window.innerWidth < 1024) ||
+    (navigator.maxTouchPoints && navigator.maxTouchPoints > 0 && window.innerWidth < 1024);
+
+  const isMobile = isTouchDevice();
+
+  const getOptimalDpr = () =>
+    isTouchDevice()
+      ? Math.min(window.devicePixelRatio || 1, 1.25)
+      : Math.min(window.devicePixelRatio || 1, 1.75);
+
+  // -------------------------------------------------------------
   // 1. LENIS SMOOTH SCROLL & GSAP SCROLLTRIGGER SETUP
   // -------------------------------------------------------------
   const lenis = new Lenis({
     lerp: 0.08,
     smoothWheel: true,
-    syncTouch: true,
+    syncTouch: false,
   });
   window.lenis = lenis;
   lenis.stop(); // Locked while preloader is active
@@ -158,7 +173,7 @@ function init() {
   gsap.ticker.add((time) => {
     lenis.raf(time * 1000);
   });
-  gsap.ticker.lagSmoothing(0);
+  gsap.ticker.lagSmoothing(500, 33);
 
   // -------------------------------------------------------------
   // 2. BACKGROUND WEBGL RENDERER SETUP (#bg-canvas)
@@ -166,11 +181,11 @@ function init() {
   const bgCanvas = document.getElementById("bg-canvas");
   const bgRenderer = new THREE.WebGLRenderer({
     canvas: bgCanvas,
-    antialias: true,
+    antialias: !isMobile,
     powerPreference: "high-performance",
   });
   bgRenderer.setSize(window.innerWidth, window.innerHeight);
-  bgRenderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  bgRenderer.setPixelRatio(getOptimalDpr());
 
   const bgScene = new THREE.Scene();
   const bgCamera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
@@ -199,12 +214,12 @@ function init() {
   const carouselCanvas = document.getElementById("carousel-canvas");
   const carouselRenderer = new THREE.WebGLRenderer({
     canvas: carouselCanvas,
-    antialias: true,
+    antialias: !isMobile,
     alpha: true,
     powerPreference: "high-performance",
   });
   carouselRenderer.setSize(window.innerWidth, window.innerHeight);
-  carouselRenderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  carouselRenderer.setPixelRatio(getOptimalDpr());
 
   const carouselScene = new THREE.Scene();
   const carouselCamera = new THREE.PerspectiveCamera(
@@ -1008,7 +1023,7 @@ function init() {
         rotateX: 16,
         rotateZ: -10,
         skewX: -12,
-        filter: "blur(6px)",
+        filter: isMobile ? "none" : "blur(6px)",
       },
       {
         opacity: 1,
@@ -1019,7 +1034,7 @@ function init() {
         rotateX: 0,
         rotateZ: 0,
         skewX: 0,
-        filter: "blur(0px)",
+        filter: isMobile ? "none" : "blur(0px)",
         duration: 1.0,
         ease: "power2.out",
       },
@@ -1074,18 +1089,19 @@ function init() {
   let domainsScene = null;
   let domainsCamera = null;
   const domainMeshes = [];
+  const domainVideoElements = [];
 
-  const isMobileViewport = window.innerWidth < 900;
+  const isMobileViewport = isMobile;
 
   if (domainsCanvas) {
     domainsRenderer = new THREE.WebGLRenderer({
       canvas: domainsCanvas,
-      antialias: !isMobileViewport,
+      antialias: !isMobile,
       alpha: true,
       powerPreference: "high-performance",
     });
     domainsRenderer.setSize(window.innerWidth, window.innerHeight);
-    domainsRenderer.setPixelRatio(Math.min(window.devicePixelRatio, isMobileViewport ? 1.25 : 1.75));
+    domainsRenderer.setPixelRatio(getOptimalDpr());
 
     domainsScene = new THREE.Scene();
     domainsCamera = new THREE.PerspectiveCamera(
@@ -1101,8 +1117,7 @@ function init() {
     const domainCardHeight = 4.84;
 
     const domainVideos = ["/videos/1.mp4", "/videos/2.mp4", "/videos/3.mp4"];
-    const domainVideoElements = [];
-    const segments = isMobileViewport ? 16 : 32;
+    const segments = isMobile ? 16 : 32;
 
     for (let i = 0; i < 3; i++) {
       // Create independent plane geometry for dynamic curvature morphing
@@ -1467,12 +1482,12 @@ function init() {
   if (glimpsesCanvas) {
     glimpsesRenderer = new THREE.WebGLRenderer({
       canvas: glimpsesCanvas,
-      antialias: true,
+      antialias: !isMobile,
       alpha: true,
       powerPreference: "high-performance",
     });
     glimpsesRenderer.setSize(window.innerWidth, window.innerHeight);
-    glimpsesRenderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    glimpsesRenderer.setPixelRatio(getOptimalDpr());
 
     glimpsesScene = new THREE.Scene();
     glimpsesCamera = new THREE.PerspectiveCamera(
@@ -1771,7 +1786,7 @@ function init() {
           rotateX: 16,
           rotateZ: -10,
           skewX: -12,
-          filter: "blur(6px)",
+          filter: isMobile ? "none" : "blur(6px)",
         },
         {
           opacity: 1,
@@ -1782,7 +1797,7 @@ function init() {
           rotateX: 0,
           rotateZ: 0,
           skewX: 0,
-          filter: "blur(0px)",
+          filter: isMobile ? "none" : "blur(0px)",
           duration: 1.0,
           ease: "power2.out",
         },
@@ -1895,7 +1910,7 @@ function init() {
               rotateX: 16,
               rotateZ: -10,
               skewX: -12,
-              filter: "blur(6px)",
+              filter: isMobile ? "none" : "blur(6px)",
             },
             {
               opacity: 1,
@@ -1906,7 +1921,7 @@ function init() {
               rotateX: 0,
               rotateZ: 0,
               skewX: 0,
-              filter: "blur(0px)",
+              filter: isMobile ? "none" : "blur(0px)",
               duration: 0.32,
               ease: "power2.out",
             },
@@ -2023,7 +2038,7 @@ function init() {
                 opacity: 0,
                 y: -40,
                 scale: 0.95,
-                filter: "blur(8px)",
+                filter: isMobile ? "none" : "blur(8px)",
                 duration: 0.3,
                 ease: "power2.inOut",
               },
@@ -2255,13 +2270,13 @@ function init() {
   const heroCanvas = document.getElementById("hero-canvas");
   const heroRenderer = new THREE.WebGLRenderer({
     canvas: heroCanvas,
-    antialias: true,
+    antialias: !isMobile,
     alpha: true,
-    precision: "highp",
+    precision: isMobile ? "mediump" : "highp",
     powerPreference: "high-performance",
   });
   heroRenderer.setSize(window.innerWidth, window.innerHeight);
-  heroRenderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  heroRenderer.setPixelRatio(getOptimalDpr());
 
   const heroScene = new THREE.Scene();
   const heroCamera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 10);
@@ -2296,19 +2311,19 @@ function init() {
   }
 
   // Ping-Pong Render Targets for Fluid Simulation
-  const size = 512;
+  const size = isMobile ? 256 : 512;
   const pingPongTargets = [
     new THREE.WebGLRenderTarget(size, size, {
       minFilter: THREE.LinearFilter,
       magFilter: THREE.LinearFilter,
       format: THREE.RGBAFormat,
-      type: THREE.FloatType,
+      type: THREE.HalfFloatType,
     }),
     new THREE.WebGLRenderTarget(size, size, {
       minFilter: THREE.LinearFilter,
       magFilter: THREE.LinearFilter,
       format: THREE.RGBAFormat,
-      type: THREE.FloatType,
+      type: THREE.HalfFloatType,
     }),
   ];
   let currentTarget = 0;
@@ -2374,9 +2389,65 @@ function init() {
   window.addEventListener("mousemove", onMouseMove, { passive: true });
   window.addEventListener("mouseenter", onMouseEnter, { passive: true });
   window.addEventListener("mouseleave", onMouseLeave, { passive: true });
-  window.addEventListener("touchmove", onTouchMove, { passive: false });
-  window.addEventListener("touchstart", onTouchStart, { passive: false });
+  window.addEventListener("touchmove", onTouchMove, { passive: true });
+  window.addEventListener("touchstart", onTouchStart, { passive: true });
   window.addEventListener("resize", onWindowResize);
+
+  // -------------------------------------------------------------
+  // VIEWPORT CULLING & VISIBILITY GATING (MOBILE OPTIMIZATION)
+  // -------------------------------------------------------------
+  let isHeroVisible = true;
+  let isDomainsVisible = false;
+  let isGlimpsesVisible = false;
+  let isTabVisible = !document.hidden;
+
+  document.addEventListener("visibilitychange", () => {
+    isTabVisible = !document.hidden;
+  });
+
+  const heroScrollSectionEl = document.getElementById("hero-scroll-section");
+  const domainsScrollSectionEl = document.getElementById("domains-scroll-section");
+  const glimpsesSectionEl = document.getElementById("glimpses-section");
+
+  if ("IntersectionObserver" in window) {
+    const heroObserver = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          isHeroVisible = entry.isIntersecting;
+        });
+      },
+      { rootMargin: "300px 0px 300px 0px" }
+    );
+    if (heroScrollSectionEl) heroObserver.observe(heroScrollSectionEl);
+
+    const domainsObserver = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          isDomainsVisible = entry.isIntersecting;
+          // Automatically pause/play videos to save mobile GPU/CPU video decoding
+          domainVideoElements.forEach((vid) => {
+            if (entry.isIntersecting) {
+              if (vid.paused) vid.play().catch(() => {});
+            } else {
+              if (!vid.paused) vid.pause();
+            }
+          });
+        });
+      },
+      { rootMargin: "300px 0px 300px 0px" }
+    );
+    if (domainsScrollSectionEl) domainsObserver.observe(domainsScrollSectionEl);
+
+    const glimpsesObserver = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          isGlimpsesVisible = entry.isIntersecting;
+        });
+      },
+      { rootMargin: "300px 0px 300px 0px" }
+    );
+    if (glimpsesSectionEl) glimpsesObserver.observe(glimpsesSectionEl);
+  }
 
   animate();
 
@@ -2503,7 +2574,7 @@ function init() {
   function onWindowResize() {
     const width = window.innerWidth;
     const height = window.innerHeight;
-    const dpr = Math.min(window.devicePixelRatio, 2);
+    const dpr = getOptimalDpr();
 
     bgRenderer.setSize(width, height);
     bgRenderer.setPixelRatio(dpr);
@@ -2547,6 +2618,9 @@ function init() {
   // -------------------------------------------------------------
   function animate() {
     requestAnimationFrame(animate);
+
+    // Freeze render loop when tab/browser is minimized/hidden
+    if (!isTabVisible) return;
 
     const elapsedTime = clock.getElapsedTime();
     const now = performance.now();
@@ -2597,69 +2671,77 @@ function init() {
 
     sharedMouse.copy(userMouse);
 
-    // 3. 3D RAYCASTER HOVER INTERACTION ON CURVED MESHES
-    raycaster.setFromCamera(ndcMouse, carouselCamera);
-    const intersects = raycaster.intersectObjects(cardMeshes);
+    // 3. 3D RAYCASTER HOVER INTERACTION ON CURVED MESHES (Desktop cursor only)
+    if (isHeroVisible && !isMobile && userInteracted) {
+      raycaster.setFromCamera(ndcMouse, carouselCamera);
+      const intersects = raycaster.intersectObjects(cardMeshes);
 
-    if (intersects.length > 0) {
-      hoveredIndex = intersects[0].object.userData.index;
+      if (intersects.length > 0) {
+        hoveredIndex = intersects[0].object.userData.index;
+      } else {
+        hoveredIndex = -1;
+      }
     } else {
       hoveredIndex = -1;
     }
 
-    // Smooth hover interpolation for all card states
-    for (let i = 0; i < totalCards; i++) {
-      const state = cardStates[i];
-      const targetScale = i === hoveredIndex ? 1.08 : 1.0;
-      const targetOffsetZ = i === hoveredIndex ? 0.35 : 0.0;
+    if (isHeroVisible) {
+      // Smooth hover interpolation for all card states
+      for (let i = 0; i < totalCards; i++) {
+        const state = cardStates[i];
+        const targetScale = i === hoveredIndex ? 1.08 : 1.0;
+        const targetOffsetZ = i === hoveredIndex ? 0.35 : 0.0;
 
-      state.hoverScale += (targetScale - state.hoverScale) * 0.18;
-      state.hoverOffsetZ += (targetOffsetZ - state.hoverOffsetZ) * 0.18;
+        state.hoverScale += (targetScale - state.hoverScale) * 0.18;
+        state.hoverOffsetZ += (targetOffsetZ - state.hoverOffsetZ) * 0.18;
+      }
+
+      updateCurvedCarousel(spiralState.progress);
+
+      // Subtle 3D mouse parallax on carousel scene
+      carouselScene.rotation.y = (userMouse.x - 0.5) * 0.06;
+      carouselScene.rotation.x = -(userMouse.y - 0.5) * 0.04;
     }
-
-    updateCurvedCarousel(spiralState.progress);
-
-    // Subtle 3D mouse parallax on carousel scene
-    carouselScene.rotation.y = (userMouse.x - 0.5) * 0.06;
-    carouselScene.rotation.x = -(userMouse.y - 0.5) * 0.04;
 
     // 4. RENDER GLOBAL BACKGROUND (#bg-canvas)
     bgMaterial.uniforms.uTime.value = elapsedTime;
     bgMaterial.uniforms.uMouse.value.copy(sharedMouse);
     bgRenderer.render(bgScene, bgCamera);
 
-    // 5. RENDER FLUID PING-PONG PASS
-    const prevTarget = pingPongTargets[currentTarget];
-    currentTarget = (currentTarget + 1) % 2;
-    const currentRenderTarget = pingPongTargets[currentTarget];
+    // 5. RENDER FLUID PING-PONG PASS & HERO SCENE (#hero-canvas & #carousel-canvas)
+    if (isHeroVisible) {
+      const prevTarget = pingPongTargets[currentTarget];
+      currentTarget = (currentTarget + 1) % 2;
+      const currentRenderTarget = pingPongTargets[currentTarget];
 
-    trailsMaterial.uniforms.uPrevTrails.value = prevTarget.texture;
-    trailsMaterial.uniforms.uMouse.value.copy(userMouse);
-    trailsMaterial.uniforms.uPrevMouse.value.copy(userPrevMouse);
-    trailsMaterial.uniforms.uIsMoving.value = userIsMoving;
-    trailsMaterial.uniforms.uAutoMouse.value.copy(autoMouse);
-    trailsMaterial.uniforms.uAutoPrevMouse.value.copy(autoPrevMouse);
-    trailsMaterial.uniforms.uAutoIsMoving.value = autoIsMoving;
+      trailsMaterial.uniforms.uPrevTrails.value = prevTarget.texture;
+      trailsMaterial.uniforms.uMouse.value.copy(userMouse);
+      trailsMaterial.uniforms.uPrevMouse.value.copy(userPrevMouse);
+      trailsMaterial.uniforms.uIsMoving.value = userIsMoving;
+      trailsMaterial.uniforms.uAutoMouse.value.copy(autoMouse);
+      trailsMaterial.uniforms.uAutoPrevMouse.value.copy(autoPrevMouse);
+      trailsMaterial.uniforms.uAutoIsMoving.value = autoIsMoving;
 
-    heroRenderer.setRenderTarget(currentRenderTarget);
-    heroRenderer.render(simScene, heroCamera);
+      heroRenderer.setRenderTarget(currentRenderTarget);
+      heroRenderer.render(simScene, heroCamera);
 
-    // 6. RENDER HERO CHARACTER PASS (#hero-canvas)
-    displayMaterial.uniforms.uFluid.value = currentRenderTarget.texture;
-    displayMaterial.uniforms.uMouse.value.copy(userMouse);
-    displayMaterial.uniforms.uTime.value = elapsedTime;
+      // 6. RENDER HERO CHARACTER PASS (#hero-canvas)
+      displayMaterial.uniforms.uFluid.value = currentRenderTarget.texture;
+      displayMaterial.uniforms.uMouse.value.copy(userMouse);
+      displayMaterial.uniforms.uTime.value = elapsedTime;
 
-    displayMesh.rotation.y = (userMouse.x - 0.5) * 0.035;
-    displayMesh.rotation.x = -(userMouse.y - 0.5) * 0.035;
+      displayMesh.rotation.y = (userMouse.x - 0.5) * 0.035;
+      displayMesh.rotation.x = -(userMouse.y - 0.5) * 0.035;
 
-    heroRenderer.setRenderTarget(null);
-    heroRenderer.render(heroScene, heroCamera);
+      heroRenderer.setRenderTarget(null);
+      heroRenderer.render(heroScene, heroCamera);
 
-    // 7. RENDER 3D CURVED CAROUSEL PASS (#carousel-canvas)
-    carouselRenderer.render(carouselScene, carouselCamera);
+      // 7. RENDER 3D CURVED CAROUSEL PASS (#carousel-canvas)
+      carouselRenderer.render(carouselScene, carouselCamera);
+    }
 
     // 8. RENDER 3D DOMAINS CAROUSEL PASS (#domains-canvas)
-    if (domainsRenderer && domainsScene && domainsCamera) {
+    if (isDomainsVisible && domainsRenderer && domainsScene && domainsCamera) {
       domainMouse.x += (targetDomainMouse.x - domainMouse.x) * 0.08;
       domainMouse.y += (targetDomainMouse.y - domainMouse.y) * 0.08;
       updateDomainsCarousel(domainState.progress);
@@ -2667,7 +2749,7 @@ function init() {
     }
 
     // 9. RENDER 3D GLIMPSES SPIRAL VORTEX & FREEFALLING PASS (#glimpses-canvas)
-    if (glimpsesRenderer && glimpsesScene && glimpsesCamera && glimpsesSpiralGroup) {
+    if (isGlimpsesVisible && glimpsesRenderer && glimpsesScene && glimpsesCamera && glimpsesSpiralGroup) {
       glimpsesState.progress += (glimpsesState.targetProgress - glimpsesState.progress) * 0.12;
 
       // Faster continuous ambient auto-rotation + scroll-driven spin

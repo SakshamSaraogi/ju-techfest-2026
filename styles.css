@@ -2542,4 +2542,11 @@ p {
     transform: scale(0.5) translateY(-20px) !important;
     transition: opacity 0.25s ease, transform 0.25s ease, visibility 0.25s ease !important;
   }
+
+  /* Prevent full-screen canvases from intercepting mobile touch momentum */
+  #carousel-canvas,
+  #domains-canvas,
+  #glimpses-canvas {
+    pointer-events: none !important;
+  }
 }
