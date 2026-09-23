@@ -22,20 +22,14 @@ const spiralVertexShader = `
   }
 `;
 
-// spiral tile fragment shader with view-dependent falloff
+// spiral tile fragment shader with true photo color (no artificial darkening falloff)
 const spiralFragmentShader = `
   uniform sampler2D uMap;
-  uniform vec3 uCameraPosition;
   varying vec2 vUv;
-  varying vec3 vWorldNormal;
-  varying vec3 vWorldPosition;
   void main() {
     vec4 tex = texture2D(uMap, vUv);
-    vec3 viewDir = normalize(uCameraPosition - vWorldPosition);
-    float facing = max(dot(-normalize(vWorldNormal), viewDir), 0.0);
-    float falloff = smoothstep(-0.2, 0.5, facing) * 0.45 + 0.42;
-    vec3 color = mix(vec3(1.0), tex.rgb * falloff, 0.975) * 1.25;
-    gl_FragColor = vec4(color, tex.a);
+    gl_FragColor = tex;
+    #include <colorspace_fragment>
   }
 `;
 
@@ -99,7 +93,10 @@ const Spiral = ({ images, heading }) => {
     const spiralTextureLoader = new THREE.TextureLoader();
     const spiralTextures = images.map((src) =>
       spiralTextureLoader.load(src, (t) => {
-        t.minFilter = THREE.LinearMipmapLinearFilter;
+        t.colorSpace = THREE.SRGBColorSpace;
+        t.generateMipmaps = false;
+        t.minFilter = THREE.LinearFilter;
+        t.magFilter = THREE.LinearFilter;
         t.anisotropy = spiralRenderer.capabilities.getMaxAnisotropy();
       }),
     );
@@ -183,15 +180,8 @@ const Spiral = ({ images, heading }) => {
       spiralGeometry.setIndex(spiralIndices);
       spiralGeometry.computeVertexNormals();
 
-      const spiralMaterial = new THREE.ShaderMaterial({
-        vertexShader: spiralVertexShader,
-        fragmentShader: spiralFragmentShader,
-        uniforms: {
-          uMap: {
-            value: spiralTextures[i % spiralTextures.length],
-          },
-          uCameraPosition: spiralCameraPositionUniform,
-        },
+      const spiralMaterial = new THREE.MeshBasicMaterial({
+        map: spiralTextures[i % spiralTextures.length],
         side: THREE.DoubleSide,
       });
 

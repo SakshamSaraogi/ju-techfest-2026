@@ -57,6 +57,48 @@ html {
   color: #ffffff;
   font-family: "DM Mono", monospace;
   overflow-x: hidden;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(217, 20, 36, 0.45) transparent;
+}
+
+html.is-loading,
+body.is-loading {
+  overflow: hidden !important;
+  height: 100vh !important;
+}
+
+/* =============================================================
+   CUSTOM MINIMAL SCROLLBAR (JU INNOV8 Dark & Crimson Aesthetic)
+   ============================================================= */
+::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(5, 5, 7, 0.6);
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.16);
+  border-radius: 9999px;
+  border: 1px solid rgba(255, 255, 255, 0.04);
+  background-clip: padding-box;
+  transition: background 0.25s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s ease;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #d91424;
+  box-shadow: 0 0 12px rgba(217, 20, 36, 0.7);
+}
+
+::-webkit-scrollbar-thumb:active {
+  background: #ff2a3b;
+  box-shadow: 0 0 16px rgba(255, 42, 59, 0.95);
+}
+
+::-webkit-scrollbar-corner {
+  background: transparent;
 }
 
 body {
@@ -194,13 +236,15 @@ p {
 }
 
 .header-left {
-  width: 80px;
+  display: flex;
+  align-items: center;
+  min-width: 80px;
 }
 
 /* Floating Centered Logo */
 .logo-anchor {
   position: fixed;
-  top: 1.75rem;
+  top: 1.25rem;
   left: 50%;
   transform: translateX(-50%);
   display: flex;
@@ -209,7 +253,6 @@ p {
   z-index: 900 !important;
   pointer-events: auto !important;
   cursor: pointer !important;
-  transform-style: preserve-3d;
 }
 
 .nav-logo-link {
@@ -217,17 +260,77 @@ p {
   align-items: center;
   justify-content: center;
   transform-origin: center center;
-  will-change: transform;
   pointer-events: auto !important;
   cursor: pointer !important;
 }
 
 .site-logo {
-  height: clamp(1.6rem, 2.5vw, 2.2rem);
+  height: clamp(58px, 4.8vw, 78px);
   width: auto;
+  max-width: 250px;
   object-fit: contain;
   pointer-events: auto !important;
   cursor: pointer !important;
+  image-rendering: -webkit-optimize-contrast;
+  filter: drop-shadow(0 2px 10px rgba(0, 0, 0, 0.5));
+  transition: transform 0.25s ease, opacity 0.25s ease, filter 0.25s ease;
+}
+
+.site-logo:hover {
+  transform: scale(1.04);
+  filter: drop-shadow(0 4px 16px rgba(217, 20, 36, 0.45));
+}
+
+/* Home Page Specific Floating Logo Lockup & Header Setup (Crisp Native Resolution) */
+.home-page .logo-anchor {
+  position: fixed;
+  top: 1.25rem;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  z-index: 900 !important;
+  pointer-events: auto !important;
+  cursor: pointer !important;
+}
+
+.home-page #floating-logo {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transform-origin: center top;
+  pointer-events: auto !important;
+  cursor: pointer !important;
+  /* Initial scale in header so there is zero flash before GSAP initializes */
+  transform: scale(0.22);
+}
+
+@media (max-width: 768px) {
+  .home-page #floating-logo {
+    transform: scale(0.30);
+  }
+}
+
+@media (max-width: 480px) {
+  .home-page #floating-logo {
+    transform: scale(0.45);
+  }
+}
+
+.home-page #floating-logo .site-logo {
+  width: min(88vw, 700px) !important;
+  height: auto !important;
+  max-width: 700px !important;
+  object-fit: contain;
+  image-rendering: -webkit-optimize-contrast;
+  filter: drop-shadow(0 4px 22px rgba(0, 0, 0, 0.75));
+  transition: filter 0.25s ease;
+}
+
+.home-page #floating-logo:hover .site-logo {
+  transform: none;
+  filter: drop-shadow(0 6px 30px rgba(217, 20, 36, 0.65));
 }
 
 .menu {
@@ -449,7 +552,7 @@ p {
 /* "Welcome To" Clean Lockup with Logo (Google Sans, Clean Gap, Larger Font) */
 .welcome-reveal-container {
   position: absolute;
-  top: calc(50% - 72px);
+  top: calc(50% - 130px);
   left: 50%;
   transform: translate(-50%, -50%);
   width: 94vw;
@@ -460,7 +563,18 @@ p {
   align-items: center;
   justify-content: center;
   padding: 0 2vw;
-  transform-style: preserve-3d;
+}
+
+@media (max-width: 768px) {
+  .welcome-reveal-container {
+    top: calc(50% - 85px);
+  }
+}
+
+@media (max-width: 480px) {
+  .welcome-reveal-container {
+    top: calc(50% - 60px);
+  }
 }
 
 .welcome-block-reveal {
@@ -791,7 +905,7 @@ p {
   }
 
   .logo-anchor {
-    top: 1.25rem;
+    top: 0.95rem;
     z-index: 900 !important;
     pointer-events: auto !important;
     cursor: pointer !important;
@@ -804,8 +918,18 @@ p {
   }
 
   .site-logo {
-    height: 30px !important;
+    height: clamp(54px, 14vw, 70px) !important;
+    max-width: calc(100vw - 120px);
+    width: auto;
+    object-fit: contain;
     pointer-events: auto !important;
+    image-rendering: -webkit-optimize-contrast;
+  }
+
+  .home-page #floating-logo .site-logo {
+    width: min(88vw, 700px) !important;
+    height: auto !important;
+    max-width: 700px !important;
   }
 
   .hero-scroll-section {
@@ -886,13 +1010,16 @@ p {
   display: flex;
   align-items: center;
   justify-content: center;
-  opacity: 0.75;
+  opacity: 0.82;
 }
 
 .domains-logo-img {
-  height: clamp(2.8rem, 5.5vw, 5rem);
+  height: clamp(8.5rem, 15vw, 14rem);
   width: auto;
+  max-width: 240px;
   object-fit: contain;
+  image-rendering: -webkit-optimize-contrast;
+  filter: drop-shadow(0 0 35px rgba(217, 20, 36, 0.45)) drop-shadow(0 6px 24px rgba(0, 0, 0, 0.85));
 }
 
 .domains-left-content {
@@ -1035,11 +1162,12 @@ p {
   }
 
   .domains-center-logo {
-    opacity: 0.6;
+    opacity: 0.68;
   }
 
   .domains-logo-img {
-    height: clamp(2rem, 6.5vw, 3rem);
+    height: clamp(5rem, 16vw, 7.5rem);
+    max-width: 140px;
   }
 
   .domains-left-content {
@@ -1454,23 +1582,71 @@ p {
   justify-content: center;
 }
 
-.aftermovie-preview-img {
+.aftermovie-desktop-video {
   width: 100%;
   height: 100%;
   object-fit: cover;
   display: block;
+  pointer-events: auto;
+}
+
+.aftermovie-preview-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: none;
 }
 
 .aftermovie-media-overlay {
   position: absolute;
   inset: 0;
-  background: radial-gradient(circle at center, rgba(0, 0, 0, 0.15) 0%, rgba(0, 0, 0, 0.5) 100%);
+  background: radial-gradient(circle at center, rgba(0, 0, 0, 0.1) 0%, rgba(0, 0, 0, 0.4) 100%);
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   pointer-events: none;
   transition: background 0.3s ease;
+}
+
+.aftermovie-sound-btn {
+  position: absolute;
+  bottom: clamp(1.1rem, 2.5vw, 1.85rem);
+  right: clamp(1.1rem, 2.5vw, 1.85rem);
+  z-index: 60;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.48rem;
+  padding: 0.55rem 1.05rem;
+  background: rgba(5, 5, 7, 0.78);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 9999px;
+  color: #ffffff;
+  font-family: "DM Mono", monospace;
+  font-size: 0.72rem;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  cursor: pointer !important;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.6);
+  pointer-events: auto;
+}
+
+.aftermovie-sound-btn:hover {
+  background: rgba(217, 20, 36, 0.28);
+  border-color: #d91424;
+  color: #ffffff;
+  box-shadow: 0 0 18px rgba(217, 20, 36, 0.55);
+  transform: translateY(-2px);
+}
+
+.aftermovie-sound-btn .sound-icon {
+  width: 15px;
+  height: 15px;
+  stroke: currentColor;
 }
 
 /* Scroll Below Hint */
@@ -1513,7 +1689,7 @@ p {
 }
 
 .aftermovie-yt-iframe {
-  display: none;
+  display: none !important;
 }
 
 @media (max-width: 900px) {
@@ -1587,6 +1763,8 @@ p {
     margin: clamp(4.2rem, 9.5vh, 6.5rem) auto 0 auto;
   }
 
+  .aftermovie-desktop-video,
+  .aftermovie-sound-btn,
   .aftermovie-preview-img,
   .aftermovie-media-overlay {
     display: none !important;
@@ -1729,7 +1907,7 @@ p {
 }
 
 .footer-notch-logo {
-  height: clamp(1.4rem, 2.2vw, 2rem);
+  height: clamp(2.8rem, 4vw, 3.8rem);
   width: auto;
   object-fit: contain;
   filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.8));
@@ -2032,7 +2210,7 @@ p {
   }
 
   .footer-notch-logo {
-    height: 1.35rem;
+    height: clamp(34px, 8vw, 44px);
   }
 
   /* Top Navigation Columns placed side-by-side at top */

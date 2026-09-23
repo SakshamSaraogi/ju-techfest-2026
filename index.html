@@ -8,7 +8,7 @@
   <link rel="stylesheet" href="/styles.css" />
 </head>
 
-<body>
+<body class="home-page">
   <!-- Preloader Screen: Spider Fill Animation -->
   <div class="preloader" id="preloader" aria-label="Loading INNOV8 2026">
     <div class="preloader-content">
@@ -30,8 +30,8 @@
   <header class="site-header">
     <div class="header-left"></div>
     <div class="logo-anchor" id="logo-anchor">
-      <a href="#" class="nav-logo-link" id="floating-logo">
-        <img src="/innov8.png" alt="INNOV8" class="site-logo" />
+      <a href="/" class="nav-logo-link" id="floating-logo" title="Back to Home">
+        <img src="/jutechfestlogo.png" alt="JU TechFest" class="site-logo" />
       </a>
     </div>
   </header>
@@ -55,27 +55,27 @@
           <span class="item-label">Home</span>
           <span class="item-divider"></span>
         </a>
-        <a class="menu-item" href="/events.html" data-target="events">
+        <a class="menu-item" href="/events" data-target="events">
           <span class="item-index">02</span>
           <span class="item-label">Events</span>
           <span class="item-divider"></span>
         </a>
-        <a class="menu-item" href="#about-section" data-target="team">
+        <a class="menu-item" href="/team" data-target="team">
           <span class="item-index">03</span>
           <span class="item-label">Team</span>
           <span class="item-divider"></span>
         </a>
-        <a class="menu-item" href="#domains-section" data-target="sponsors">
+        <a class="menu-item" href="/sponsors" data-target="sponsors">
           <span class="item-index">04</span>
           <span class="item-label">Sponsors</span>
           <span class="item-divider"></span>
         </a>
-        <a class="menu-item" href="#footer-section" data-target="contact">
+        <a class="menu-item" href="#site-footer" data-target="contact">
           <span class="item-index">05</span>
           <span class="item-label">Contact</span>
           <span class="item-divider"></span>
         </a>
-        <a class="menu-item" href="/events.html" data-target="guidelines">
+        <a class="menu-item" href="/guidelines" data-target="guidelines">
           <span class="item-index">06</span>
           <span class="item-label">Guidelines</span>
           <span class="item-divider"></span>
@@ -117,23 +117,23 @@
 
             <div class="marquee-track track-bottom">
               <div class="marquee-content reverse">
-                <span>JU INNOV8 2026</span>
+                <span>JU TECHFEST 2026</span>
                 <img src="/spiderweb.png" alt="Spiderweb" class="spiderweb-accent" />
-                <span>JU INNOV8 2026</span>
+                <span>JU TECHFEST 2026</span>
                 <img src="/spiderweb.png" alt="Spiderweb" class="spiderweb-accent" />
-                <span>JU INNOV8 2026</span>
+                <span>JU TECHFEST 2026</span>
                 <img src="/spiderweb.png" alt="Spiderweb" class="spiderweb-accent" />
-                <span>JU INNOV8 2026</span>
+                <span>JU TECHFEST 2026</span>
                 <img src="/spiderweb.png" alt="Spiderweb" class="spiderweb-accent" />
               </div>
               <div class="marquee-content reverse" aria-hidden="true">
-                <span>JU INNOV8 2026</span>
+                <span>JU TECHFEST 2026</span>
                 <img src="/spiderweb.png" alt="Spiderweb" class="spiderweb-accent" />
-                <span>JU INNOV8 2026</span>
+                <span>JU TECHFEST 2026</span>
                 <img src="/spiderweb.png" alt="Spiderweb" class="spiderweb-accent" />
-                <span>JU INNOV8 2026</span>
+                <span>JU TECHFEST 2026</span>
                 <img src="/spiderweb.png" alt="Spiderweb" class="spiderweb-accent" />
-                <span>JU INNOV8 2026</span>
+                <span>JU TECHFEST 2026</span>
                 <img src="/spiderweb.png" alt="Spiderweb" class="spiderweb-accent" />
               </div>
             </div>
@@ -225,9 +225,9 @@
         <!-- 3D WebGL Canvas for 3 Curved Cards & Orbit Flight -->
         <canvas id="domains-canvas"></canvas>
 
-        <!-- Center Innov8 Logo Anchor (Behind the active card) -->
+        <!-- Center Spider Emblem Anchor (Behind the active card) -->
         <div class="domains-center-logo">
-          <img src="/innov8.png" alt="INNOV8" class="domains-logo-img" />
+          <img src="/spider-icon.png" alt="JU TechFest Spider Icon" class="domains-logo-img" />
         </div>
 
         <!-- Left Column: Title, Description, CTA -->
@@ -237,7 +237,7 @@
             Dive in and discover our core disciplines turning groundbreaking ideas into reality across software,
             hardware, and esports.
           </p>
-          <a href="/events.html" class="domains-cta-btn">REGISTER NOW</a>
+          <a href="/events" class="domains-cta-btn">REGISTER NOW</a>
         </div>
 
         <!-- Right Column: Vertical Domain Selector Navigation -->
@@ -318,9 +318,27 @@
         <!-- Centered Expanding Video/Media Box -->
         <div class="aftermovie-media-card" id="aftermovie-media-card">
           <div class="aftermovie-media-inner">
-            <iframe class="aftermovie-yt-iframe" id="aftermovie-yt-iframe" src="https://www.youtube.com/embed/dQw4w9WgXcQ?enablejsapi=1&rel=0&playsinline=1" title="JU Innov8 Aftermovie" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
-            <img src="/img1.png" alt="JU Innov8 Aftermovie" class="aftermovie-preview-img" />
+            <!-- Mobile YouTube Embed -->
+            <iframe class="aftermovie-yt-iframe" id="aftermovie-yt-iframe" src="https://www.youtube.com/embed/nKrJw1DvRso?enablejsapi=1&rel=0&playsinline=1" title="JU Innov8 Aftermovie" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+            
+            <!-- Desktop / Laptop Local High-Res Video -->
+            <video class="aftermovie-desktop-video" id="aftermovie-desktop-video" src="/aftermovie.mp4" poster="/img1.png" autoplay loop muted playsinline preload="auto"></video>
+            
             <div class="aftermovie-media-overlay"></div>
+
+            <!-- Desktop Minimal Sound Toggle -->
+            <button class="aftermovie-sound-btn" id="aftermovie-sound-btn" type="button" aria-label="Toggle Aftermovie Sound">
+              <svg class="sound-icon sound-icon-muted" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M11 5L6 9H2v6h4l5 4V5z"/>
+                <line x1="23" y1="9" x2="17" y2="15"/>
+                <line x1="17" y1="9" x2="23" y2="15"/>
+              </svg>
+              <svg class="sound-icon sound-icon-unmuted" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:none;">
+                <path d="M11 5L6 9H2v6h4l5 4V5z"/>
+                <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"/>
+              </svg>
+              <span class="sound-label">UNMUTE</span>
+            </button>
           </div>
         </div>
 
@@ -370,8 +388,8 @@
 
           <!-- In-Footer Top Crown Notch Innov8 Logo -->
           <div class="footer-notch-logo-container" id="footer-notch-logo-container">
-            <a href="javascript:void(0)" class="footer-notch-logo-link" id="footer-notch-logo-link">
-              <img src="/innov8.png" alt="JU Innov8 Logo" class="footer-notch-logo" />
+            <a href="/" class="footer-notch-logo-link" id="footer-notch-logo-link">
+              <img src="/jutechfestlogo.png" alt="JU TechFest Logo" class="footer-notch-logo" />
             </a>
           </div>
 
@@ -393,10 +411,10 @@
           <div class="footer-nav-col col-pages">
             <span class="footer-col-label">PAGES</span>
             <nav class="footer-links-list">
-              <a href="javascript:void(0)" class="footer-link-pill" data-text="HOME">
+              <a href="/" class="footer-link-pill" data-text="HOME">
                 <span class="footer-link-wrap" data-text="HOME">HOME</span>
               </a>
-              <a href="events.html" class="footer-link-pill" data-text="EVENTS">
+              <a href="/events" class="footer-link-pill" data-text="EVENTS">
                 <span class="footer-link-wrap" data-text="EVENTS">EVENTS</span>
               </a>
               <a href="#site-footer" class="footer-link-pill" data-text="TEAM">
@@ -409,14 +427,14 @@
           <div class="footer-nav-col col-socials">
             <span class="footer-col-label">FOLLOW ON</span>
             <nav class="footer-links-list">
-              <a href="https://youtube.com" target="_blank" rel="noopener" class="footer-link-pill" data-text="YOUTUBE">
+              <a href="https://www.youtube.com/@jecrcuvideo" target="_blank" rel="noopener noreferrer" class="footer-link-pill" data-text="YOUTUBE">
                 <span class="footer-link-wrap" data-text="YOUTUBE">YOUTUBE</span>
               </a>
-              <a href="https://instagram.com" target="_blank" rel="noopener" class="footer-link-pill"
+              <a href="https://www.instagram.com/student_council_ju/" target="_blank" rel="noopener noreferrer" class="footer-link-pill"
                 data-text="INSTAGRAM">
                 <span class="footer-link-wrap" data-text="INSTAGRAM">INSTAGRAM</span>
               </a>
-              <a href="https://linkedin.com" target="_blank" rel="noopener" class="footer-link-pill"
+              <a href="https://in.linkedin.com/company/student-council-jecrc-university" target="_blank" rel="noopener noreferrer" class="footer-link-pill"
                 data-text="LINKEDIN">
                 <span class="footer-link-wrap" data-text="LINKEDIN">LINKEDIN</span>
               </a>
@@ -430,7 +448,7 @@
 
           <!-- Bottom Venue CTA Button -->
           <div class="footer-venue-cta-container">
-            <a href="https://maps.google.com" target="_blank" rel="noopener" class="footer-venue-btn">
+            <a href="https://maps.app.goo.gl/FUYVqDCGatsQyUn67" target="_blank" rel="noopener noreferrer" class="footer-venue-btn">
               <span>VENUE</span>
               <svg class="footer-btn-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
                 <path d="M7 17L17 7M17 7H7M17 7V17" />
@@ -441,7 +459,7 @@
 
         <!-- Bottom Copyright Bar -->
         <div class="footer-bottom-bar">
-          <p class="footer-copyright">© Innov8 2026. ALL RIGHTS RESERVED.</p>
+          <p class="footer-copyright">© JU TECHFEST. ALL RIGHTS RESERVED.</p>
           <p class="footer-copyright footer-credits">DEVELOPED BY SAKSHAM SARAOGI</p>
         </div>
       </div>

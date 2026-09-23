@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TEAM // JU TECHFEST 2026</title>
+  <link rel="stylesheet" href="/styles.css" />
+  <link rel="stylesheet" href="/placeholder.css" />
+</head>
+
+<body class="teaser-page-body">
+  <!-- Preloader Screen: Spider Fill Animation -->
+  <div class="preloader" id="preloader" aria-label="Loading INNOV8 2026">
+    <div class="preloader-content">
+      <div class="spider-loader-container" id="spider-container">
+        <div class="spider-bg"></div>
+        <div class="spider-fill" id="spider-fill"></div>
+      </div>
+      <div class="preloader-text-wrapper" id="preloader-text-wrapper">
+        <p class="preloader-subtext">Entering The Innoverse...</p>
+        <div class="preloader-counter" id="preloader-counter">0%</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Global Ambient Three.js Canvas (Crimson Red Streamlines on Black) -->
+  <canvas id="bg-canvas"></canvas>
+
+  <!-- Top Navigation Header -->
+  <header class="site-header">
+    <div class="header-left">
+      <a href="/" class="nav-logo-link" title="Return to Home">
+        <img src="/jutechfestlogo.png" alt="JU TechFest" class="site-logo" />
+      </a>
+    </div>
+  </header>
+
+  <!-- Top-Level Fixed Circular Glass Hamburger / Cross Toggle Button -->
+  <button class="menu" id="menu-btn" type="button" aria-label="Toggle navigation menu">
+    <div class="hamburger-icon" id="hamburger-icon">
+      <span class="ham-line line-top"></span>
+      <span class="ham-line line-mid"></span>
+      <span class="ham-line line-bot"></span>
+    </div>
+  </button>
+
+  <!-- Fullscreen WeAreCasey Style Interactive Menu Overlay -->
+  <nav class="fullscreen-menu" id="fullscreen-menu" aria-hidden="true">
+    <div class="menu-bg"></div>
+    <div class="menu-container">
+      <div class="menu-items-list">
+        <a class="menu-item" href="/" data-target="home">
+          <span class="item-index">01</span>
+          <span class="item-label">Home</span>
+          <span class="item-divider"></span>
+        </a>
+        <a class="menu-item" href="/events" data-target="events">
+          <span class="item-index">02</span>
+          <span class="item-label">Events</span>
+          <span class="item-divider"></span>
+        </a>
+        <a class="menu-item active" href="/team" data-target="team">
+          <span class="item-index">03</span>
+          <span class="item-label">Team</span>
+          <span class="item-divider"></span>
+        </a>
+        <a class="menu-item" href="/sponsors" data-target="sponsors">
+          <span class="item-index">04</span>
+          <span class="item-label">Sponsors</span>
+          <span class="item-divider"></span>
+        </a>
+        <a class="menu-item" href="/#site-footer" data-target="contact">
+          <span class="item-index">05</span>
+          <span class="item-label">Contact</span>
+          <span class="item-divider"></span>
+        </a>
+        <a class="menu-item" href="/guidelines" data-target="guidelines">
+          <span class="item-index">06</span>
+          <span class="item-label">Guidelines</span>
+          <span class="item-divider"></span>
+        </a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Teaser Stage -->
+  <main class="teaser-stage">
+    <div class="teaser-card">
+      <!-- Main Headline (Animated Crimson Glow on Repeat) -->
+      <h1 class="teaser-headline">
+        Wanna meet the Team?<br />We'll soon introduce them!
+      </h1>
+
+      <!-- Minimalist Animated Light Divider -->
+      <div class="teaser-divider" aria-hidden="true"></div>
+
+      <!-- Main Subtext (Animated Shimmer on Repeat) -->
+      <p class="teaser-subtext">
+        Stay Tuned!
+      </p>
+    </div>
+  </main>
+
+  <script type="module" src="/placeholder.js"></script>
+</body>
+
+</html>

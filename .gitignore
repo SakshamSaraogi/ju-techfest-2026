@@ -34,3 +34,5 @@ lerna-debug.log*
 
 # Temporary media storage
 .tempmediaStorage/
+__MACOSX/
+.agents/

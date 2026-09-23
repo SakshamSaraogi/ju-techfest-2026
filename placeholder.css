@@ -1,0 +1,181 @@
+/* =============================================================
+   JU TECHFEST 2026 — MINIMALIST TEASER PAGES
+   (TEAM, SPONSORS, GUIDELINES)
+   Pure Minimalist Visuals: Abstract Lines Background + Main Font + Repeat Animation
+   ============================================================= */
+
+@import url("https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,300;0,400;0,600;0,700;0,800;0,900;1,800&family=DM+Mono:ital,wght@0,400;0,500;1,400&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap");
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --color-bg: #050507;
+  --color-red: #d91424;
+  --color-text-main: #ffffff;
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+  background-color: var(--color-bg);
+  color: var(--color-text-main);
+  font-family: "Plus Jakarta Sans", sans-serif;
+  overflow: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Three.js Global Background Canvas */
+#bg-canvas {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* =============================================================
+   MAIN TEASER CONTENT (MINIMALIST & ANIMATED ON REPEAT)
+   Strictly headline, divider, and subtext — NO pill buttons
+   ============================================================= */
+.teaser-stage {
+  position: fixed;
+  inset: 0;
+  z-index: 10;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: clamp(1.5rem, 4vw, 3rem);
+  pointer-events: none;
+}
+
+.teaser-card {
+  max-width: 1000px;
+  width: 100%;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  animation: subtleFloat 6s ease-in-out infinite;
+  pointer-events: auto;
+  user-select: none;
+}
+
+/* Primary Big Question Headline */
+.teaser-headline {
+  font-family: "Barlow Condensed", sans-serif;
+  font-size: clamp(2.6rem, 6.5vw, 5.4rem);
+  font-weight: 900;
+  line-height: 1.05;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: #ffffff;
+  margin: 0;
+  animation: crimsonPulse 4.5s ease-in-out infinite;
+}
+
+/* Thin Minimalist Animated Divider */
+.teaser-divider {
+  width: clamp(70px, 12vw, 120px);
+  height: 2px;
+  background: rgba(255, 255, 255, 0.12);
+  position: relative;
+  overflow: hidden;
+  margin: clamp(1.5rem, 3.5vh, 2.2rem) 0;
+  border-radius: 2px;
+}
+
+.teaser-divider::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: #d91424;
+  box-shadow: 0 0 10px #d91424, 0 0 20px #d91424;
+  animation: travelLight 3s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+
+/* Secondary Action Subtext */
+.teaser-subtext {
+  font-family: "Barlow Condensed", sans-serif;
+  font-size: clamp(1.8rem, 4.2vw, 3.4rem);
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  margin: 0;
+  background: linear-gradient(90deg, #d91424 0%, #ffffff 50%, #d91424 100%);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: shimmerFlow 5s linear infinite;
+}
+
+/* =============================================================
+   KEYFRAME ANIMATIONS (ON REPEAT)
+   ============================================================= */
+
+/* Gentle Floating Animation */
+@keyframes subtleFloat {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+/* Crimson Ambient Glow Pulse */
+@keyframes crimsonPulse {
+  0%, 100% {
+    text-shadow: 0 0 24px rgba(217, 20, 36, 0.18), 0 4px 12px rgba(0, 0, 0, 0.9);
+  }
+  50% {
+    text-shadow: 0 0 48px rgba(217, 20, 36, 0.65), 0 0 75px rgba(217, 20, 36, 0.35), 0 4px 12px rgba(0, 0, 0, 0.9);
+  }
+}
+
+/* Shimmer Flow on Gradient Text */
+@keyframes shimmerFlow {
+  0% {
+    background-position: 0% center;
+  }
+  100% {
+    background-position: 200% center;
+  }
+}
+
+/* Light Tracer across Divider */
+@keyframes travelLight {
+  0% {
+    left: -100%;
+  }
+  50%, 100% {
+    left: 100%;
+  }
+}
+
+/* Responsive Media Queries */
+@media (max-width: 768px) {
+  .teaser-card {
+    padding: 0 1rem;
+  }
+  .teaser-headline {
+    font-size: clamp(2.2rem, 9vw, 3.4rem);
+    line-height: 1.08;
+  }
+  .teaser-subtext {
+    font-size: clamp(1.6rem, 6.5vw, 2.4rem);
+  }
+  .teaser-divider {
+    margin: 1.2rem 0;
+  }
+}
