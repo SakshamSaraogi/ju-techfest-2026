@@ -153,6 +153,16 @@ function init() {
 
   const isMobile = isTouchDevice();
 
+  // Section and tab real-time visibility flags for frame-perfect WebGL render gating
+  let isHeroVisible = true;
+  let isDomainsVisible = false;
+  let isGlimpsesVisible = false;
+  let isTabVisible = !document.hidden;
+
+  document.addEventListener("visibilitychange", () => {
+    isTabVisible = !document.hidden;
+  });
+
   const getOptimalDpr = () =>
     isTouchDevice()
       ? Math.min(window.devicePixelRatio || 1, 1.25)
@@ -162,9 +172,10 @@ function init() {
   // 1. LENIS SMOOTH SCROLL & GSAP SCROLLTRIGGER SETUP
   // -------------------------------------------------------------
   const lenis = new Lenis({
-    lerp: 0.08,
+    lerp: isMobile ? 0.12 : 0.08,
     smoothWheel: true,
-    syncTouch: false,
+    syncTouch: true,
+    touchMultiplier: isMobile ? 1.4 : 1.0,
   });
   window.lenis = lenis;
   lenis.stop(); // Locked while preloader is active
@@ -173,7 +184,7 @@ function init() {
   gsap.ticker.add((time) => {
     lenis.raf(time * 1000);
   });
-  gsap.ticker.lagSmoothing(500, 33);
+  gsap.ticker.lagSmoothing(0);
 
   // -------------------------------------------------------------
   // 2. BACKGROUND WEBGL RENDERER SETUP (#bg-canvas)
@@ -181,11 +192,11 @@ function init() {
   const bgCanvas = document.getElementById("bg-canvas");
   const bgRenderer = new THREE.WebGLRenderer({
     canvas: bgCanvas,
-    antialias: !isMobile,
+    antialias: false,
     powerPreference: "high-performance",
   });
   bgRenderer.setSize(window.innerWidth, window.innerHeight);
-  bgRenderer.setPixelRatio(getOptimalDpr());
+  bgRenderer.setPixelRatio(isMobile ? 1.0 : getOptimalDpr());
 
   const bgScene = new THREE.Scene();
   const bgCamera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
@@ -451,11 +462,14 @@ function init() {
     scrollTrigger: {
       trigger: "#hero-scroll-section",
       start: "top top",
-      end: "+=5600",
+      end: isMobile ? "+=2600" : "+=5600",
       pin: true,
-      scrub: 0.5,
+      scrub: isMobile ? 0.2 : 0.5,
       anticipatePin: 1,
       invalidateOnRefresh: true,
+      onToggle: (self) => {
+        isHeroVisible = self.isActive;
+      },
     },
   });
 
@@ -1186,6 +1200,7 @@ function init() {
 
   // Dynamic mesh curvature deformation: Inward curl for entering frame, outward curl for exiting frame
   function updateCardCurvature(mesh, curvatureK) {
+    if (isMobile && mesh.userData.lastCurvature !== null) return;
     if (mesh.userData.lastCurvature !== null && Math.abs(mesh.userData.lastCurvature - curvatureK) < 0.001) {
       return;
     }
@@ -1418,15 +1433,34 @@ function init() {
   const domainsScrollTrigger = ScrollTrigger.create({
     trigger: "#domains-scroll-section",
     start: "top top",
-    end: window.innerWidth < 900 ? "+=1600" : "+=3400",
+    end: isMobile ? "+=1500" : "+=3400",
     pin: true,
-    scrub: window.innerWidth < 900 ? 0.35 : 0.8,
+    scrub: isMobile ? 0.2 : 0.8,
+    onToggle: (self) => {
+      isDomainsVisible = self.isActive;
+      if (!self.isActive) {
+        domainVideoElements.forEach((vid) => {
+          if (!vid.paused) vid.pause();
+        });
+      }
+    },
     onUpdate: (self) => {
       // Map self.progress (0.0 -> 1.0) across the 3 domains with wide gap
       const orbitT = -DOMAIN_CARD_GAP + self.progress * (DOMAIN_CARD_GAP * 3.0);
       domainState.progress = orbitT;
       const activeIdx = orbitT < DOMAIN_CARD_GAP * 0.5 ? 0 : (orbitT < DOMAIN_CARD_GAP * 1.5 ? 1 : 2);
       setActiveDomainPill(activeIdx);
+
+      // On mobile, play ONLY the active domain's video to save 67% of video decoding bandwidth
+      if (isMobile && domainVideoElements.length >= 3) {
+        domainVideoElements.forEach((vid, idx) => {
+          if (idx === activeIdx && isDomainsVisible) {
+            if (vid.paused) vid.play().catch(() => {});
+          } else {
+            if (!vid.paused) vid.pause();
+          }
+        });
+      }
     },
   });
 
@@ -1451,12 +1485,12 @@ function init() {
   `;
 
   const GLIMPSES_CONFIG = {
-    tilesPerRevolution: 14,
-    revolutions: 5.5,
+    tilesPerRevolution: isMobile ? 10 : 14,
+    revolutions: isMobile ? 4.0 : 5.5,
     startRadius: 5.4,
     endRadius: 3.6,
     tileHeightRatio: 1.15,
-    tileSegments: 24,
+    tileSegments: isMobile ? 8 : 24,
     spiralGap: 0.35,
     tileOverlap: 0.005,
     cameraZ: 12,
@@ -1520,9 +1554,9 @@ function init() {
       "/deadlock-studios/public/spiral/spiral-19.jpg",
     ];
 
-    const maxAnisotropy = glimpsesRenderer
-      ? glimpsesRenderer.capabilities.getMaxAnisotropy()
-      : 16;
+    const maxAnisotropy = isMobile
+      ? 1
+      : (glimpsesRenderer ? glimpsesRenderer.capabilities.getMaxAnisotropy() : 16);
     const glimpsesTextures = glimpsesImages.map((src) => {
       const t = textureLoader.load(src);
       t.colorSpace = THREE.SRGBColorSpace;
@@ -1682,9 +1716,12 @@ function init() {
     ScrollTrigger.create({
       trigger: "#glimpses-section",
       start: "top top",
-      end: "+=3200",
+      end: isMobile ? "+=1800" : "+=3200",
       pin: true,
-      scrub: 0.5,
+      scrub: isMobile ? 0.25 : 0.5,
+      onToggle: (self) => {
+        isGlimpsesVisible = self.isActive;
+      },
       onUpdate: (self) => {
         glimpsesState.targetProgress = self.progress;
       },
@@ -2393,62 +2430,6 @@ function init() {
   window.addEventListener("touchstart", onTouchStart, { passive: true });
   window.addEventListener("resize", onWindowResize);
 
-  // -------------------------------------------------------------
-  // VIEWPORT CULLING & VISIBILITY GATING (MOBILE OPTIMIZATION)
-  // -------------------------------------------------------------
-  let isHeroVisible = true;
-  let isDomainsVisible = false;
-  let isGlimpsesVisible = false;
-  let isTabVisible = !document.hidden;
-
-  document.addEventListener("visibilitychange", () => {
-    isTabVisible = !document.hidden;
-  });
-
-  const heroScrollSectionEl = document.getElementById("hero-scroll-section");
-  const domainsScrollSectionEl = document.getElementById("domains-scroll-section");
-  const glimpsesSectionEl = document.getElementById("glimpses-section");
-
-  if ("IntersectionObserver" in window) {
-    const heroObserver = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          isHeroVisible = entry.isIntersecting;
-        });
-      },
-      { rootMargin: "300px 0px 300px 0px" }
-    );
-    if (heroScrollSectionEl) heroObserver.observe(heroScrollSectionEl);
-
-    const domainsObserver = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          isDomainsVisible = entry.isIntersecting;
-          // Automatically pause/play videos to save mobile GPU/CPU video decoding
-          domainVideoElements.forEach((vid) => {
-            if (entry.isIntersecting) {
-              if (vid.paused) vid.play().catch(() => {});
-            } else {
-              if (!vid.paused) vid.pause();
-            }
-          });
-        });
-      },
-      { rootMargin: "300px 0px 300px 0px" }
-    );
-    if (domainsScrollSectionEl) domainsObserver.observe(domainsScrollSectionEl);
-
-    const glimpsesObserver = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          isGlimpsesVisible = entry.isIntersecting;
-        });
-      },
-      { rootMargin: "300px 0px 300px 0px" }
-    );
-    if (glimpsesSectionEl) glimpsesObserver.observe(glimpsesSectionEl);
-  }
-
   animate();
 
   function createPlaceholderTexture(color) {
@@ -2710,34 +2691,41 @@ function init() {
 
     // 5. RENDER FLUID PING-PONG PASS & HERO SCENE (#hero-canvas & #carousel-canvas)
     if (isHeroVisible) {
-      const prevTarget = pingPongTargets[currentTarget];
-      currentTarget = (currentTarget + 1) % 2;
-      const currentRenderTarget = pingPongTargets[currentTarget];
+      const heroProgress = masterTl ? masterTl.progress() : 0.0;
 
-      trailsMaterial.uniforms.uPrevTrails.value = prevTarget.texture;
-      trailsMaterial.uniforms.uMouse.value.copy(userMouse);
-      trailsMaterial.uniforms.uPrevMouse.value.copy(userPrevMouse);
-      trailsMaterial.uniforms.uIsMoving.value = userIsMoving;
-      trailsMaterial.uniforms.uAutoMouse.value.copy(autoMouse);
-      trailsMaterial.uniforms.uAutoPrevMouse.value.copy(autoPrevMouse);
-      trailsMaterial.uniforms.uAutoIsMoving.value = autoIsMoving;
+      // Phase 1: Only run fluid simulation & hero character pass when character is visible (progress < 0.35)
+      if (heroProgress < 0.35) {
+        const prevTarget = pingPongTargets[currentTarget];
+        currentTarget = (currentTarget + 1) % 2;
+        const currentRenderTarget = pingPongTargets[currentTarget];
 
-      heroRenderer.setRenderTarget(currentRenderTarget);
-      heroRenderer.render(simScene, heroCamera);
+        trailsMaterial.uniforms.uPrevTrails.value = prevTarget.texture;
+        trailsMaterial.uniforms.uMouse.value.copy(userMouse);
+        trailsMaterial.uniforms.uPrevMouse.value.copy(userPrevMouse);
+        trailsMaterial.uniforms.uIsMoving.value = userIsMoving;
+        trailsMaterial.uniforms.uAutoMouse.value.copy(autoMouse);
+        trailsMaterial.uniforms.uAutoPrevMouse.value.copy(autoPrevMouse);
+        trailsMaterial.uniforms.uAutoIsMoving.value = autoIsMoving;
 
-      // 6. RENDER HERO CHARACTER PASS (#hero-canvas)
-      displayMaterial.uniforms.uFluid.value = currentRenderTarget.texture;
-      displayMaterial.uniforms.uMouse.value.copy(userMouse);
-      displayMaterial.uniforms.uTime.value = elapsedTime;
+        heroRenderer.setRenderTarget(currentRenderTarget);
+        heroRenderer.render(simScene, heroCamera);
 
-      displayMesh.rotation.y = (userMouse.x - 0.5) * 0.035;
-      displayMesh.rotation.x = -(userMouse.y - 0.5) * 0.035;
+        // 6. RENDER HERO CHARACTER PASS (#hero-canvas)
+        displayMaterial.uniforms.uFluid.value = currentRenderTarget.texture;
+        displayMaterial.uniforms.uMouse.value.copy(userMouse);
+        displayMaterial.uniforms.uTime.value = elapsedTime;
 
-      heroRenderer.setRenderTarget(null);
-      heroRenderer.render(heroScene, heroCamera);
+        displayMesh.rotation.y = (userMouse.x - 0.5) * 0.035;
+        displayMesh.rotation.x = -(userMouse.y - 0.5) * 0.035;
 
-      // 7. RENDER 3D CURVED CAROUSEL PASS (#carousel-canvas)
-      carouselRenderer.render(carouselScene, carouselCamera);
+        heroRenderer.setRenderTarget(null);
+        heroRenderer.render(heroScene, heroCamera);
+      }
+
+      // Phase 2: Render 3D Curved Carousel only when carousel is active (progress >= 0.28)
+      if (heroProgress >= 0.28) {
+        carouselRenderer.render(carouselScene, carouselCamera);
+      }
     }
 
     // 8. RENDER 3D DOMAINS CAROUSEL PASS (#domains-canvas)
