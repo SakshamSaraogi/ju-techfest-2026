@@ -146,12 +146,8 @@ function init() {
   // -------------------------------------------------------------
   // DEVICE & PERFORMANCE PROFILING
   // -------------------------------------------------------------
-  const isTouchDevice = () =>
-    window.innerWidth < 900 ||
-    ("ontouchstart" in window && window.innerWidth < 1024) ||
-    (navigator.maxTouchPoints && navigator.maxTouchPoints > 0 && window.innerWidth < 1024);
-
-  const isMobile = isTouchDevice();
+  const isMobile = window.innerWidth < 900;
+  const isTouchDevice = () => window.innerWidth < 900;
 
   // Section and tab real-time visibility flags for frame-perfect WebGL render gating
   let isHeroVisible = true;
@@ -172,10 +168,9 @@ function init() {
   // 1. LENIS SMOOTH SCROLL & GSAP SCROLLTRIGGER SETUP
   // -------------------------------------------------------------
   const lenis = new Lenis({
-    lerp: isMobile ? 0.12 : 0.08,
+    lerp: 0.08,
     smoothWheel: true,
     syncTouch: true,
-    touchMultiplier: isMobile ? 1.4 : 1.0,
   });
   window.lenis = lenis;
   lenis.stop(); // Locked while preloader is active
@@ -1189,8 +1184,6 @@ function init() {
       });
     };
     window.addEventListener("click", resumeDomainVideos, { passive: true });
-    window.addEventListener("touchstart", resumeDomainVideos, { passive: true });
-    window.addEventListener("scroll", resumeDomainVideos, { passive: true });
     document.addEventListener("visibilitychange", () => {
       if (document.visibilityState === "visible") {
         resumeDomainVideos();
@@ -1309,8 +1302,10 @@ function init() {
       }
 
       mesh.visible = true;
-      if (mesh.userData.video && mesh.userData.video.paused) {
-        mesh.userData.video.play().catch(() => {});
+      if (!isMobile) {
+        if (mesh.userData.video && mesh.userData.video.paused) {
+          mesh.userData.video.play().catch(() => {});
+        }
       }
       updateCardCurvature(mesh, t.curvatureK);
       mesh.position.set(t.x + cardShiftX, t.y + cardShiftY, t.z);
@@ -2239,8 +2234,12 @@ function init() {
         }
       }
 
+      if (isMobile && desktopVideo) {
+        desktopVideo.pause();
+      }
+
       function startAftermovieVideo() {
-        if (desktopVideo && desktopVideo.paused) {
+        if (!isMobile && desktopVideo && desktopVideo.paused) {
           desktopVideo.play().catch(() => {});
         }
       }

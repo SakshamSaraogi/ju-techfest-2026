@@ -2544,6 +2544,8 @@ p {
   }
 
   /* Prevent full-screen canvases from intercepting mobile touch momentum */
+  #bg-canvas,
+  #hero-canvas,
   #carousel-canvas,
   #domains-canvas,
   #glimpses-canvas {
