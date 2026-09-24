@@ -1064,11 +1064,20 @@ function openModalWithCircleMorph(event, originPoint) {
         <p class="modal-subtitle">${event.subtitle}</p>
         <p class="modal-desc">${event.description}</p>
         
-        <div class="modal-info-row">
-          <div class="modal-info-item">
-            <span class="modal-info-label">TEAM SIZE</span>
-            <span class="modal-info-val">${event.teamSize}</span>
+        <div class="modal-info-action-row">
+          <div class="modal-info-row">
+            <div class="modal-info-item">
+              <span class="modal-info-label">TEAM SIZE</span>
+              <span class="modal-info-val">${event.teamSize}</span>
+            </div>
           </div>
+          <a href="${regUrl}" target="_blank" rel="noopener noreferrer" class="modal-register-btn modal-register-btn-inline" id="event-header-register-btn">
+            <span>REGISTER NOW</span>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+              <polyline points="12 5 19 12 12 19"></polyline>
+            </svg>
+          </a>
         </div>
       </div>
     </div>
