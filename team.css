@@ -1,0 +1,543 @@
+/* =============================================================
+   JU TECHFEST 2026 — TEAM STYLESHEET
+   Aesthetic: Minimalist Obsidian, High-Impact Editorial, Architectural Grid
+   Strict constraint: Avoid pill shapes, use crisp geometric styling
+   ============================================================= */
+
+/* Page Wrapper */
+.team-page-wrapper {
+  position: relative;
+  z-index: 10;
+  width: 100%;
+  min-height: 100vh;
+  padding: 8.5rem 2.5rem 6rem;
+  max-width: 1440px;
+  margin: 0 auto;
+  color: #ffffff;
+}
+
+/* -------------------------------------------------------------
+   HERO / HEADER SECTION
+   ------------------------------------------------------------- */
+.team-header-section {
+  margin-bottom: 4.5rem;
+  position: relative;
+}
+
+.team-meta-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.65rem;
+  font-family: "DM Mono", monospace;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  color: #d91424;
+  text-transform: uppercase;
+  margin-bottom: 0.85rem;
+  background: rgba(217, 20, 36, 0.08);
+  border: 1px solid rgba(217, 20, 36, 0.25);
+  padding: 0.35rem 0.75rem;
+  border-radius: 3px;
+}
+
+.team-meta-tag .tag-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #d91424;
+  box-shadow: 0 0 8px rgba(217, 20, 36, 0.9);
+}
+
+.team-main-heading {
+  font-family: "Barlow Condensed", sans-serif;
+  font-size: clamp(3rem, 7vw, 6.5rem);
+  font-weight: 900;
+  letter-spacing: -0.01em;
+  line-height: 0.92;
+  text-transform: uppercase;
+  color: #ffffff;
+  margin: 0 0 1.25rem 0;
+}
+
+.team-main-heading span.accent-text {
+  color: #d91424;
+  text-shadow: 0 0 28px rgba(217, 20, 36, 0.45);
+}
+
+.team-subtext-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1.25rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.09);
+}
+
+.team-subtext {
+  font-family: "Plus Jakarta Sans", sans-serif;
+  font-size: 1rem;
+  color: rgba(255, 255, 255, 0.65);
+  max-width: 680px;
+  margin: 0;
+  line-height: 1.6;
+}
+
+.team-stats-badge {
+  font-family: "DM Mono", monospace;
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  color: rgba(255, 255, 255, 0.85);
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  padding: 0.45rem 0.95rem;
+  border-radius: 3px;
+  text-transform: uppercase;
+}
+
+/* -------------------------------------------------------------
+   SECTION: EXECUTIVE BOARD (SECRETARIES)
+   ------------------------------------------------------------- */
+.team-section-block {
+  margin-bottom: 5.5rem;
+}
+
+.section-title-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 2rem;
+  padding-bottom: 0.85rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+}
+
+.section-heading-wrap {
+  display: flex;
+  align-items: baseline;
+  gap: 0.85rem;
+}
+
+.section-num {
+  font-family: "DM Mono", monospace;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #d91424;
+  letter-spacing: 0.12em;
+}
+
+.section-heading {
+  font-family: "Barlow Condensed", sans-serif;
+  font-size: clamp(1.8rem, 3.2vw, 2.8rem);
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: #ffffff;
+  margin: 0;
+}
+
+.section-sublabel {
+  font-family: "DM Mono", monospace;
+  font-size: 0.72rem;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  color: rgba(255, 255, 255, 0.4);
+  text-transform: uppercase;
+}
+
+/* Secretaries Grid — 5 columns on desktop */
+.secretaries-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 1.5rem;
+}
+
+/* -------------------------------------------------------------
+   TEAM CARD — ARCHITECTURAL EDITORIAL DESIGN (NO PILL SHAPES)
+   ------------------------------------------------------------- */
+.team-card {
+  position: relative;
+  background: #09090d;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 6px;
+  overflow: hidden;
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+              border-color 0.35s ease,
+              box-shadow 0.35s ease;
+  will-change: transform;
+  display: flex;
+  flex-direction: column;
+}
+
+.team-card:hover {
+  transform: translateY(-6px);
+  border-color: rgba(217, 20, 36, 0.55);
+  box-shadow: 0 14px 35px rgba(0, 0, 0, 0.7),
+              0 0 25px rgba(217, 20, 36, 0.18);
+}
+
+.team-card-image-wrap {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 3 / 4;
+  overflow: hidden;
+  background: #050508;
+}
+
+.team-card-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top center;
+  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1),
+              filter 0.4s ease;
+  filter: contrast(102%) brightness(96%);
+}
+
+.team-card:hover .team-card-img {
+  transform: scale(1.06);
+  filter: contrast(106%) brightness(102%);
+}
+
+/* Gradient Vignette over photo */
+.team-card-vignette {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to bottom,
+    rgba(5, 5, 8, 0.15) 0%,
+    transparent 35%,
+    rgba(5, 5, 8, 0.75) 75%,
+    #09090d 100%
+  );
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+.team-card:hover .team-card-vignette {
+  opacity: 0.9;
+}
+
+/* Top Monospace Tag Badge on Card */
+.team-card-tag {
+  position: absolute;
+  top: 0.85rem;
+  left: 0.85rem;
+  font-family: "DM Mono", monospace;
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  color: rgba(255, 255, 255, 0.8);
+  background: rgba(5, 5, 8, 0.75);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  padding: 0.25rem 0.55rem;
+  border-radius: 3px;
+  text-transform: uppercase;
+  z-index: 2;
+  transition: border-color 0.3s ease, color 0.3s ease;
+}
+
+.team-card:hover .team-card-tag {
+  color: #ffffff;
+  border-color: rgba(217, 20, 36, 0.45);
+}
+
+.team-card-index {
+  position: absolute;
+  top: 0.85rem;
+  right: 0.85rem;
+  font-family: "DM Mono", monospace;
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  color: rgba(255, 255, 255, 0.35);
+  z-index: 2;
+}
+
+.team-card:hover .team-card-index {
+  color: #d91424;
+}
+
+/* Bottom Card Details */
+.team-card-details {
+  position: relative;
+  z-index: 2;
+  padding: 1.15rem 1.15rem 1.25rem;
+  background: #09090d;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+
+.team-card-name {
+  font-family: "Barlow Condensed", sans-serif;
+  font-size: 1.55rem;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  line-height: 1.05;
+  text-transform: uppercase;
+  color: #ffffff;
+  margin: 0 0 0.35rem 0;
+  transition: color 0.3s ease;
+}
+
+.team-card:hover .team-card-name {
+  color: #ffffff;
+}
+
+.team-card-role {
+  font-family: "Plus Jakarta Sans", sans-serif;
+  font-size: 0.82rem;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.6);
+  margin: 0;
+  letter-spacing: 0.02em;
+  transition: color 0.3s ease;
+}
+
+.team-card:hover .team-card-role {
+  color: rgba(255, 255, 255, 0.88);
+}
+
+/* Subtle Crimson Neon Bottom Border Accent */
+.team-card-accent-bar {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: transparent;
+  transition: all 0.35s ease;
+}
+
+.team-card:hover .team-card-accent-bar {
+  background: #d91424;
+  box-shadow: 0 0 14px rgba(217, 20, 36, 0.9);
+}
+
+/* -------------------------------------------------------------
+   CORE COMMITTEE & INTERACTIVE DEPARTMENT FILTER TABS
+   Strict constraint: Geometric rectangular tabs, NO PILL SHAPES
+   ------------------------------------------------------------- */
+.team-filters-wrapper {
+  margin-bottom: 2.25rem;
+}
+
+.team-filters-nav {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.filter-btn {
+  background: rgba(255, 255, 255, 0.025);
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  border-radius: 3px;
+  color: rgba(255, 255, 255, 0.6);
+  font-family: "DM Mono", monospace;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 0.55rem 0.95rem;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  user-select: none;
+}
+
+.filter-btn .filter-count {
+  font-size: 0.62rem;
+  opacity: 0.55;
+  transition: opacity 0.25s ease;
+}
+
+.filter-btn:hover {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(255, 255, 255, 0.2);
+  color: #ffffff;
+}
+
+.filter-btn.active {
+  background: rgba(217, 20, 36, 0.12);
+  border-color: #d91424;
+  color: #ffffff;
+  box-shadow: 0 0 16px rgba(217, 20, 36, 0.25);
+}
+
+.filter-btn.active .filter-count {
+  color: #d91424;
+  opacity: 1;
+}
+
+/* Core Team Grid — 4 columns on large desktop, 3 on desktop */
+.core-team-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.5rem;
+}
+
+/* No results fallback */
+.team-empty-state {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 4rem 2rem;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px dashed rgba(255, 255, 255, 0.1);
+  border-radius: 6px;
+}
+
+.empty-title {
+  font-family: "Barlow Condensed", sans-serif;
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: #ffffff;
+  text-transform: uppercase;
+  margin: 0 0 0.5rem 0;
+}
+
+.empty-subtext {
+  font-family: "Plus Jakarta Sans", sans-serif;
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.5);
+  margin: 0;
+}
+
+/* -------------------------------------------------------------
+   RESPONSIVE DESIGN BREAKPOINTS
+   ------------------------------------------------------------- */
+@media (max-width: 1240px) {
+  .secretaries-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.25rem;
+  }
+  .core-team-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.25rem;
+  }
+}
+
+@media (max-width: 900px) {
+  .team-page-wrapper {
+    padding: 7rem 1.5rem 4rem;
+  }
+
+  .team-main-heading {
+    font-size: clamp(2.5rem, 11vw, 4.2rem);
+  }
+
+  .secretaries-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+  }
+
+  .core-team-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+  }
+
+  .team-card-name {
+    font-size: 1.35rem;
+  }
+
+  .team-card-role {
+    font-size: 0.78rem;
+  }
+
+  .team-card-details {
+    padding: 0.95rem;
+  }
+}
+
+@media (max-width: 600px) {
+  .team-page-wrapper {
+    padding: 6.2rem 1rem 3.5rem;
+  }
+
+  .team-header-section {
+    margin-bottom: 3rem;
+  }
+
+  .team-subtext-bar {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.85rem;
+  }
+
+  .team-stats-badge {
+    align-self: flex-start;
+    font-size: 0.72rem;
+  }
+
+  .team-filters-nav {
+    overflow-x: auto;
+    flex-wrap: nowrap;
+    padding-bottom: 0.5rem;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+  .team-filters-nav::-webkit-scrollbar {
+    display: none;
+  }
+
+  .filter-btn {
+    flex-shrink: 0;
+    padding: 0.45rem 0.8rem;
+    font-size: 0.68rem;
+  }
+
+  .secretaries-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.75rem;
+  }
+
+  .core-team-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.75rem;
+  }
+
+  .team-card {
+    border-radius: 4px;
+  }
+
+  .team-card-tag {
+    top: 0.5rem;
+    left: 0.5rem;
+    font-size: 0.55rem;
+    padding: 0.2rem 0.45rem;
+  }
+
+  .team-card-index {
+    top: 0.5rem;
+    right: 0.5rem;
+    font-size: 0.58rem;
+  }
+
+  .team-card-details {
+    padding: 0.75rem 0.7rem 0.85rem;
+  }
+
+  .team-card-name {
+    font-size: 1.15rem;
+    margin-bottom: 0.2rem;
+  }
+
+  .team-card-role {
+    font-size: 0.72rem;
+  }
+}
+
+@media (max-width: 380px) {
+  .team-card-name {
+    font-size: 1.05rem;
+  }
+  .team-card-role {
+    font-size: 0.68rem;
+  }
+}

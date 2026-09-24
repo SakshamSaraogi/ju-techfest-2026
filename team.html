@@ -4,12 +4,12 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>TEAM // JU TECHFEST 2026</title>
+  <title>CORE TEAM // JU TECHFEST 2026</title>
   <link rel="stylesheet" href="/styles.css" />
-  <link rel="stylesheet" href="/placeholder.css" />
+  <link rel="stylesheet" href="/team.css" />
 </head>
 
-<body class="teaser-page-body">
+<body class="team-page-body">
   <!-- Preloader Screen: Spider Fill Animation -->
   <div class="preloader" id="preloader" aria-label="Loading INNOV8 2026">
     <div class="preloader-content">
@@ -70,7 +70,7 @@
           <span class="item-label">Sponsors</span>
           <span class="item-divider"></span>
         </a>
-        <a class="menu-item" href="/#site-footer" data-target="contact">
+        <a class="menu-item" href="/contact" data-target="contact">
           <span class="item-index">05</span>
           <span class="item-label">Contact</span>
           <span class="item-divider"></span>
@@ -84,25 +84,63 @@
     </div>
   </nav>
 
-  <!-- Main Teaser Stage -->
-  <main class="teaser-stage">
-    <div class="teaser-card">
-      <!-- Main Headline (Animated Crimson Glow on Repeat) -->
-      <h1 class="teaser-headline">
-        Wanna meet the Team?<br />We'll soon introduce them!
+  <!-- Main Team Page Wrapper -->
+  <main class="team-page-wrapper">
+    <!-- Header Section -->
+    <header class="team-header-section">
+      <div class="team-meta-tag">
+        <span class="tag-dot"></span>
+        <span>03 // ARCHITECTS OF INNOVERSE</span>
+      </div>
+      <h1 class="team-main-heading">
+        THE CORE <span class="accent-text">COMMITTEE</span>
       </h1>
+      <div class="team-subtext-bar">
+        <p class="team-subtext">
+          Meet the executive secretaries and departmental heads orchestrating the engineering, operations, and vision of JU TechFest 2026.
+        </p>
+        <span class="team-stats-badge">33 TOTAL ORGANIZERS • 8 VERTICALS</span>
+      </div>
+    </header>
 
-      <!-- Minimalist Animated Light Divider -->
-      <div class="teaser-divider" aria-hidden="true"></div>
+    <!-- Section 1: Executive Board (Secretaries) -->
+    <section class="team-section-block">
+      <div class="section-title-bar">
+        <div class="section-heading-wrap">
+          <span class="section-num">01 //</span>
+          <h2 class="section-heading">EXECUTIVE SECRETARIES</h2>
+        </div>
+        <span class="section-sublabel">LEADERSHIP BOARD</span>
+      </div>
+      <div class="secretaries-grid" id="secretaries-grid">
+        <!-- Rendered dynamically by team.js -->
+      </div>
+    </section>
 
-      <!-- Main Subtext (Animated Shimmer on Repeat) -->
-      <p class="teaser-subtext">
-        Stay Tuned!
-      </p>
-    </div>
+    <!-- Section 2: Core Committee Heads with Interactive Department Filters -->
+    <section class="team-section-block">
+      <div class="section-title-bar">
+        <div class="section-heading-wrap">
+          <span class="section-num">02 //</span>
+          <h2 class="section-heading">CORE COMMITTEE HEADS</h2>
+        </div>
+        <span class="section-sublabel">DEPARTMENTAL LEADS</span>
+      </div>
+
+      <!-- Department Filter Tabs (Crisp Rectangular, No Pills) -->
+      <div class="team-filters-wrapper">
+        <nav class="team-filters-nav" id="team-filters-nav" aria-label="Filter by department">
+          <!-- Filter buttons rendered dynamically by team.js -->
+        </nav>
+      </div>
+
+      <div class="core-team-grid" id="core-team-grid">
+        <!-- Rendered dynamically by team.js -->
+      </div>
+    </section>
   </main>
 
-  <script type="module" src="/placeholder.js"></script>
+  <script type="module" src="/team.js"></script>
 </body>
 
 </html>

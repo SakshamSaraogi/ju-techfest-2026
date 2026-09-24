@@ -12,7 +12,7 @@ export default defineConfig({
           const query = search ? `?${search}` : "";
 
           // Redirect *.html to clean URLs
-          const cleanRoutes = ["events", "team", "sponsors", "guidelines"];
+          const cleanRoutes = ["events", "team", "sponsors", "guidelines", "contact"];
           for (const route of cleanRoutes) {
             if (pathname === `/${route}.html`) {
               res.writeHead(301, { Location: `/${route}${query}` });
@@ -51,6 +51,8 @@ export default defineConfig({
         eventsLegacy: resolve(__dirname, "events.html"),
         team: resolve(__dirname, "team/index.html"),
         teamLegacy: resolve(__dirname, "team.html"),
+        contact: resolve(__dirname, "contact/index.html"),
+        contactLegacy: resolve(__dirname, "contact.html"),
         sponsors: resolve(__dirname, "sponsors/index.html"),
         sponsorsLegacy: resolve(__dirname, "sponsors.html"),
         guidelines: resolve(__dirname, "guidelines/index.html"),
