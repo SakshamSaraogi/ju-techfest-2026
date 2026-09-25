@@ -51,6 +51,27 @@ function init() {
     img.src = src;
   });
 
+  // Track aftermovie video readiness so no static poster flashes before video streams
+  const desktopVideo = document.getElementById("aftermovie-desktop-video");
+  if (desktopVideo && window.innerWidth >= 900) {
+    loadingManager.itemStart("aftermovie-video");
+    let videoResolved = false;
+    const resolveVideo = () => {
+      if (!videoResolved) {
+        videoResolved = true;
+        loadingManager.itemEnd("aftermovie-video");
+      }
+    };
+    if (desktopVideo.readyState >= 3) {
+      resolveVideo();
+    } else {
+      desktopVideo.addEventListener("canplay", resolveVideo, { once: true });
+      desktopVideo.addEventListener("canplaythrough", resolveVideo, { once: true });
+      desktopVideo.addEventListener("error", resolveVideo, { once: true });
+      setTimeout(resolveVideo, 6000);
+    }
+  }
+
   loadingManager.onProgress = (url, itemsLoaded, itemsTotal) => {
     itemsTotalTracked = Math.max(itemsTotal, itemsTotalTracked);
     if (itemsTotalTracked > 0) {
@@ -106,11 +127,34 @@ function init() {
   function finishPreloader() {
     // 1. Initial WebGL Warmup: compile all scenes on GPU behind preloader
     try {
-      if (bgRenderer && bgScene && bgCamera) bgRenderer.compile(bgScene, bgCamera);
-      if (heroRenderer && heroScene && heroCamera) heroRenderer.compile(heroScene, heroCamera);
-      if (carouselRenderer && carouselScene && carouselCamera) carouselRenderer.compile(carouselScene, carouselCamera);
-      if (domainsRenderer && domainsScene && domainsCamera) domainsRenderer.compile(domainsScene, domainsCamera);
-      if (glimpsesRenderer && glimpsesScene && glimpsesCamera) glimpsesRenderer.compile(glimpsesScene, glimpsesCamera);
+      if (bgRenderer && bgScene && bgCamera) {
+        bgRenderer.compile(bgScene, bgCamera);
+        bgRenderer.render(bgScene, bgCamera);
+      }
+      if (heroRenderer && heroScene && heroCamera) {
+        heroRenderer.compile(heroScene, heroCamera);
+        heroRenderer.render(heroScene, heroCamera);
+      }
+      if (carouselRenderer && carouselScene && carouselCamera) {
+        carouselRenderer.compile(carouselScene, carouselCamera);
+        carouselRenderer.render(carouselScene, carouselCamera);
+      }
+      if (domainsRenderer && domainsScene && domainsCamera) {
+        domainsRenderer.compile(domainsScene, domainsCamera);
+        domainsRenderer.render(domainsScene, domainsCamera);
+      }
+      if (glimpsesRenderer && glimpsesScene && glimpsesCamera) {
+        if (glimpsesTextures && glimpsesTextures.length) {
+          glimpsesTextures.forEach((t) => {
+            try { glimpsesRenderer.initTexture(t); } catch (_) {}
+          });
+        }
+        if (fallingTexture) {
+          try { glimpsesRenderer.initTexture(fallingTexture); } catch (_) {}
+        }
+        glimpsesRenderer.compile(glimpsesScene, glimpsesCamera);
+        glimpsesRenderer.render(glimpsesScene, glimpsesCamera);
+      }
     } catch (_) {}
 
     ScrollTrigger.refresh();
@@ -154,6 +198,9 @@ function init() {
   let isDomainsVisible = false;
   let isGlimpsesVisible = false;
   let isTabVisible = !document.hidden;
+
+  let glimpsesTextures = [];
+  let fallingTexture = null;
 
   document.addEventListener("visibilitychange", () => {
     isTabVisible = !document.hidden;
@@ -1552,13 +1599,16 @@ function init() {
     const maxAnisotropy = isMobile
       ? 1
       : (glimpsesRenderer ? glimpsesRenderer.capabilities.getMaxAnisotropy() : 16);
-    const glimpsesTextures = glimpsesImages.map((src) => {
+    glimpsesTextures = glimpsesImages.map((src) => {
       const t = textureLoader.load(src);
       t.colorSpace = THREE.SRGBColorSpace;
       t.generateMipmaps = false;
       t.minFilter = THREE.LinearFilter;
       t.magFilter = THREE.LinearFilter;
       t.anisotropy = maxAnisotropy;
+      if (glimpsesRenderer) {
+        try { glimpsesRenderer.initTexture(t); } catch (_) {}
+      }
       return t;
     });
 
@@ -1656,10 +1706,13 @@ function init() {
     }
 
     // 3D FREEFALLING CHARACTER MESH (Layered at Z = 0 between front and back spiral layers)
-    const fallingTexture = textureLoader.load("/falling.png");
+    fallingTexture = textureLoader.load("/falling.png");
     fallingTexture.colorSpace = THREE.SRGBColorSpace;
     fallingTexture.minFilter = THREE.LinearMipmapLinearFilter;
     fallingTexture.magFilter = THREE.LinearFilter;
+    if (glimpsesRenderer) {
+      try { glimpsesRenderer.initTexture(fallingTexture); } catch (_) {}
+    }
 
     const charAspect = 752 / 1623;
     const charHeight = 5.2;
@@ -1707,16 +1760,23 @@ function init() {
 
     updateGlimpsesScale();
 
-    // ScrollTrigger to pin the section and drive the freefall vortex
+    // WebGL Loop Gating: activate loop smoothly as section approaches viewport so all frames are silky smooth
+    ScrollTrigger.create({
+      trigger: "#glimpses-section",
+      start: "top 120%",
+      end: isMobile ? "+=2600" : "+=4200",
+      onToggle: (self) => {
+        isGlimpsesVisible = self.isActive;
+      },
+    });
+
+    // Pinned scroll-driven travel & interaction
     ScrollTrigger.create({
       trigger: "#glimpses-section",
       start: "top top",
       end: isMobile ? "+=1800" : "+=3200",
       pin: true,
       scrub: isMobile ? 0.25 : 0.5,
-      onToggle: (self) => {
-        isGlimpsesVisible = self.isActive;
-      },
       onUpdate: (self) => {
         glimpsesState.targetProgress = self.progress;
       },

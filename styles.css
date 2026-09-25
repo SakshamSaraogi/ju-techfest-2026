@@ -2213,56 +2213,64 @@ p {
     height: clamp(34px, 8vw, 44px);
   }
 
-  /* Top Navigation Columns placed side-by-side at top */
+  /* Tagline positioned at top of card below notch logo — zero collision with links */
+  .footer-tagline-container {
+    top: clamp(2.8rem, 6.5vh, 4.0rem);
+    left: 50%;
+    transform: translateX(-50%);
+    width: 95%;
+    max-width: 600px;
+    z-index: 5;
+    pointer-events: none;
+  }
+
+  .footer-tagline {
+    font-size: clamp(2.4rem, 10vw, 3.8rem);
+    line-height: 0.88;
+    letter-spacing: -0.02em;
+    font-weight: 900;
+  }
+
+  /* Navigation Columns placed below the tagline on left and right flanks */
   .footer-nav-col {
     position: absolute;
-    top: clamp(2.8rem, 6.8vh, 4rem);
+    top: clamp(8.5rem, 19vh, 11.5rem);
     transform: none;
     z-index: 15;
   }
 
   .footer-nav-col.col-pages {
-    left: clamp(1.2rem, 5vw, 2.2rem);
+    left: clamp(1.0rem, 4.5vw, 2.0rem);
     text-align: left;
     align-items: flex-start;
   }
 
   .footer-nav-col.col-socials {
-    right: clamp(1.2rem, 5vw, 2.2rem);
+    right: clamp(1.0rem, 4.5vw, 2.0rem);
     text-align: left;
     align-items: flex-start;
   }
 
   .footer-col-label {
-    font-size: 0.72rem;
-    letter-spacing: 0.22em;
-    margin-bottom: 0.3rem;
+    font-size: 0.68rem;
+    letter-spacing: 0.2em;
+    margin-bottom: 0.25rem;
     color: rgba(255, 255, 255, 0.48);
   }
 
+  .footer-links-list {
+    gap: clamp(0.18rem, 0.6vh, 0.4rem);
+  }
+
   .footer-char {
-    font-size: clamp(1.4rem, 5vw, 1.85rem);
-    line-height: 1.85rem;
+    font-size: clamp(1.05rem, 3.8vw, 1.45rem);
+    line-height: 1.45rem;
   }
 
   .footer-link-wrap,
   .footer-char-box {
-    height: 1.85rem;
-    line-height: 1.85rem;
-  }
-
-  /* Tagline positioned in the lower-middle with large impactful font size */
-  .footer-tagline-container {
-    top: clamp(10.5rem, 24vh, 14.5rem);
-    width: 95%;
-    z-index: 5;
-  }
-
-  .footer-tagline {
-    font-size: clamp(3.2rem, 13vw, 4.8rem);
-    line-height: 0.86;
-    letter-spacing: -0.02em;
-    font-weight: 900;
+    height: 1.45rem;
+    line-height: 1.45rem;
   }
 
   /* Character strictly inside mask boundary rooted at the bottom edge */

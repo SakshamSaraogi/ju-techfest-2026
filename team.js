@@ -178,83 +178,143 @@ function initPreloader() {
 // 3. FULLSCREEN WEARECASEY NAVIGATION MENU
 // =============================================================
 function initFullscreenMenu() {
-  const menuBtn = document.getElementById("menu-btn");
   const fullscreenMenu = document.getElementById("fullscreen-menu");
-  const hamburgerIcon = document.getElementById("hamburger-icon");
-  if (!menuBtn || !fullscreenMenu) return;
+  const menuBg = document.querySelector(".menu-bg");
+  const menuItems = document.querySelectorAll(".fullscreen-menu .menu-item");
+  const menuBtn = document.getElementById("menu-btn") || document.querySelector(".menu");
+
+  if (!fullscreenMenu || !menuBtn) return;
+
+  const menuAnimItems = [...menuItems].map((item) => {
+    const indexEl = item.querySelector(".item-index");
+    const labelEl = item.querySelector(".item-label");
+    const dividerEl = item.querySelector(".item-divider");
+
+    const indexText = (indexEl ? indexEl.textContent : "").trim();
+    const labelText = (labelEl ? labelEl.textContent : "").trim();
+
+    if (indexEl) {
+      indexEl.innerHTML = `<span class="item-index-inner" style="display:inline-block; overflow:hidden;"><span class="index-word" style="display:inline-block;">${indexText}</span></span>`;
+    }
+    const indexWord = indexEl ? indexEl.querySelector(".index-word") : null;
+
+    const firstCharStr = labelText.charAt(0);
+    const trailingCharsStr = labelText.slice(1);
+
+    const firstCharBox = document.createElement("span");
+    firstCharBox.className = "item-first-char-box";
+    firstCharBox.innerHTML = `<span class="item-first-char" style="display:inline-block;">${firstCharStr}</span>`;
+
+    const trailingCharBox = document.createElement("span");
+    trailingCharBox.className = "item-body";
+
+    const trailingChars = [];
+    for (let c of trailingCharsStr) {
+      const charSpan = document.createElement("span");
+      charSpan.className = "item-char-box";
+      charSpan.innerHTML = `<span class="item-char" style="display:inline-block;">${c === " " ? "&nbsp;" : c}</span>`;
+      trailingCharBox.appendChild(charSpan);
+      trailingChars.push(charSpan.querySelector(".item-char"));
+    }
+
+    if (labelEl) {
+      labelEl.innerHTML = "";
+      labelEl.appendChild(firstCharBox);
+      labelEl.appendChild(trailingCharBox);
+    }
+
+    const firstChar = firstCharBox.querySelector(".item-first-char");
+
+    gsap.set([indexWord, firstChar], { yPercent: 100 });
+    gsap.set(trailingChars, { xPercent: 125 });
+    gsap.set(trailingCharBox, { width: 0 });
+    if (dividerEl) gsap.set(dividerEl, { scaleY: 0 });
+
+    return { indexWord, firstChar, trailingChars, trailingCharBox, divider: dividerEl, item };
+  });
+
+  const menuTimeline = gsap.timeline({
+    paused: true,
+    defaults: { ease: "power3.out" },
+    onReverseComplete: () => {
+      fullscreenMenu.classList.remove("is-menu-open");
+      fullscreenMenu.setAttribute("aria-hidden", "true");
+    },
+  });
 
   let isMenuOpen = false;
 
-  const menuItems = fullscreenMenu.querySelectorAll(".menu-item");
-  const menuBg = fullscreenMenu.querySelector(".menu-bg");
-
-  gsap.set(fullscreenMenu, { autoAlpha: 0 });
-  gsap.set(menuBg, { scaleY: 0, transformOrigin: "top center" });
-  gsap.set(menuItems, { y: 40, opacity: 0 });
-
-  function openMenu() {
-    isMenuOpen = true;
-    fullscreenMenu.setAttribute("aria-hidden", "false");
-    hamburgerIcon.classList.add("active");
-    document.body.style.overflow = "hidden";
-
-    gsap.killTweensOf([fullscreenMenu, menuBg, menuItems]);
-
-    gsap.set(fullscreenMenu, { autoAlpha: 1 });
-    gsap.to(menuBg, {
-      scaleY: 1,
-      duration: 0.65,
-      ease: "power4.inOut",
-    });
-
-    gsap.to(menuItems, {
-      y: 0,
-      opacity: 1,
-      duration: 0.5,
-      stagger: 0.05,
-      ease: "power3.out",
-      delay: 0.25,
-    });
+  if (menuBg) {
+    menuTimeline.to(menuBg, { opacity: 1, duration: 0.5 }, 0);
   }
 
-  function closeMenu() {
-    isMenuOpen = false;
-    fullscreenMenu.setAttribute("aria-hidden", "true");
-    hamburgerIcon.classList.remove("active");
-    document.body.style.overflow = "";
+  menuAnimItems.forEach(({ indexWord, firstChar, trailingChars, trailingCharBox, divider }, i) => {
+    const startTime = 0.25 + i * 0.08;
 
-    gsap.killTweensOf([fullscreenMenu, menuBg, menuItems]);
-
-    gsap.to(menuItems, {
-      y: -25,
-      opacity: 0,
-      duration: 0.3,
-      stagger: 0.03,
-      ease: "power3.in",
-    });
-
-    gsap.to(menuBg, {
-      scaleY: 0,
-      duration: 0.55,
-      ease: "power4.inOut",
-      delay: 0.15,
-      onComplete: () => {
-        gsap.set(fullscreenMenu, { autoAlpha: 0 });
-      },
-    });
-  }
-
-  menuBtn.addEventListener("click", () => {
-    if (isMenuOpen) {
-      closeMenu();
-    } else {
-      openMenu();
+    if (indexWord && firstChar) {
+      menuTimeline.to([indexWord, firstChar], { yPercent: 0, duration: 0.5 }, startTime);
+    }
+    if (divider) {
+      menuTimeline.to(divider, { scaleY: 1, duration: 0.6, ease: "power3.out" }, startTime + 0.04);
+    }
+    if (trailingCharBox) {
+      menuTimeline.to(
+        trailingCharBox,
+        {
+          width: () => trailingCharBox.scrollWidth,
+          duration: 0.6,
+          ease: "power4.inOut",
+        },
+        startTime + 0.1
+      );
+    }
+    if (trailingChars.length > 0) {
+      menuTimeline.to(
+        trailingChars,
+        { xPercent: 0, duration: 0.5, stagger: 0.02 },
+        startTime + 0.2
+      );
     }
   });
 
-  document.addEventListener("keydown", (e) => {
+  const toggleMenu = () => {
+    isMenuOpen = !isMenuOpen;
+
+    if (isMenuOpen) {
+      fullscreenMenu.classList.add("is-menu-open");
+      fullscreenMenu.setAttribute("aria-hidden", "false");
+      menuBtn.classList.add("menu-active");
+      menuTimeline.timeScale(1).play();
+    } else {
+      menuBtn.classList.remove("menu-active");
+      menuTimeline.timeScale(1.5).reverse();
+    }
+  };
+
+  menuBtn.addEventListener("click", toggleMenu);
+  menuBtn.addEventListener("keydown", (e) => {
+    if (e.key === "Enter" || e.key === " ") {
+      e.preventDefault();
+      toggleMenu();
+    }
+  });
+
+  menuItems.forEach((link) => {
+    link.addEventListener("click", (e) => {
+      const href = link.getAttribute("href");
+      if (
+        (href === "/team" || href === "/team/" || href === "/team.html") &&
+        (window.location.pathname === "/team" || window.location.pathname === "/team/" || window.location.pathname.endsWith("team.html"))
+      ) {
+        e.preventDefault();
+        if (isMenuOpen) toggleMenu();
+      }
+    });
+  });
+
+  window.addEventListener("keydown", (e) => {
     if (e.key === "Escape" && isMenuOpen) {
-      closeMenu();
+      toggleMenu();
     }
   });
 }

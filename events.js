@@ -564,6 +564,26 @@ const EVENTS_DATA = [
       "<strong>Fair Play:</strong> In-game open-play pauses, abusive conduct, or match-fixing/collusion lead to immediate disqualification.",
     ],
   },
+  {
+    id: "tekken",
+    title: "TEKKEN",
+    subtitle: "1V1 IRON FIST FIGHTING CHAMPIONSHIP",
+    category: "esports",
+    categoryLabel: "ESPORTS // TRACK 06",
+    image: "/event%20posters/tekken.png",
+    description:
+      "The Iron Fist Tournament descends upon JU TechFest 2026. Live 1v1 double elimination championship in Tekken played on competition rigs at JECRC University, featuring bracket resets, character lock rules, and premier fighting game action.",
+    teamSize: "SOLO",
+    prize: "₹20,000",
+    venue: "ESPORTS FIGHTING LOUNGE",
+    rules: [
+      "<strong>Tournament Format:</strong> Double-elimination bracket. All matches prior to finals are Best-of-1 games; Grand Finals are Best-of-3 games.",
+      "<strong>Bracket Reset:</strong> The Grand Final will reset if the player emerging from the Loser's Bracket wins the first set.",
+      "<strong>Character Selection:</strong> Winner of a game must lock their character; the loser is permitted to switch characters for the next game.",
+      "<strong>DLC & Customization:</strong> All characters including DLC are permitted unless specifically restricted. Character customization must be disabled.",
+      "<strong>Fair Play:</strong> Spamming uncompetitive power moves is prohibited. Random stage selection if players do not mutually agree on a rematch stage.",
+    ],
+  },
 ];
 
 let currentCategory = "all";
