@@ -330,17 +330,15 @@ function renderMarquee() {
     <span class="marquee-chunk">
       <span>REACH OUT TO INNOVERSE</span>
       <span class="marquee-dot">•</span>
-      <span>TECHNICAL</span>
+      <span>HARDWARE</span>
       <span class="marquee-dot">•</span>
-      <span>CULTURAL</span>
+      <span>SOFTWARE</span>
       <span class="marquee-dot">•</span>
-      <span>SPORTS</span>
-      <span class="marquee-dot">•</span>
-      <span>MEDIA</span>
-      <span class="marquee-dot">•</span>
-      <span>SPONSORSHIP</span>
+      <span>ESPORTS</span>
       <span class="marquee-dot">•</span>
       <span>PUBLIC RELATIONS</span>
+      <span class="marquee-dot">•</span>
+      <span>SPONSORSHIP</span>
       <span class="marquee-dot">•</span>
       <span>JU TECHFEST 2026</span>
       <span class="marquee-dot">•</span>

@@ -146,13 +146,27 @@
 }
 
 /* -------------------------------------------------------------
-   VERTICAL HEADS GRID — 6 DEPARTMENTS
+   VERTICAL HEADS GRID — 5 DEPARTMENTS (BALANCED EDITORIAL LAYOUT)
    ------------------------------------------------------------- */
 .verticals-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(6, 1fr);
   gap: 1.75rem;
   margin-bottom: 4.5rem;
+}
+
+.vertical-card:nth-child(1),
+.vertical-card:nth-child(2),
+.vertical-card:nth-child(3) {
+  grid-column: span 2;
+}
+
+.vertical-card:nth-child(4) {
+  grid-column: 2 / span 2;
+}
+
+.vertical-card:nth-child(5) {
+  grid-column: 4 / span 2;
 }
 
 /* Department Card */
@@ -495,6 +509,20 @@
     grid-template-columns: repeat(2, 1fr);
     gap: 1.5rem;
   }
+
+  .vertical-card:nth-child(1),
+  .vertical-card:nth-child(2),
+  .vertical-card:nth-child(3),
+  .vertical-card:nth-child(4) {
+    grid-column: span 1;
+  }
+
+  .vertical-card:nth-child(5) {
+    grid-column: span 2;
+    max-width: 540px;
+    width: 100%;
+    margin: 0 auto;
+  }
 }
 
 @media (max-width: 900px) {
@@ -509,6 +537,12 @@
   .verticals-grid {
     grid-template-columns: 1fr;
     gap: 1.25rem;
+  }
+
+  .vertical-card:nth-child(5) {
+    grid-column: auto;
+    max-width: 100%;
+    margin: 0;
   }
 
   .venue-card {
