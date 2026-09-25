@@ -146,11 +146,13 @@
   text-transform: uppercase;
 }
 
-/* Secretaries Grid — 5 columns on desktop */
+/* Fest Leads Grid — 3 columns centered on desktop */
 .secretaries-grid {
   display: grid;
-  grid-template-columns: repeat(5, 1fr);
-  gap: 1.5rem;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
+  max-width: 1080px;
+  margin: 0 auto;
 }
 
 /* -------------------------------------------------------------
@@ -180,24 +182,33 @@
 .team-card-image-wrap {
   position: relative;
   width: 100%;
-  aspect-ratio: 3 / 4;
+  aspect-ratio: 4 / 5;
   overflow: hidden;
-  background: #050508;
+  background: radial-gradient(circle at 50% 32%, rgba(217, 20, 36, 0.16) 0%, rgba(16, 2, 6, 0.38) 48%, #08080c 100%);
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  transition: background 0.4s ease;
+}
+
+.team-card:hover .team-card-image-wrap {
+  background: radial-gradient(circle at 50% 30%, rgba(217, 20, 36, 0.28) 0%, rgba(22, 3, 9, 0.5) 52%, #08080c 100%);
 }
 
 .team-card-img {
   width: 100%;
   height: 100%;
-  object-fit: cover;
-  object-position: top center;
-  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1),
+  object-fit: contain;
+  object-position: bottom center;
+  transition: transform 0.55s cubic-bezier(0.16, 1, 0.3, 1),
               filter 0.4s ease;
-  filter: contrast(102%) brightness(96%);
+  filter: drop-shadow(0 8px 18px rgba(0, 0, 0, 0.85)) contrast(104%) brightness(98%);
+  z-index: 1;
 }
 
 .team-card:hover .team-card-img {
-  transform: scale(1.06);
-  filter: contrast(106%) brightness(102%);
+  transform: scale(1.05) translateY(-4px);
+  filter: drop-shadow(0 14px 24px rgba(217, 20, 36, 0.28)) drop-shadow(0 6px 14px rgba(0, 0, 0, 0.95)) contrast(106%) brightness(102%);
 }
 
 /* Gradient Vignette over photo */
@@ -206,12 +217,12 @@
   inset: 0;
   background: linear-gradient(
     to bottom,
-    rgba(5, 5, 8, 0.15) 0%,
-    transparent 35%,
-    rgba(5, 5, 8, 0.75) 75%,
+    transparent 55%,
+    rgba(8, 8, 12, 0.6) 80%,
     #09090d 100%
   );
   pointer-events: none;
+  z-index: 2;
   transition: opacity 0.3s ease;
 }
 
@@ -289,17 +300,19 @@
 }
 
 .team-card-role {
-  font-family: "Plus Jakarta Sans", sans-serif;
-  font-size: 0.82rem;
-  font-weight: 500;
-  color: rgba(255, 255, 255, 0.6);
+  font-family: "DM Mono", monospace;
+  font-size: 0.74rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  color: #d91424;
+  text-transform: uppercase;
   margin: 0;
-  letter-spacing: 0.02em;
-  transition: color 0.3s ease;
+  transition: color 0.3s ease, text-shadow 0.3s ease;
 }
 
 .team-card:hover .team-card-role {
-  color: rgba(255, 255, 255, 0.88);
+  color: #ff3344;
+  text-shadow: 0 0 10px rgba(217, 20, 36, 0.5);
 }
 
 /* Subtle Crimson Neon Bottom Border Accent */
@@ -435,6 +448,13 @@
   .secretaries-grid {
     grid-template-columns: repeat(2, 1fr);
     gap: 1rem;
+  }
+
+  .secretaries-grid .team-card:last-child:nth-child(odd) {
+    grid-column: span 2;
+    max-width: 360px;
+    width: 100%;
+    margin: 0 auto;
   }
 
   .core-team-grid {

@@ -341,7 +341,7 @@ function renderCoreTeam(filter = "all", animate = false) {
 
   const filtered = filter === "all"
     ? coreTeamData
-    : coreTeamData.filter((member) => member.department === filter);
+    : coreTeamData.filter((member) => member.department === filter || member.secondaryDept === filter);
 
   if (filtered.length === 0) {
     container.innerHTML = `
