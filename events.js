@@ -418,31 +418,11 @@ const EVENTS_DATA = [
     ],
   },
   {
-    id: "freefire-max",
-    title: "FREEFIRE MAX",
-    subtitle: "BATTLE ROYALE SQUAD CHAMPIONSHIP",
-    category: "esports",
-    categoryLabel: "ESPORTS // TRACK 03",
-    image: "/event%20posters/freefire.png",
-    description:
-      "High-speed survival battle royale tournament in Free Fire Max. 48 players per lobby in Esports Mode battling through Qualifiers, 24-team Semi-Finals, and 12-team Grand Finals across Bermuda, Purgatory, Kalahari, Nexterra, and Solara.",
-    teamSize: "4 + 1 MEMBERS",
-    prize: "₹1,00,000",
-    venue: "ESPORTS ARENA C",
-    rules: [
-      "<strong>Team Roster:</strong> 4 players + 1 substitute. Students from different institutes are permitted to team up.",
-      "<strong>Device Policy:</strong> Strictly mobile phones only. Emulators and iPads are prohibited.",
-      "<strong>Settings:</strong> Classic Squad Battle Royale, 48 players, Esports Mode drop list, 200 HP, 100% speed, Gun properties disabled.",
-      "<strong>Stages:</strong> Qualifiers (Open), Semi-Finals (Top 24, 3 matches), Grand Finals (Top 12, 6 matches).",
-      "<strong>Scoring:</strong> Booyah (12 pts), 2nd (9 pts), 3rd (8 pts), 4th (7 pts), 5th (6 pts), 6th (5 pts), 7th (4 pts), 8th (3 pts), 9th (2 pts), 10th (1 pt) + 1 point per kill.",
-    ],
-  },
-  {
     id: "minecraft",
     title: "MINECRAFT",
     subtitle: "BEDWARS SOLO CHAMPIONSHIP",
     category: "esports",
-    categoryLabel: "ESPORTS // TRACK 04",
+    categoryLabel: "ESPORTS // TRACK 03",
     image: "/event%20posters/minecraft.png",
     description:
       "The ultimate individual BedWars showdown. Protect your bed, gather resources, bridge the void, and eliminate competitors across custom Paper/Spigot zero-lag tournament servers. 128 gladiators compete through online qualifiers to the LAN Grand Finals.",
@@ -462,7 +442,7 @@ const EVENTS_DATA = [
     title: "FIFA",
     subtitle: "PRO 1V1 CONSOLE SHOWDOWN (PS5)",
     category: "esports",
-    categoryLabel: "ESPORTS // TRACK 05",
+    categoryLabel: "ESPORTS // TRACK 04",
     image: "/event%20posters/fifa.png",
     description:
       "Elite head-to-head console football tournament played live on PlayStation 5 consoles at JECRC University. 1v1 Club Mode bracket with tactical defending, fast-paced matches, and penalty shootouts.",
@@ -482,7 +462,7 @@ const EVENTS_DATA = [
     title: "TEKKEN",
     subtitle: "1V1 IRON FIST FIGHTING CHAMPIONSHIP",
     category: "esports",
-    categoryLabel: "ESPORTS // TRACK 06",
+    categoryLabel: "ESPORTS // TRACK 05",
     image: "/event%20posters/tekken.png",
     description:
       "The Iron Fist Tournament descends upon JU TechFest 2026. Live 1v1 double elimination championship in Tekken played on competition rigs at JECRC University, featuring bracket resets, character lock rules, and premier fighting game action.",
