@@ -412,7 +412,7 @@ const EVENTS_DATA = [
     description:
       "Survive the chaos, eliminate rival squads, and be the last team standing in Battle Royale: BGMI. Squads drop into Erangel, Miramar, and Rondo across multi-stage qualifiers and 16-team finals for the championship title.",
     teamSize: "4 + 1 MEMBERS",
-    prize: "₹50,000",
+    prize: "₹40,000",
     venue: "ESPORTS ARENA B",
     registrationUrl: "https://forms.gle/21NojR3L1L4XaSzv5",
     rules: [
