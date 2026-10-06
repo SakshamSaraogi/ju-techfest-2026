@@ -1,6 +1,6 @@
 // =============================================================
 // JU TECHFEST 2026 — TEAM DATA
-// 3 Fest Leads & 19 Core Committee Heads
+// 3 Fest Leads & 25 Core Committee Heads (28 Total)
 // =============================================================
 
 export const secretariesData = [
@@ -186,6 +186,58 @@ export const coreTeamData = [
     deptLabel: "SPONSORSHIP",
     image: "/team/niyati.png",
   },
+  {
+    id: "core-sanyam",
+    name: "Sanyam Jain",
+    role: "Sponsorship",
+    department: "sponsorship",
+    deptLabel: "SPONSORSHIP",
+    image: "/team/sanyam.png",
+  },
+
+  // Accommodation
+  {
+    id: "core-kuldeep",
+    name: "Kuldeep Gaur",
+    role: "Accommodation",
+    department: "accommodation",
+    deptLabel: "ACCOMMODATION",
+    image: "/team/kuldeep.png",
+  },
+
+  // Media
+  {
+    id: "core-gaurav",
+    name: "Gaurav Tanwar",
+    role: "Media",
+    department: "media",
+    deptLabel: "MEDIA",
+    image: "/team/gaurav.png",
+  },
+  {
+    id: "core-dhruv",
+    name: "Dhruv Lakra",
+    role: "Media",
+    department: "media",
+    deptLabel: "MEDIA",
+    image: "/team/dhruv.png",
+  },
+  {
+    id: "core-gagan",
+    name: "Gagan",
+    role: "Media",
+    department: "media",
+    deptLabel: "MEDIA",
+    image: "/team/gagan.png",
+  },
+  {
+    id: "core-hemesh",
+    name: "Hemesh",
+    role: "Media",
+    department: "media",
+    deptLabel: "MEDIA",
+    image: "/team/hemesh.png",
+  },
 
   // Hospitality
   {
@@ -207,12 +259,14 @@ export const coreTeamData = [
 ];
 
 export const departmentFilters = [
-  { key: "all", label: "ALL MEMBERS", count: 19 },
+  { key: "all", label: "ALL MEMBERS", count: 25 },
   { key: "hardware", label: "HARDWARE", count: 3 },
   { key: "software", label: "SOFTWARE", count: 3 },
   { key: "esports", label: "ESPORTS", count: 3 },
+  { key: "media", label: "MEDIA", count: 4 },
   { key: "pr", label: "PUBLIC RELATIONS", count: 4 },
   { key: "logistics", label: "LOGISTICS", count: 4 },
-  { key: "sponsorship", label: "SPONSORSHIP", count: 1 },
+  { key: "sponsorship", label: "SPONSORSHIP", count: 2 },
   { key: "hospitality", label: "HOSPITALITY", count: 3 },
+  { key: "accommodation", label: "ACCOMMODATION", count: 1 },
 ];

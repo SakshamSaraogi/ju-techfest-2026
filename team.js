@@ -359,8 +359,15 @@ function renderFilterTabs() {
   if (!container) return;
 
   container.innerHTML = departmentFilters
-    .map(
-      (f) => `
+    .map((f) => {
+      const count =
+        f.key === "all"
+          ? coreTeamData.length
+          : coreTeamData.filter(
+              (member) =>
+                member.department === f.key || member.secondaryDept === f.key
+            ).length;
+      return `
       <button 
         type="button" 
         class="filter-btn ${f.key === currentFilter ? "active" : ""}" 
@@ -368,10 +375,10 @@ function renderFilterTabs() {
         aria-pressed="${f.key === currentFilter}"
       >
         <span>${f.label}</span>
-        <span class="filter-count">[ ${f.count} ]</span>
+        <span class="filter-count">[ ${count} ]</span>
       </button>
-    `
-    )
+    `;
+    })
     .join("");
 
   const buttons = container.querySelectorAll(".filter-btn");

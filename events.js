@@ -69,7 +69,7 @@ const EVENTS_DATA = [
     description:
       "A competitive, time-bound coding challenge testing knowledge of the C programming language, algorithmic speed, and problem-solving. Solve C problems across 4 knockout levels, decipher clues to find hidden sealed envelopes across campus, and race the clock to victory.",
     teamSize: "1 - 2 MEMBERS",
-    prize: "₹30,000",
+    prize: "₹14,000",
     venue: "TECH LAB 1",
     rules: [
       "<strong>Team Format:</strong> Each team may consist of a minimum of 1 and a maximum of 2 participants who must remain together throughout the event.",
@@ -117,7 +117,7 @@ const EVENTS_DATA = [
     description:
       "A creative visual competition where imagination meets generative AI. Participants generate a sequential 4-poster visual storyline based on mystery assigned elements, testing prompting finesse, artistic flow, consistency, and narrative presentation.",
     teamSize: "SOLO",
-    prize: "₹20,000",
+    prize: "₹11,000",
     venue: "DESIGN SUITE B",
     rules: [
       "<strong>Participation:</strong> Single participation only (Solo competition).",
@@ -140,7 +140,7 @@ const EVENTS_DATA = [
     description:
       "A multi-round practical AI tournament testing prompting precision, logical reasoning, code debugging, and task automation. Move through structured challenges to an unseen final mission where correctness, speed, and reliability determine the champion.",
     teamSize: "1 - 2 MEMBERS",
-    prize: "₹30,000",
+    prize: "₹11,000",
     venue: "AI INNOVATION LAB",
     rules: [
       "<strong>Team Specification:</strong> 1 to 2 participants per team using their own laptops.",
@@ -164,7 +164,7 @@ const EVENTS_DATA = [
     description:
       "A thrilling competitive arena blending technical code debugging with social deduction. Hunt down insidious bugs, optimize broken programs, and outmaneuver Traitors planting sabotages inside shared GitHub repositories.",
     teamSize: "SOLO",
-    prize: "₹25,000",
+    prize: "₹14,000",
     venue: "CYBER ARENA 3",
     rules: [
       "<strong>Participation:</strong> Individual participation only. All participants must use their own laptops.",
@@ -187,7 +187,7 @@ const EVENTS_DATA = [
     description:
       "An individual frontend design and development showdown. Observe a mystery reference UI for a few fleeting seconds, commit the typography, layout, spacing, and micro-interactions to memory, and recreate it from scratch within a 45-minute sprint.",
     teamSize: "SOLO",
-    prize: "₹25,000",
+    prize: "₹11,000",
     venue: "WEB LAB 2",
     rules: [
       "<strong>Individual Entry:</strong> Individual participation only; pair programming and outside collaboration are strictly prohibited.",
@@ -234,7 +234,7 @@ const EVENTS_DATA = [
     description:
       "Conquer demanding obstacle courses—bridges, speed breakers, marble pits, rotating arms, slippery paths, and seesaws—with a manually controlled wired or wireless robot in the fastest time.",
     teamSize: "1 - 3 MEMBERS",
-    prize: "EXCELLENCE AWARD (TOP 2)",
+    prize: "₹25,000",
     venue: "HURDLE RACETRACK ARENA",
     rules: [
       "<strong>Team Format:</strong> 1 to 3 participants per team (cross-college teams permitted).",
@@ -255,7 +255,7 @@ const EVENTS_DATA = [
     description:
       "A dynamic 1v1 soccer clash inside a 12ft × 8ft wooden arena. Build an agile robot to tackle opponents, dribble, and score goals with tennis balls into 20cm goalposts.",
     teamSize: "1 - 4 MEMBERS",
-    prize: "CASH AWARDS",
+    prize: "₹26,000",
     venue: "SOCCER ARENA (12 FT × 8 FT)",
     rules: [
       "<strong>Team Format:</strong> 1 to 4 participants. Teams designate 1 Robot Handler and 1 Wire/Battery Handler in the game zone.",
@@ -275,7 +275,7 @@ const EVENTS_DATA = [
     description:
       "The 8kg combat robotics arena at JU TechFest. Custom-armored machines with high-RPM active weapons clash in an enclosed steel cage across intense 3-minute knockout battles.",
     teamSize: "1 - 6 MEMBERS",
-    prize: "CHAMPIONSHIP CASH PRIZE",
+    prize: "₹50,000",
     venue: "COMBAT ROBOTIC ARENA",
     rules: [
       "<strong>Team Format:</strong> 1 to 6 members. Contested on a single-elimination knockout basis with 3-minute rounds.",
@@ -295,7 +295,7 @@ const EVENTS_DATA = [
     description:
       "The heavyweight combat robotics arena at JU TechFest. Custom-armored machines with high-RPM active weapons and cluster bots clash in an enclosed steel cage across the 15kg weight division.",
     teamSize: "1 - 6 MEMBERS",
-    prize: "CHAMPIONSHIP CASH PRIZE",
+    prize: "₹1,00,000",
     venue: "COMBAT ROBOTIC ARENA",
     rules: [
       "<strong>Team Format:</strong> 1 to 6 members. Contested on a single-elimination knockout basis with 3-minute rounds.",
@@ -315,7 +315,7 @@ const EVENTS_DATA = [
     description:
       "Fast and furious beetleweight combat robotics. Up to 1.5 kg machines armed with active spinners, drums, and flippers fight in a 3-minute knockout cage match.",
     teamSize: "1 - 4 MEMBERS",
-    prize: "EXCELLENCE AWARD (TOP 2)",
+    prize: "₹26,000",
     venue: "MINI COMBAT ARENA",
     rules: [
       "<strong>Team Format:</strong> 1 to 4 members. Single-elimination knockout bracket with 3-minute combat rounds.",
@@ -336,7 +336,7 @@ const EVENTS_DATA = [
     description:
       "High-octane RC basher challenge testing vehicle durability, throttle control, aerial jumps, and precision driving over extreme off-road terrain.",
     teamSize: "1 - 3 MEMBERS",
-    prize: "CASH AWARDS",
+    prize: "₹20,000",
     venue: "RC OFF-ROAD TRACK",
     rules: [
       "To be updated",
@@ -352,26 +352,31 @@ const EVENTS_DATA = [
     description:
       "Precision RC vehicle obstacle trial. Navigate tight chicanes, dynamic elevated ramps, uneven surfaces, and complex hurdles in the fastest clean time.",
     teamSize: "1 - 3 MEMBERS",
-    prize: "CASH AWARDS",
+    prize: "₹20,000",
     venue: "RC OBSTACLE ARENA",
     rules: [
       "To be updated",
     ],
   },
   {
-    id: "drone-soccer",
-    title: "DRONE SOCCER",
-    subtitle: "AERIAL COMBAT & DRONE FOOTBALL SHOWDOWN",
+    id: "robo-sumo",
+    title: "ROBO SUMO",
+    subtitle: "HIGH-IMPACT SUMO ROBOTICS ARENA",
     category: "hardware",
     categoryLabel: "HARDWARE // TRACK 09",
-    image: "/event%20posters/dronesoccer.png",
+    image: "/event%20posters/robosumo.png",
     description:
-      "High-tech aerial sport where protected drone spheres clash, tackle, and score goals through elevated circular hoops inside an enclosed safety-netted cage.",
-    teamSize: "1 - 4 MEMBERS",
-    prize: "CASH AWARDS",
-    venue: "DRONE ARENA (ENCLOSED NET)",
+      "Design and build a dynamic machine to step into the sumo arena. Push rival bots out of the ring across high-torque pushing battles where agility, precision, and drive power bring the thrill of combat to life.",
+    teamSize: "1 - 3 MEMBERS",
+    prize: "₹20,000",
+    venue: "SUMO ROBOTICS ARENA",
     rules: [
-      "To be updated",
+      "<strong>Team Specifications:</strong> Teams can have a maximum of 3 participants and a minimum of 1 participant. Inter-college teams permitted.",
+      "<strong>Match Objective:</strong> One-on-one sumo match. Score victory by pushing the opponent bot completely out of the designated sumo ring.",
+      "<strong>Bot Specifications:</strong> Maximum weight of 7 kg (5% tolerance). Max potential difference of 24V between any two points (up to 6S battery). Any motor type allowed.",
+      "<strong>Handlers:</strong> Each team designates 1 Robot Handler and 1 Wire/Battery Handler in the competition zone.",
+      "<strong>Wired / Wireless:</strong> Both permitted. For wired bots, wire must be minimum 4m in length, and external battery weight counts toward the total 7kg limit.",
+      "<strong>Fair Play & Conduct:</strong> Deliberate damage, unsporting behaviour, or non-compliance results in immediate disqualification.",
     ],
   },
 
@@ -386,7 +391,7 @@ const EVENTS_DATA = [
     description:
       "The premier Valorant LAN championship at JECRC University. 5v5 tactical shooter tournament kicking off with online qualifiers and culminating in an 8-team offline LAN showdown with tournament-grade PCs, live map vetoes, and Mumbai server competition.",
     teamSize: "5 + 1 SUBSTITUTE",
-    prize: "₹1,00,000",
+    prize: "₹65,000",
     venue: "ESPORTS LAN ARENA",
     rules: [
       "<strong>Team Roster:</strong> Minimum of 5 players and 1 registered substitute (5+1 squad).",
@@ -407,8 +412,9 @@ const EVENTS_DATA = [
     description:
       "Survive the chaos, eliminate rival squads, and be the last team standing in Battle Royale: BGMI. Squads drop into Erangel, Miramar, and Rondo across multi-stage qualifiers and 16-team finals for the championship title.",
     teamSize: "4 + 1 MEMBERS",
-    prize: "₹1,00,000",
+    prize: "₹50,000",
     venue: "ESPORTS ARENA B",
+    registrationUrl: "https://forms.gle/21NojR3L1L4XaSzv5",
     rules: [
       "<strong>Team Roster:</strong> Maximum 4+1 participants. Cross-institution squads are allowed.",
       "<strong>Device Policy:</strong> Mobile phones and iPads only. Emulators are strictly prohibited.",
@@ -427,7 +433,7 @@ const EVENTS_DATA = [
     description:
       "The ultimate individual BedWars showdown. Protect your bed, gather resources, bridge the void, and eliminate competitors across custom Paper/Spigot zero-lag tournament servers. 128 gladiators compete through online qualifiers to the LAN Grand Finals.",
     teamSize: "SOLO",
-    prize: "₹15,000",
+    prize: "₹7,000",
     venue: "COMPUTE ARENA LAN",
     rules: [
       "<strong>Format:</strong> BedWars Solo (8 players per arena) with strict vanilla Minecraft mechanics.",
@@ -447,7 +453,7 @@ const EVENTS_DATA = [
     description:
       "Elite head-to-head console football tournament played live on PlayStation 5 consoles at JECRC University. 1v1 Club Mode bracket with tactical defending, fast-paced matches, and penalty shootouts.",
     teamSize: "SOLO",
-    prize: "₹20,000",
+    prize: "₹9,000",
     venue: "PS5 CONSOLE LOUNGE",
     rules: [
       "<strong>Format:</strong> 1v1 Single Elimination knockout in Club Mode on provided PS5 setups.",
@@ -467,7 +473,7 @@ const EVENTS_DATA = [
     description:
       "The Iron Fist Tournament descends upon JU TechFest 2026. Live 1v1 double elimination championship in Tekken played on competition rigs at JECRC University, featuring bracket resets, character lock rules, and premier fighting game action.",
     teamSize: "SOLO",
-    prize: "₹20,000",
+    prize: "₹9,000",
     venue: "ESPORTS FIGHTING LOUNGE",
     rules: [
       "<strong>Tournament Format:</strong> Double-elimination bracket. All matches prior to finals are Best-of-1 games; Grand Finals are Best-of-3 games.",
@@ -475,6 +481,28 @@ const EVENTS_DATA = [
       "<strong>Character Selection:</strong> Winner of a game must lock their character; the loser is permitted to switch characters for the next game.",
       "<strong>DLC & Customization:</strong> All characters including DLC are permitted unless specifically restricted. Character customization must be disabled.",
       "<strong>Fair Play:</strong> Spamming uncompetitive power moves is prohibited. Random stage selection if players do not mutually agree on a rematch stage.",
+    ],
+  },
+  {
+    id: "real-cricket",
+    title: "REAL CRICKET",
+    subtitle: "1V1 MOBILE CRICKET CHAMPIONSHIP",
+    category: "esports",
+    categoryLabel: "ESPORTS // TRACK 06",
+    image: "/event%20posters/realcricket.png",
+    description:
+      "Step up to the crease in the 1v1 Real Cricket Championship. High-pressure T20 matches contested in a single-elimination knockout format, testing tactical field settings, batting shot-timing, and precision bowling.",
+    teamSize: "SOLO (1V1)",
+    prize: "₹5,000",
+    venue: "ESPORTS MOBILE ARENA",
+    registrationUrl: "https://forms.gle/oRGXBcQB2jVRsQmE8",
+    rules: [
+      "<strong>Match Format:</strong> 1v1 matches, T20 format, Single Elimination Knockout (Best of 1).",
+      "<strong>Player Rules:</strong> Only registered players can participate. Account sharing is strictly prohibited. Players must use their own device/account and join the lobby on time.",
+      "<strong>Fair Play:</strong> Hacks, cheats, modified apps, macros, and exploits are strictly prohibited. Match fixing, collusion, or intentionally losing is prohibited. Respectful behaviour is mandatory.",
+      "<strong>Disconnection:</strong> Disconnect before match starts → restart may be allowed. Disconnect during match → admin decision. Repeated disconnects may result in forfeit.",
+      "<strong>Penalties:</strong> Violations may result in Warning, Match Loss, Disqualification, or Ban from tournament.",
+      "<strong>Final Decision:</strong> Tournament admins have the final authority on all disputes and rule interpretations.",
     ],
   },
 ];
@@ -960,7 +988,7 @@ function openModalWithCircleMorph(event, originPoint) {
     hardware: "https://rzp.io/rzp/hardwareju",
     esports: "https://rzp.io/rzp/esportsju",
   };
-  const regUrl = regLinks[categoryKey] || "https://rzp.io/rzp/softwareju";
+  const regUrl = event.registrationUrl || regLinks[categoryKey] || "https://rzp.io/rzp/softwareju";
 
   body.innerHTML = `
     <!-- Top Row: Square Poster on Left, Big Name on Right -->
@@ -982,6 +1010,11 @@ function openModalWithCircleMorph(event, originPoint) {
             <div class="modal-info-item">
               <span class="modal-info-label">TEAM SIZE</span>
               <span class="modal-info-val">${event.teamSize}</span>
+            </div>
+            <div class="modal-info-divider"></div>
+            <div class="modal-info-item">
+              <span class="modal-info-label">PRIZE POOL</span>
+              <span class="modal-info-val modal-prize-val">${event.prize}</span>
             </div>
           </div>
           <a href="${regUrl}" target="_blank" rel="noopener noreferrer" class="modal-register-btn modal-register-btn-inline" id="event-header-register-btn">
