@@ -1,23 +1,21 @@
 // =============================================================
-// JU TECHFEST 2026 — SPONSORS & PARTNERS PAGE LOGIC
-// Minimalist Editorial UI, Dynamic Category Filtering & GSAP Entrance
+// JU TECHFEST 2026 — SPONSORS PAGE LOGIC
+// Minimalist Editorial Grid: Logos + Names Only, Full WeAreCasey Menu, GSAP Entrance
 // =============================================================
 
 import * as THREE from "three";
 import gsap from "gsap";
 import { vertexShader, bgFragmentShader } from "./shaders.js";
-import { sponsorsData, sponsorFilters } from "./sponsorsData.js";
+import { sponsorsData } from "./sponsorsData.js";
 
 let bgRenderer, bgScene, bgCamera;
-let currentFilter = "all";
 
 function init() {
   initBackgroundCanvas();
   initPreloader();
   initFullscreenMenu();
   renderMarquee();
-  renderFilterTabs();
-  renderSponsorsGrid("all");
+  renderSponsorsGrid();
 }
 
 if (document.readyState === "loading") {
@@ -142,36 +140,149 @@ function initPreloader() {
 }
 
 // =============================================================
-// 3. FULLSCREEN NAVIGATION MENU LOGIC
+// 3. FULLSCREEN WEARECASEY NAVIGATION MENU (IDENTICAL TO TEAM & HOME)
 // =============================================================
 function initFullscreenMenu() {
-  const menuBtn = document.getElementById("menu-btn");
   const fullscreenMenu = document.getElementById("fullscreen-menu");
-  if (!menuBtn || !fullscreenMenu) return;
+  const menuBg = document.querySelector(".menu-bg");
+  const menuItems = document.querySelectorAll(".fullscreen-menu .menu-item");
+  const menuBtn = document.getElementById("menu-btn") || document.querySelector(".menu");
+
+  if (!fullscreenMenu || !menuBtn) return;
+
+  // Split each menu item into letter-boxes and initial GSAP hidden states
+  const menuAnimItems = [...menuItems].map((item) => {
+    const indexEl = item.querySelector(".item-index");
+    const labelEl = item.querySelector(".item-label");
+    const dividerEl = item.querySelector(".item-divider");
+
+    const indexText = (indexEl ? indexEl.textContent : "").trim();
+    const labelText = (labelEl ? labelEl.textContent : "").trim();
+
+    if (indexEl) {
+      indexEl.innerHTML = `<span class="item-index-inner" style="display:inline-block; overflow:hidden;"><span class="index-word" style="display:inline-block;">${indexText}</span></span>`;
+    }
+    const indexWord = indexEl ? indexEl.querySelector(".index-word") : null;
+
+    const firstCharStr = labelText.charAt(0);
+    const trailingCharsStr = labelText.slice(1);
+
+    const firstCharBox = document.createElement("span");
+    firstCharBox.className = "item-first-char-box";
+    firstCharBox.innerHTML = `<span class="item-first-char" style="display:inline-block;">${firstCharStr}</span>`;
+
+    const trailingCharBox = document.createElement("span");
+    trailingCharBox.className = "item-body";
+
+    const trailingChars = [];
+    for (let c of trailingCharsStr) {
+      const charSpan = document.createElement("span");
+      charSpan.className = "item-char-box";
+      charSpan.innerHTML = `<span class="item-char" style="display:inline-block;">${c === " " ? "&nbsp;" : c}</span>`;
+      trailingCharBox.appendChild(charSpan);
+      trailingChars.push(charSpan.querySelector(".item-char"));
+    }
+
+    if (labelEl) {
+      labelEl.innerHTML = "";
+      labelEl.appendChild(firstCharBox);
+      labelEl.appendChild(trailingCharBox);
+    }
+
+    const firstChar = firstCharBox.querySelector(".item-first-char");
+
+    // Hide characters off-screen initially
+    gsap.set([indexWord, firstChar], { yPercent: 100 });
+    gsap.set(trailingChars, { xPercent: 125 });
+    gsap.set(trailingCharBox, { width: 0 });
+    if (dividerEl) gsap.set(dividerEl, { scaleY: 0 });
+
+    return { indexWord, firstChar, trailingChars, trailingCharBox, divider: dividerEl, item };
+  });
+
+  const menuTimeline = gsap.timeline({
+    paused: true,
+    defaults: { ease: "power3.out" },
+    onReverseComplete: () => {
+      fullscreenMenu.classList.remove("is-menu-open");
+      fullscreenMenu.setAttribute("aria-hidden", "true");
+    },
+  });
 
   let isMenuOpen = false;
 
-  function toggleMenu() {
-    isMenuOpen = !isMenuOpen;
-    menuBtn.classList.toggle("active", isMenuOpen);
-    fullscreenMenu.classList.toggle("active", isMenuOpen);
-    fullscreenMenu.setAttribute("aria-hidden", (!isMenuOpen).toString());
-    document.body.style.overflow = isMenuOpen ? "hidden" : "";
+  if (menuBg) {
+    menuTimeline.to(menuBg, { opacity: 1, duration: 0.5 }, 0);
   }
 
-  menuBtn.addEventListener("click", toggleMenu);
+  menuAnimItems.forEach(({ indexWord, firstChar, trailingChars, trailingCharBox, divider }, i) => {
+    const startTime = 0.25 + i * 0.08;
 
-  document.addEventListener("keydown", (e) => {
-    if (e.key === "Escape" && isMenuOpen) {
+    if (indexWord && firstChar) {
+      menuTimeline.to([indexWord, firstChar], { yPercent: 0, duration: 0.5 }, startTime);
+    }
+    if (divider) {
+      menuTimeline.to(divider, { scaleY: 1, duration: 0.6, ease: "power3.out" }, startTime + 0.04);
+    }
+    if (trailingCharBox) {
+      menuTimeline.to(
+        trailingCharBox,
+        {
+          width: () => trailingCharBox.scrollWidth,
+          duration: 0.6,
+          ease: "power4.inOut",
+        },
+        startTime + 0.1
+      );
+    }
+    if (trailingChars.length > 0) {
+      menuTimeline.to(
+        trailingChars,
+        { xPercent: 0, duration: 0.5, stagger: 0.02 },
+        startTime + 0.2
+      );
+    }
+  });
+
+  const toggleMenu = () => {
+    isMenuOpen = !isMenuOpen;
+
+    if (isMenuOpen) {
+      fullscreenMenu.classList.add("is-menu-open");
+      fullscreenMenu.setAttribute("aria-hidden", "false");
+      menuBtn.classList.add("menu-active");
+      menuTimeline.timeScale(1).play();
+    } else {
+      menuBtn.classList.remove("menu-active");
+      menuTimeline.timeScale(1.5).reverse();
+    }
+  };
+
+  menuBtn.addEventListener("click", toggleMenu);
+  menuBtn.addEventListener("keydown", (e) => {
+    if (e.key === "Enter" || e.key === " ") {
+      e.preventDefault();
       toggleMenu();
     }
   });
 
-  const menuLinks = fullscreenMenu.querySelectorAll(".menu-item");
-  menuLinks.forEach(link => {
-    link.addEventListener("click", () => {
-      if (isMenuOpen) toggleMenu();
+  menuItems.forEach((link) => {
+    link.addEventListener("click", (e) => {
+      const href = link.getAttribute("href");
+      if (
+        (href === "/sponsors" || href === "/sponsors/" || href === "/sponsors.html") &&
+        (window.location.pathname === "/sponsors" || window.location.pathname === "/sponsors/" || window.location.pathname.endsWith("sponsors.html"))
+      ) {
+        e.preventDefault();
+        if (isMenuOpen) toggleMenu();
+      }
     });
+  });
+
+  window.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && isMenuOpen) {
+      toggleMenu();
+    }
   });
 }
 
@@ -198,7 +309,6 @@ function renderMarquee() {
     </div>
   `).join("");
 
-  // Duplicate for seamless infinite loop
   marqueeTrack.innerHTML = `
     <div class="marquee-group">${itemsHtml}</div>
     <div class="marquee-group" aria-hidden="true">${itemsHtml}</div>
@@ -206,40 +316,7 @@ function renderMarquee() {
 }
 
 // =============================================================
-// 5. FILTER TABS (CRISP GEOMETRIC NAVIGATION)
-// =============================================================
-function renderFilterTabs() {
-  const navContainer = document.getElementById("sponsors-filters-nav");
-  if (!navContainer) return;
-
-  navContainer.innerHTML = sponsorFilters.map(filter => `
-    <button class="filter-tab ${filter.key === currentFilter ? "active" : ""}" data-filter="${filter.key}" type="button">
-      <span>${filter.label}</span>
-      <span class="tab-count">${getFilterCount(filter.key)}</span>
-    </button>
-  `).join("");
-
-  navContainer.querySelectorAll(".filter-tab").forEach(btn => {
-    btn.addEventListener("click", () => {
-      const filterKey = btn.getAttribute("data-filter");
-      if (filterKey === currentFilter) return;
-
-      currentFilter = filterKey;
-      navContainer.querySelectorAll(".filter-tab").forEach(b => b.classList.remove("active"));
-      btn.classList.add("active");
-
-      renderSponsorsGrid(filterKey);
-    });
-  });
-}
-
-function getFilterCount(key) {
-  if (key === "all") return sponsorsData.length;
-  return sponsorsData.filter(s => s.category === key).length;
-}
-
-// =============================================================
-// 6. SPONSORS GRID RENDERING & UNIFORM SCALING
+// 5. UNIFORM SPONSORS GRID RENDERING (IMAGES & NAMES ONLY)
 // =============================================================
 function getOpticalScaleClass(ar, id) {
   if (id === "max-protein") return "scale-compact";
@@ -249,26 +326,12 @@ function getOpticalScaleClass(ar, id) {
   return "scale-medium"; // GB Nodes, HopUp, Jaipur RC Club, Plum, WScube
 }
 
-function renderSponsorsGrid(filter = "all") {
+function renderSponsorsGrid() {
   const grid = document.getElementById("sponsors-grid");
   if (!grid) return;
 
-  const filteredList = filter === "all"
-    ? sponsorsData
-    : sponsorsData.filter(s => s.category === filter);
-
-  if (filteredList.length === 0) {
-    grid.innerHTML = `
-      <div style="grid-column: 1 / -1; text-align: center; padding: 4rem 1rem; color: rgba(255,255,255,0.4); font-family: 'DM Mono', monospace;">
-        NO PARTNERS FOUND FOR THIS VERTICAL
-      </div>
-    `;
-    return;
-  }
-
-  grid.innerHTML = filteredList.map((sponsor, index) => {
+  grid.innerHTML = sponsorsData.map((sponsor) => {
     const scaleClass = getOpticalScaleClass(sponsor.aspectRatio, sponsor.id);
-    const indexStr = (index + 1).toString().padStart(2, "0");
 
     return `
       <article class="sponsor-card" data-id="${sponsor.id}">
@@ -282,12 +345,7 @@ function renderSponsorsGrid(filter = "all") {
           />
         </div>
         <div class="sponsor-details">
-          <div class="sponsor-badge-row">
-            <span class="sponsor-partner-badge">${sponsor.partnerTitle}</span>
-            <span class="sponsor-index-num">// ${indexStr}</span>
-          </div>
           <h3 class="sponsor-name">${sponsor.name}</h3>
-          <p class="sponsor-desc">${sponsor.description}</p>
         </div>
       </article>
     `;
@@ -296,12 +354,12 @@ function renderSponsorsGrid(filter = "all") {
   gsap.fromTo(
     grid.querySelectorAll(".sponsor-card"),
     { opacity: 0, y: 20 },
-    { opacity: 1, y: 0, duration: 0.45, stagger: 0.05, ease: "power2.out" }
+    { opacity: 1, y: 0, duration: 0.45, stagger: 0.04, ease: "power2.out" }
   );
 }
 
 // =============================================================
-// 7. INITIAL PAGE ENTRANCE ANIMATION
+// 6. INITIAL PAGE ENTRANCE ANIMATION
 // =============================================================
 function animateEntrance() {
   const tl = gsap.timeline();
@@ -309,7 +367,6 @@ function animateEntrance() {
     .from(".sponsors-main-heading", { opacity: 0, y: 25, duration: 0.7, ease: "power3.out" }, "-=0.3")
     .from(".sponsors-subtext-bar", { opacity: 0, y: 15, duration: 0.5, ease: "power2.out" }, "-=0.4")
     .from(".sponsors-marquee-section", { opacity: 0, duration: 0.6, ease: "power1.out" }, "-=0.3")
-    .from(".sponsors-controls-bar", { opacity: 0, y: 15, duration: 0.5, ease: "power2.out" }, "-=0.3")
     .from(".sponsor-card", { opacity: 0, y: 25, duration: 0.5, stagger: 0.04, ease: "power2.out" }, "-=0.3")
     .from(".sponsors-cta-banner", { opacity: 0, y: 20, duration: 0.6, ease: "power2.out" }, "-=0.2");
 }

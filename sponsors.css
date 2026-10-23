@@ -53,6 +53,22 @@ body.is-loading {
 }
 
 /* -------------------------------------------------------------
+   FULLSCREEN MENU OVERLAY BUG FIX
+   Ensure menu is completely invisible & unclickable when closed
+   ------------------------------------------------------------- */
+.fullscreen-menu:not(.is-menu-open) {
+  visibility: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
+.fullscreen-menu.is-menu-open {
+  visibility: visible !important;
+  opacity: 1 !important;
+  pointer-events: auto !important;
+}
+
+/* -------------------------------------------------------------
    PAGE WRAPPER
    ------------------------------------------------------------- */
 .sponsors-page-wrapper {
@@ -153,7 +169,7 @@ body.is-loading {
    ------------------------------------------------------------- */
 .sponsors-marquee-section {
   width: 100%;
-  margin: 2.5rem 0 3.5rem;
+  margin: 2.5rem 0 4rem;
   overflow: hidden;
   position: relative;
   border-top: 1px solid rgba(255, 255, 255, 0.06);
@@ -267,73 +283,11 @@ body.is-loading {
 }
 
 /* -------------------------------------------------------------
-   FILTER TABS & CONTROLS (CRISP GEOMETRIC)
-   ------------------------------------------------------------- */
-.sponsors-controls-bar {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  gap: 1.5rem;
-  margin-bottom: 2.75rem;
-}
-
-.sponsors-filters-nav {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-}
-
-.filter-tab {
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  color: rgba(255, 255, 255, 0.7);
-  font-family: "DM Mono", monospace;
-  font-size: 0.75rem;
-  font-weight: 500;
-  letter-spacing: 0.1em;
-  padding: 0.55rem 1.1rem;
-  border-radius: 3px;
-  cursor: pointer;
-  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
-  display: inline-flex;
-  align-items: center;
-  gap: 0.6rem;
-  text-transform: uppercase;
-}
-
-.filter-tab:hover {
-  background: rgba(255, 255, 255, 0.07);
-  border-color: rgba(255, 255, 255, 0.25);
-  color: #ffffff;
-}
-
-.filter-tab.active {
-  background: var(--color-red);
-  border-color: var(--color-red);
-  color: #ffffff;
-  box-shadow: 0 0 16px rgba(217, 20, 36, 0.4);
-}
-
-.filter-tab .tab-count {
-  font-size: 0.68rem;
-  opacity: 0.75;
-  background: rgba(0, 0, 0, 0.3);
-  padding: 0.1rem 0.45rem;
-  border-radius: 2px;
-}
-
-.filter-tab.active .tab-count {
-  background: rgba(0, 0, 0, 0.35);
-  opacity: 0.95;
-}
-
-/* -------------------------------------------------------------
-   SPONSORS GRID & UNIFORM CARDS
+   SPONSORS GRID & UNIFORM CARDS (LOGOS & NAMES ONLY)
    ------------------------------------------------------------- */
 .sponsors-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(310px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
   gap: clamp(1.2rem, 2.2vw, 2rem);
   margin-bottom: 5rem;
 }
@@ -343,9 +297,11 @@ body.is-loading {
   background: var(--color-bg-card);
   border: 1px solid var(--color-border-card);
   border-radius: 6px;
-  padding: 1.8rem;
+  padding: 2.2rem 1.6rem 1.8rem;
   display: flex;
   flex-direction: column;
+  align-items: center;
+  text-align: center;
   transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1),
               border-color 0.35s ease,
               box-shadow 0.35s ease,
@@ -369,9 +325,9 @@ body.is-loading {
 
 .sponsor-card:hover {
   transform: translateY(-5px);
-  border-color: rgba(217, 20, 36, 0.35);
-  box-shadow: 0 16px 36px -12px rgba(217, 20, 36, 0.22);
-  background: rgba(18, 18, 26, 0.85);
+  border-color: rgba(217, 20, 36, 0.4);
+  box-shadow: 0 16px 36px -12px rgba(217, 20, 36, 0.25);
+  background: rgba(18, 18, 26, 0.88);
 }
 
 .sponsor-card:hover::before {
@@ -458,65 +414,31 @@ body.is-loading {
   image-rendering: -webkit-optimize-contrast;
 }
 
-/* Card Content / Typography */
+/* Card Content / Sponsor Name Only */
 .sponsor-details {
   display: flex;
   flex-direction: column;
-  flex: 1;
-}
-
-.sponsor-badge-row {
-  display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: 0.5rem;
-  margin-bottom: 0.65rem;
-}
-
-.sponsor-partner-badge {
-  font-family: "DM Mono", monospace;
-  font-size: 0.68rem;
-  font-weight: 600;
-  letter-spacing: 0.12em;
-  color: var(--color-red);
-  text-transform: uppercase;
-  background: rgba(217, 20, 36, 0.08);
-  border: 1px solid rgba(217, 20, 36, 0.2);
-  padding: 0.25rem 0.55rem;
-  border-radius: 2px;
-  white-space: nowrap;
-}
-
-.sponsor-index-num {
-  font-family: "DM Mono", monospace;
-  font-size: 0.7rem;
-  color: var(--color-text-dim);
-  letter-spacing: 0.08em;
+  justify-content: center;
+  width: 100%;
 }
 
 .sponsor-name {
   font-family: "Barlow Condensed", sans-serif;
-  font-size: 1.75rem;
+  font-size: 1.65rem;
   font-weight: 800;
-  line-height: 1.05;
-  letter-spacing: 0.02em;
+  line-height: 1.1;
+  letter-spacing: 0.04em;
   text-transform: uppercase;
   color: #ffffff;
-  margin: 0 0 0.65rem 0;
-  transition: color 0.3s ease;
+  margin: 0;
+  text-align: center;
+  transition: color 0.3s ease, text-shadow 0.3s ease;
 }
 
 .sponsor-card:hover .sponsor-name {
   color: #ffffff;
-  text-shadow: 0 0 14px rgba(255, 255, 255, 0.3);
-}
-
-.sponsor-desc {
-  font-family: "Plus Jakarta Sans", sans-serif;
-  font-size: 0.86rem;
-  line-height: 1.55;
-  color: var(--color-text-muted);
-  margin: 0;
+  text-shadow: 0 0 16px rgba(255, 255, 255, 0.35);
 }
 
 /* -------------------------------------------------------------
@@ -634,7 +556,7 @@ body.is-loading {
   }
   
   .sponsors-grid {
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
   }
 }
 
@@ -649,28 +571,20 @@ body.is-loading {
   }
 
   .sponsors-grid {
-    grid-template-columns: 1fr;
-    gap: 1.25rem;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
   }
 
   .sponsor-card {
-    padding: 1.4rem;
+    padding: 1.5rem 1rem 1.25rem;
   }
 
-  .sponsors-controls-bar {
-    flex-direction: column;
-    align-items: stretch;
+  .sponsor-stage {
+    height: 90px;
   }
 
-  .sponsors-filters-nav {
-    overflow-x: auto;
-    padding-bottom: 0.5rem;
-    flex-wrap: nowrap;
-    -webkit-overflow-scrolling: touch;
-  }
-
-  .filter-tab {
-    flex-shrink: 0;
+  .sponsor-name {
+    font-size: 1.35rem;
   }
 
   .sponsors-cta-banner {
@@ -682,5 +596,11 @@ body.is-loading {
   .cta-btn {
     width: 100%;
     justify-content: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .sponsors-grid {
+    grid-template-columns: 1fr;
   }
 }
