@@ -4,14 +4,14 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>SPONSORS & PARTNERS // JU TECHFEST 2026</title>
+  <title>SPONSORS &amp; PARTNERS // JU TECHFEST 2026</title>
   <link rel="stylesheet" href="/styles.css" />
-  <link rel="stylesheet" href="/placeholder.css" />
+  <link rel="stylesheet" href="/sponsors.css" />
 </head>
 
-<body class="teaser-page-body">
+<body class="sponsors-page-body">
   <!-- Preloader Screen: Spider Fill Animation -->
-  <div class="preloader" id="preloader" aria-label="Loading JU TechFest 2026">
+  <div class="preloader" id="preloader" aria-label="Loading JU TechFest 2026 Sponsors">
     <div class="preloader-content">
       <div class="spider-loader-container" id="spider-container">
         <div class="spider-bg"></div>
@@ -60,7 +60,7 @@
           <span class="item-label">Events</span>
           <span class="item-divider"></span>
         </a>
-        <a class="menu-item active" href="/team" data-target="team">
+        <a class="menu-item" href="/team" data-target="team">
           <span class="item-index">03</span>
           <span class="item-label">Team</span>
           <span class="item-divider"></span>
@@ -84,25 +84,65 @@
     </div>
   </nav>
 
-  <!-- Main Teaser Stage -->
-  <main class="teaser-stage">
-    <div class="teaser-card">
-      <!-- Main Headline (Animated Crimson Glow on Repeat) -->
-      <h1 class="teaser-headline">
-        Wanna know our sponsors &amp; partners?
+  <!-- Main Sponsors Page Wrapper -->
+  <main class="sponsors-page-wrapper">
+    <!-- Header Section -->
+    <header class="sponsors-header-section">
+      <div class="sponsors-meta-tag">
+        <span class="tag-dot"></span>
+        <span>04 // POWERING THE INNOVERSE</span>
+      </div>
+      <h1 class="sponsors-main-heading">
+        OUR <span class="accent-text">SPONSORS</span> &amp; PARTNERS
       </h1>
+      <div class="sponsors-subtext-bar">
+        <p class="sponsors-subtext">
+          Industry titans, gaming giants, and disruptive tech pioneers championing innovation, robotics, and youth excellence at JU TechFest 2026.
+        </p>
+        <span class="sponsors-stats-badge">12 OFFICIAL PARTNERS • 2026 EDITION</span>
+      </div>
+    </header>
 
-      <!-- Minimalist Animated Light Divider -->
-      <div class="teaser-divider" aria-hidden="true"></div>
+    <!-- Continuous Partner Ticker / Marquee -->
+    <section class="sponsors-marquee-section" aria-hidden="true">
+      <div class="sponsors-marquee-track" id="sponsors-marquee-track">
+        <!-- Injected dynamically by sponsors.js -->
+      </div>
+    </section>
 
-      <!-- Main Subtext (Animated Shimmer on Repeat) -->
-      <p class="teaser-subtext">
-        Stay Tuned!
-      </p>
+    <!-- Industry Filter Tabs Navigation -->
+    <div class="sponsors-controls-bar">
+      <nav class="sponsors-filters-nav" id="sponsors-filters-nav" aria-label="Filter by industry">
+        <!-- Rendered dynamically by sponsors.js -->
+      </nav>
     </div>
+
+    <!-- Uniform Rescaled Sponsors Cards Grid -->
+    <section class="sponsors-grid" id="sponsors-grid" aria-label="Official Sponsors Directory">
+      <!-- Rendered dynamically by sponsors.js -->
+    </section>
+
+    <!-- Become a Partner CTA Banner -->
+    <section class="sponsors-cta-banner">
+      <div class="cta-content">
+        <span class="cta-tag">PARTNERSHIP INQUIRIES</span>
+        <h2 class="cta-title">WANT TO PARTNER WITH JU TECHFEST 2026?</h2>
+        <p class="cta-desc">
+          Collaborate with Rajasthan's premier student-led technical festival. Connect with 15,000+ engineers, coders, gamers, and robot builders. Access custom branding, exhibition stalls, and keynote engagement.
+        </p>
+      </div>
+      <div class="cta-action-wrap">
+        <a href="/contact" class="cta-btn">
+          <span>CONNECT WITH SPONSORSHIP TEAM</span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <path d="M5 12h14M12 5l7 7-7 7"/>
+          </svg>
+        </a>
+      </div>
+    </section>
   </main>
 
-  <script type="module" src="/placeholder.js"></script>
+  <script type="module" src="/sponsors.js"></script>
 </body>
 
 </html>
